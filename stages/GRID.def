@@ -1,0 +1,123 @@
+[Info]
+name = "GRID"
+displayname = "GRID"
+versiondate = 1,16,2019
+mugenversion = 1.1
+author = "VWTG"
+
+;--------------------------------------------------------
+[Camera]
+startx = 0
+starty = -30
+boundleft = -700
+boundright = 700
+boundhigh = -9999999999999999999999999
+boundlow = -40
+
+floortension = 120
+tensionhigh = 200
+tensionlow = 100
+overdrawhigh = 120
+overdrawlow = 120
+tension = 200
+cuthigh = 0
+cutlow = 0
+zoomin = .7
+zoomout = .1
+zoominspeed = .5
+AutoCenter = 1
+zoomanchor = bottom
+verticalfollow = 1.1
+
+
+;--------------------------------------------------------
+[PlayerInfo]
+;--- Player 1 ---
+p1startx = 0	
+p1starty = 0
+p1facing = 1
+
+;--- Player 2 ---
+p2startx = 150
+p2starty = 0
+p2facing = -1
+
+;--- Common ---
+leftbound  = -4000
+rightbound =  4000
+
+;--------------------------------------------------------
+[Bound]
+screenleft = 60
+screenright = 60
+
+[StageInfo]
+zoffset = 195
+autoturn = 1
+resetBG = 1
+
+[Shadow]
+color = 255,190,180
+yscale = 0
+;--------------------------------------------------------
+[StageInfo]
+zoffset = 660
+autoturn = 1
+resetBG = 1
+xscale = 1
+yscale = 1
+;--------------------------------------------------------
+[Reflection]
+intensity = 0
+;--------------------------------------------------------
+[Music]
+bgmusic = sound\GRID.mp3
+bgmvolume = 100
+
+[BGdef]
+spr = GRID.sff
+debugbg = 0
+;----------
+;[BG sea]
+;type = anim
+;actionno = 20
+;spriteno = 0,0
+;start = 0,220
+;delta = 0.3,0.4
+;mask = 0
+;velocity = 0
+
+[BG 0]
+type  = anim
+actionno = 0
+layerno = 0
+start = 0,195
+delta = 1,1
+trans = none
+mask  = 0
+tile  = 0, 0
+tilespacing = 0,0
+[BG Clouds]
+type = normal
+spriteno = 40,0
+start = 0,-50
+delta = 1,1
+mask = 0
+velocity = 0,0
+tile = 1,1
+tilespacing = 0,0
+layerno = 0
+
+[BG Ground]
+type = normal
+spriteno = 0,0
+start = 0,196
+layerno = 0
+delta = 1,1
+mask = 1
+velocity = 0
+tile = 1,0
+tilespacing = 0
+; beenisizeref
+[Begin Action 0]
+1,0, 0,0, 10, , , 0.38,0.38
