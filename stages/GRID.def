@@ -12,7 +12,7 @@ starty = -30
 boundleft = -700
 boundright = 700
 boundhigh = -9999999999999999999999999
-boundlow = -40
+boundlow = 0
 
 floortension = 120
 tensionhigh = 200
@@ -24,7 +24,7 @@ cuthigh = 0
 cutlow = 0
 zoomin = .7
 zoomout = .1
-zoominspeed = .2
+zoominspeed = 1
 AutoCenter = 1
 zoomanchor = bottom
 verticalfollow = 1.1

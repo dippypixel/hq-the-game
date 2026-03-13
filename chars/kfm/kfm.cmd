@@ -145,107 +145,21 @@ command.time = 15
 ; maximum 30.
 command.buffer.time = 1
 
-
-;-| Super Motions |--------------------------------------------------------
-;The following two have the same name, but different motion.
-;Either one will be detected by a "command = TripleKFPalm" trigger.
-;Time is set to 20 (instead of default of 15) to make the move
-;easier to do.
-;
-[Command]
-name = "TripleKFPalm"
-command = ~D, DF, F, D, DF, F, x
-time = 20
-
-[Command]
-name = "TripleKFPalm"   ;Same name as above
-command = ~D, DF, F, D, DF, F, y
-time = 20
-
-[Command]
-name = "SmashKFUpper"
-command = ~D, DB, B, D, DB, B, x;~F, D, DF, F, D, DF, x
-time = 20
-
-[Command]
-name = "SmashKFUpper"   ;Same name as above
-command = ~D, DB, B, D, DB, B, y;~F, D, DF, F, D, DF, y
-time = 20
-
 ;-| Special Motions |------------------------------------------------------
-
 [Command]
 name = "WallPunch"
 command = /$D+y
 [Command]
-name = "blocking"
-command = $F,x
-time = 3
-
-[Command]
-name = "blocking" ;Same name as above (buttons in opposite order)
-command = x,$F
-time = 3
-
-[Command]
-name = "upper_x"
-command = ~F, D, DF, x
-
-[Command]
-name = "upper_y"
-command = ~F, D, DF, y
-
-[Command]
-name = "upper_xy"
-command = ~F, D, DF, x+y
-
-[Command]
-name = "QCF_x"
-command = ~D, DF, F, x
-
-[Command]
-name = "QCF_y"
-command = ~D, DF, F, y
-
-[Command]
-name = "QCF_xy"
-command = ~D, DF, F, x+y
-
-[Command]
-name = "QCB_x"
-command = ~D, DB, B, x
-
-[Command]
-name = "QCB_y"
-command = ~D, DB, B, y
-
-[Command]
-name = "QCB_xy"
-command = ~D, DB, B, x+y
-
-[Command]
-name = "QCF_a"
-command = ~D, DF, F, a
-
-[Command]
-name = "QCF_b"
-command = ~D, DF, F, b
-
-[Command]
-name = "QCF_ab"
-command = ~D, DF, F, a+b
-
-[Command]
-name = "FF_ab"
-command = F, F, a+b
-
-[Command]
-name = "FF_a"
-command = F, F, a
-
-[Command]
-name = "FF_b"
-command = F, F, b
+name = "Uppercut"
+command = /$D+y
+[command]
+name = "SuperJump"
+command = D,U
+time = 2
+[command]
+name = "SuperJump"
+command = z+/$U
+time = 5
 
 ;-| Double Tap |-----------------------------------------------------------
 [Command]
@@ -258,10 +172,14 @@ name = "BB"     ;Required (do not remove)
 command = B, B
 time = 10
 
-[command]
-name = "SuperJump"
-command = ~D,U
-time = 15
+[Command]
+name = "AirDashF"
+command = x+y + /$F
+time = 5
+[Command]
+name = "AirDashB"
+command = x+y + /$B
+time = 5
 
 ;-| 2/3 Button Combination |-----------------------------------------------
 [Command]
@@ -314,6 +232,11 @@ time = 1
 [Command]
 name = "start"
 command = s
+time = 1
+
+[Command]
+name = "up" ;Required (do not remove)
+command = U
 time = 1
 
 ;-| Hold Dir |--------------------------------------------------------------
@@ -409,27 +332,37 @@ value = 41
 triggerall = command = "SuperJump"
 trigger1 = ctrl
 trigger1 = statetype  != A
-
+[State -1, superjump]
+type = ChangeState
+value = 45
+triggerall = command = "up"
+trigger1 = ctrl
+trigger1 = statetype  = A
+trigger2 = movehit
 ;Air DashFwd
 [State -1, Air Dash]
 type = ChangeState
 value = 110
 triggerall = !var(55)
-triggerall = !var(18)
-triggerall = command = "FF"
+triggerall = var(18)<3
+triggerall = stateno != 110
+triggerall = command = "AirDashF" || command = "FF"
 triggerall = statetype = A
 trigger1 = Pos Y < -const(movement.airjump.height)
 trigger1 = ctrl 
+trigger2 = movehit
 ;Air DashFwd
 [State -1, Air Dash]
 type = ChangeState
 value = 115
 triggerall = !var(55)
-triggerall = !var(18)
-triggerall = command = "BB"
+triggerall = var(18)<3
+triggerall = stateno != 115
+triggerall = command = "AirDashB" || command = "BB"
 triggerall = statetype = A
 trigger1 = Pos Y < -const(movement.airjump.height)
 trigger1 = ctrl 
+trigger2 = movehit
 ;Run Fwd
 [State -1, Run Fwd]
 type = ChangeState
@@ -448,127 +381,16 @@ trigger1 = statetype != A
 trigger1 = ctrl
 
 ;---------------------------------------------------------------------------
-;Kung Fu Throw
-[State -1, Kung Fu Throw]
-type = ChangeState
-value = 800
-triggerall = command = "y"
-triggerall = statetype = S
-triggerall = ctrl
-triggerall = stateno != 100
-trigger1 = command = "holdfwd"
-trigger1 = p2bodydist X < 3
-trigger1 = (p2statetype = S) || (p2statetype = C)
-trigger1 = p2movetype != H
-trigger2 = command = "holdback"
-trigger2 = p2bodydist X < 5
-trigger2 = (p2statetype = S) || (p2statetype = C)
-trigger2 = p2movetype != H
-
-
-
-;===========================================================================
-;---------------------------------------------------------------------------
-;Stand Light Punch
-[State -1, Stand Light Punch]
-type = ChangeState
-value = 200
-triggerall = command = "x"
-triggerall = command != "holddown"
-trigger1 = statetype = S
-trigger1 = ctrl
-trigger2 = stateno = 200 && movehit
-
-;---------------------------------------------------------------------------
-;Stand Strong Punch
-[State -1, Stand Strong Punch]
-type = ChangeState
-value = 210
-triggerall = command = "y"
-triggerall = command != "holddown"
-trigger1 = statetype = S
-trigger1 = ctrl
-trigger2 = (stateno = 200) && movehit
-trigger3 = (stateno = 230) && movehit
-
-;---------------------------------------------------------------------------
-;Stand Light Kick
-[State -1, Stand Light Kick]
-type = ChangeState
-value = 230
-triggerall = command = "a"
-triggerall = command != "holddown"
-trigger1 = statetype = S
-trigger1 = ctrl
-trigger2 = (stateno = 200) && movehit
-trigger3 = (stateno = 230) && movehit
-
-;---------------------------------------------------------------------------
-;Standing Strong Kick
-[State -1, Standing Strong Kick]
-type = ChangeState
-value = 240
-triggerall = command = "b"
-triggerall = command != "holddown"
-trigger1 = statetype = S
-trigger1 = ctrl
-trigger2 = (stateno = 200) && movehit
-trigger3 = (stateno = 230) && movehit
-trigger4 = (stateno = 210) && movehit
-;---------------------------------------------------------------------------
-;Taunt
-[State -1, Taunt]
-type = ChangeState
-value = 195
-triggerall = command = "start"
-trigger1 = statetype != A
-trigger1 = ctrl
-
-;---------------------------------------------------------------------------
-;Crouching Light Punch
-[State -1, Crouching Light Punch]
-type = ChangeState
-value = 400
-triggerall = command = "x"
-triggerall = command = "holddown"
-trigger1 = statetype = C
-trigger1 = ctrl
-
-;---------------------------------------------------------------------------
 ;Crouching Strong Punch
-[State -1, Crouching Strong Punch]
+[State -1, Uppercut]
 type = ChangeState
 value = 410
-triggerall = command = "y"
-triggerall = command = "holddown"
-trigger1 = statetype = C
+triggerall = command = "Uppercut"
+triggerall = statetype != A
 trigger1 = ctrl
-trigger2 = (stateno = 400) || (stateno = 430)|| (stateno = 210)|| (stateno = 240)
+trigger2 = stateno = [200,220]
 trigger2 = movecontact
 
-;---------------------------------------------------------------------------
-;Crouching Light Kick
-[State -1, Crouching Light Kick]
-type = ChangeState
-value = 430
-triggerall = command = "a"
-triggerall = command = "holddown"
-trigger1 = statetype = C
-trigger1 = ctrl
-trigger2 = (stateno = 400) || (stateno = 430)
-trigger2 = movecontact
-
-;---------------------------------------------------------------------------
-;Crouching Strong Kick
-[State -1, Crouching Strong Kick]
-type = ChangeState
-value = 440
-triggerall = command = "b"
-triggerall = command = "holddown"
-trigger1 = statetype = C
-trigger1 = ctrl
-trigger2 = (stateno = 400) || (stateno = 430)
-trigger2 = movecontact
 ;Jump Strong Punch
 [State -1, WallPunch]
 type = ChangeState
@@ -576,10 +398,52 @@ value = 650
 triggerall = command = "WallPunch"
 trigger1 = statetype = A
 trigger1 = ctrl
-trigger2 = stateno = 600 || stateno = 630 ;jump_x or jump_a
+trigger2 = stateno = [600,620] ;jump_x or jump_a
 trigger2 = movecontact
-trigger3 = stateno = 1350 ;Air blocking
-trigger4 = stateno = 640 && movehit && time > 10 ;Air blocking
+trigger3 = stateno = 640 ;jump_x or jump_a
+trigger3 = movecontact&& time>10
+;===========================================================================
+;---------------------------------------------------------------------------
+;Stand Light Punch
+[State -1, Stand Light Punch]
+type = ChangeState
+value = 200
+triggerall = command = "x"
+trigger1 = statetype = S
+trigger1 = ctrl
+trigger2 = stateno = 200 && movehit
+
+;---------------------------------------------------------------------------
+;Standing Strong Kick
+[State -1, Stand Medium Punch]
+type = ChangeState
+value = 210
+triggerall = command = "y"
+trigger1 = statetype = S
+trigger1 = ctrl
+trigger2 = (stateno = 200) && movehit
+trigger3 = (stateno = 230) && movehit
+;---------------------------------------------------------------------------
+;Stand Light Punch
+[State -1, Stand Light Kick]
+type = ChangeState
+value = 230
+triggerall = command = "a"
+trigger1 = statetype = S
+trigger1 = ctrl
+trigger2 = stateno = 200 && movehit
+trigger3 = stateno = 230 && movehit
+;---------------------------------------------------------------------------
+;Stand Strong Punch
+[State -1, Stand Strong Kick]
+type = ChangeState
+value = 240
+triggerall = command = "b"
+trigger1 = statetype = S
+trigger1 = ctrl
+trigger2 = (stateno = 200) && movehit
+trigger3 = (stateno = 210) && movehit
+trigger4 = (stateno = 230) && movehit
 ;---------------------------------------------------------------------------
 ;Jump Light Punch
 [State -1, Jump Light Punch]
@@ -589,11 +453,13 @@ triggerall = command = "x"
 trigger1 = statetype = A
 trigger1 = ctrl
 trigger2 = prevstateno != 600 && stateno = 600 && movecontact
-trigger3 = stateno = 1350 ;Air blocking
+trigger3 = stateno = 640 ;jump_x or jump_a
+trigger3 = movecontact&& time>10
+trigger4 = enemynear,stateno=5820
 
 ;---------------------------------------------------------------------------
 ;Jump Strong Punch
-[State -1, Jump Strong Punch]
+[State -1, Jump Medium Punch]
 type = ChangeState
 value = 610
 triggerall = command = "y"
@@ -601,24 +467,20 @@ trigger1 = statetype = A
 trigger1 = ctrl
 trigger2 = stateno = 600 || stateno = 630 ;jump_x or jump_a
 trigger2 = movecontact
-trigger3 = stateno = 1350 ;Air blocking
 trigger4 = stateno = 640 && movehit && time > 30 ;Air blocking
 ;---------------------------------------------------------------------------
 
 ;---------------------------------------------------------------------------
-;Jump Light Kick
-[State -1, Jump Light Kick]
+;Jump Light Punch
+[State -1, Jump Light Punch]
 type = ChangeState
 value = 630
 triggerall = command = "a"
 trigger1 = statetype = A
 trigger1 = ctrl
-trigger2 = prevstateno != 630 && stateno = 630 && movecontact
-trigger3 = stateno = 600 && movecontact
-
-;---------------------------------------------------------------------------
+trigger2 = prevstateno != 600 && stateno = 600 && movecontact
 ;Jump Strong Kick
-[State -1, Jump Strong Kick]
+[State -1, Jump Strong Punch]
 type = ChangeState
 value = 640
 triggerall = command = "b"
@@ -626,4 +488,4 @@ trigger1 = statetype = A
 trigger1 = ctrl
 trigger2 = stateno = 600 || stateno = 630|| stateno = 610 ;jump_x or jump_a
 trigger2 = movecontact
-trigger3 = stateno = 1350 ;Air blocking
+trigger3 = enemynear,stateno=5820
