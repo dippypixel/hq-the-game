@@ -174,11 +174,11 @@ time = 10
 
 [Command]
 name = "AirDashF"
-command = x+y + /$F
+command = z + /$F
 time = 5
 [Command]
 name = "AirDashB"
-command = x+y + /$B
+command = z + /$B
 time = 5
 
 ;-| 2/3 Button Combination |-----------------------------------------------
@@ -328,13 +328,14 @@ var(1) = 1
 ;---------------------------------------------------------------------------
 [State -1, superjump]
 type = ChangeState
-value = 41
+value = 9000
 triggerall = command = "SuperJump"
 trigger1 = ctrl
 trigger1 = statetype  != A
-[State -1, superjump]
+[State -1, AirJump]
 type = ChangeState
 value = 45
+triggerall = map(air_jump_used) = 0
 triggerall = command = "up"
 trigger1 = ctrl
 trigger1 = statetype  = A

@@ -40,8 +40,6 @@ air.back = 50       ;Player width (back, air)
 air.front = -10       ;Player width (front, air)
 ground.back = 15     ;Player width (back, ground)
 ground.front = 16    ;Player width (front, ground)
-air.back = 12        ;Player width (back, air)
-air.front = 12       ;Player width (front, air)
 height = 120          ;Height of player (for opponent to jump over)
 attack.dist = 160    ;Default attack distance
 proj.attack.dist = 90 ;Default attack distance for projectiles
@@ -531,13 +529,13 @@ fall = 1
 [State 410, 4]
 type = ChangeState
 trigger1 = movehit && command = "holdup"
-value = 41
+value = 9000
 ctrl = 1
 
 [State 410, 4]
 type = ChangeState
 trigger1 = AnimTime = 0
-value = 11
+value = 0
 ctrl = 1
 
 ;---------------------------------------------------------------------------
@@ -822,8 +820,10 @@ y = -2
 [State 0, DisplayToClipboard]
 type = DisplayToClipboard
 trigger1 = 1
-text = "%f %f %f %f %d"
-params = StageVar(camera.zoominspeed),StageVar(camera.zoomout),StageVar(camera.tensionvel)
+text = "var(10) = %f"
+params = ifelse(p2bodydist x/250<1,1,p2bodydist x/250), map(air_jump_used)
+;ignorehitpause = 
+;persistent = 
 ;ignorehitpause = 
 ;persistent = 
 [State -3, stagrevear]
@@ -838,11 +838,6 @@ camera.zoomout= .1
 ignorehitpause =1
 ;This controller plays a sound everytime KFM lands from a jump, or
 ;from his back-dash.
-[State -3, Landing Sound]
-type = PlaySnd
-triggerall = Time = 1
-trigger1 = stateno = 41 ;Jump land
-value = 1000, 1
 
 [State -3, Landing Sound]
 type = PlaySnd
