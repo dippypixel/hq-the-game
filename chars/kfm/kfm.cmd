@@ -332,6 +332,7 @@ value = 9000
 triggerall = command = "SuperJump"
 trigger1 = ctrl
 trigger1 = statetype  != A
+trigger2 = stateno=410 && movehit
 [State -1, AirJump]
 type = ChangeState
 value = 45
