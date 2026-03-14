@@ -387,29 +387,38 @@ value = 0
 ;---------------------------------------------------------------------------
 ; Hop backwards
 [Statedef 105]
-type    = A
-physics = A
-ctrl = 0
+type    = S
+physics = S
 anim = 105
 sprpriority = 1
+[State 210, 1]
+type = PlaySnd
+trigger1 = Time = 1
+value = 1000, 0
 
-[State 105, 1]
-type = VelSet
-trigger1 = Time = 0
+[State 100, 1]
+type = Velset
+trigger1 = 1
 x = const(velocity.run.back.x)
-y = const(velocity.run.back.y)
 
-[State 105, 2]
-type = CtrlSet
-trigger1 = Time = 2
-value = 1
+[State 100, 2] ;Prevent run from canceling into walk
+type = AssertSpecial
+trigger1 = 1
+flag = NoWalk
 
-[State 105, 3]
+[State 100, 3] ;Prevent from turning
+type = AssertSpecial
+trigger1 = 1
+flag = NoAutoTurn
+flag2= NoBrake
+
+
+
+[State 100, 4]
 type = ChangeState
-trigger1 = Vel Y > 0
-trigger1 = Pos Y >= 0
-value = 106
-
+trigger1 = command != "holdback"   && time > 10
+trigger2 = time > 20
+value = 0
 ;---------------------------------------------------------------------------
 ; Hop backwards (land)
 [Statedef 106]

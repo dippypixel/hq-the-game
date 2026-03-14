@@ -775,6 +775,7 @@ envshake.time = 12
 envshake.freq = 90
 envshake.ampl = -6
 envshake.phase = 90
+fall.recover=0
 
 [State 0, AllPalFX]
 type = AllPalFX
