@@ -326,6 +326,16 @@ var(1) = 1
 
 ;===========================================================================
 ;---------------------------------------------------------------------------
+[State -1, Teleport]
+type = ChangeState
+value = 1000
+triggerall = map(movement_ability_used) = 0
+triggerall = (abs(enemy,vel y)+abs(enemy,vel x))/2 > 6
+triggerall = command = "c"
+trigger1 = ctrl
+trigger2 = movehit
+;===========================================================================
+;---------------------------------------------------------------------------
 [State -1, superjump]
 type = ChangeState
 value = 9000
@@ -369,7 +379,7 @@ trigger2 = movehit
 [State -1, Run Fwd]
 type = ChangeState
 value = 100
-trigger1 = command = "FF"
+trigger1 = command = "AirDashF" || command = "FF"
 trigger1 = statetype != A
 trigger1 = ctrl
 
@@ -378,7 +388,7 @@ trigger1 = ctrl
 [State -1, Run Back]
 type = ChangeState
 value = 105
-trigger1 = command = "BB"
+trigger1 = command = "AirDashB" || command = "BB"
 trigger1 = statetype != A
 trigger1 = ctrl
 
@@ -390,7 +400,7 @@ value = 410
 triggerall = command = "Uppercut"
 triggerall = statetype != A
 trigger1 = ctrl
-trigger2 = stateno = [200,220]
+trigger2 = stateno = [200,240]
 trigger2 = movecontact
 
 ;Jump Strong Punch
@@ -434,7 +444,7 @@ triggerall = command = "a"
 trigger1 = statetype = S
 trigger1 = ctrl
 trigger2 = prevstateno != 230 && stateno = 230 && movecontact
-trigger2 = stateno = 200 && movecontact
+trigger3 = stateno = 200 && movecontact
 ;---------------------------------------------------------------------------
 ;Stand Strong Punch
 [State -1, Stand Strong Kick]
@@ -469,7 +479,8 @@ trigger1 = statetype = A
 trigger1 = ctrl
 trigger2 = stateno = 600 || stateno = 630 ;jump_x or jump_a
 trigger2 = movecontact
-trigger4 = stateno = 640 && movehit && time > 30 ;Air blocking
+trigger3 = stateno = 640 && movehit && time > 10 ;Air blocking
+
 ;---------------------------------------------------------------------------
 
 ;---------------------------------------------------------------------------
@@ -481,6 +492,7 @@ triggerall = command = "a"
 trigger1 = statetype = A
 trigger1 = ctrl
 trigger2 = prevstateno != 630 && stateno = 630 && movecontact
+trigger3 = stateno = 600 && movehit 
 ;Jump Strong Kick
 [State -1, Jump Strong Punch]
 type = ChangeState

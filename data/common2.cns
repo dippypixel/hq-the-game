@@ -113,7 +113,7 @@ sysvar(1) = -1
 [State 40, 4]
 type = VelSet
 trigger1 = AnimTime = 0
-x = ifelse(sysvar(1) = 0, const(velocity.jump.neu.x), ifelse(sysvar(1) = 1, ifelse(prevstateno = 100, (vel x), const(velocity.jump.fwd.x)),ifelse(prevstateno = 105, (vel x), const(velocity.jump.back.x)))*ifelse(command="holdup", 1, 1.334))
+x = ifelse(sysvar(1) = 0, const(velocity.jump.neu.x), ifelse(sysvar(1) = 1, ifelse(prevstateno = 100, (vel x)*1.2, const(velocity.jump.fwd.x)),ifelse(prevstateno = 105, (vel x)*1.2, const(velocity.jump.back.x)))*ifelse(command="holdup", 1, 1.334))
 y = ifelse(command!="holdup",const(velocity.jump.y)*0.667,const(velocity.jump.y))
 
 [State 40, 6]
@@ -297,7 +297,7 @@ x = ifelse((p2bodydist x/220*10)>20,20,10*ifelse(p2bodydist x/220<1,1,p2bodydist
 [State 0, VelAdd]
 type = Velset
 trigger1 = command = "holdback" && prevstateno=9000 && time < 5
-x = -10*ifelse(abs(p2bodydist x/220)<1 && p2bodydist x < 0,1,abs(p2bodydist x/220))
+x = ifelse((p2bodydist x/220*10)<-20,-20,-10*ifelse(abs(p2bodydist x/220)<1 && p2bodydist x < 0,1,abs(p2bodydist x/220)))
 [State 0, VelAdd]
 type = VelAdd
 trigger1 = command = "holdfwd" && vel x < const(velocity.runjump.fwd.x)*ifelse(prevstateno=9000,1,.5)
@@ -472,7 +472,6 @@ type = PlaySnd
 trigger1 = Time = 1
 value = 1000, 0
 
-
 [State 0, VelSet]
 type = VelSet
 trigger1 = !time
@@ -553,7 +552,12 @@ trigger1 = !time
 x = -const(velocity.run.fwd.x)
 Y =0
 ignorehitpause = 1
-
+[State 0, VelAdd]
+type = Velset
+trigger1 = time < 10
+trigger1 = command = "holddown" 
+y = 10
+;persistent = 
 ;persistent = 
 [State 0, Gravity]
 type = VelAdd
@@ -2566,10 +2570,6 @@ trigger1 = Time = 0
 x= enemy,map(wallbounceVelX)
 
 
-[State 1028, Turn]
-type = Turn
-trigger1 = (Time = 0) && (BackEdgeDist < 30)
-
 [State 1028, Gravity]
 type = VelAdd
 trigger1 = 1
@@ -2713,22 +2713,29 @@ trigger1 = statetype !=A
 map = "air_jump_used"
 value = 0
 ignorehitpause = 1
-[State Test]
+[State -3, High Speed Width]
 type = width
-trigger1 = statetype = A && vel x > 6 && p2bodydist x > 20
-value = -10, 60
+trigger1 = statetype = A && vel x > 4 && p2bodydist x > 20&&movetype != H
+value = -10, ifelse((vel x *6)+(enemynear,vel x *6)<60,60,(vel x *6)+(enemynear,vel x *6))
 ignorehitpause = 1
-[State Test]
+[State -3 High Speed Width]
 type = width
-trigger1 = statetype != A && vel x > 6&& p2bodydist x > 20
-value = 0, 60
+trigger1 = statetype != A && vel x > 4&& p2bodydist x > 20 &&movetype != H
+value = 0, ifelse((vel x *6)+(enemynear,vel x *6)<60,60,(vel x *6)+(enemynear,vel x *6))
 ignorehitpause = 1
-[State Test]
+[State -3State Test]
 type = Height
 trigger1 = statetype = A
 value = 0, 50
 ignorehitpause = 1
 
+
+[State 0, Turn]
+type = Turn
+trigger1 = p2bodydist x < -10
+trigger1 = movetype = A && statetype = A && movehit
+;ignorehitpause = 
+;persistent = 
 
 [State 0, AssertSpecial]
 type = AssertSpecial

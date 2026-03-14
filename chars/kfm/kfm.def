@@ -49,3 +49,4 @@ ending.storyboard = ending.def
 wallbounceVelX = 1
 floorbounceVelY = 1
 air_jump_used = 0
+movement_ability_used = 0
