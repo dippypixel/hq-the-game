@@ -413,7 +413,7 @@ value = 200
 triggerall = command = "x"
 trigger1 = statetype = S
 trigger1 = ctrl
-trigger2 = stateno = 200 && movehit
+trigger2 = prevstateno != 200 && stateno = 200 && movecontact
 
 ;---------------------------------------------------------------------------
 ;Standing Strong Kick
@@ -433,8 +433,8 @@ value = 230
 triggerall = command = "a"
 trigger1 = statetype = S
 trigger1 = ctrl
-trigger2 = stateno = 200 && movehit
-trigger3 = stateno = 230 && movehit
+trigger2 = prevstateno != 230 && stateno = 230 && movecontact
+trigger2 = stateno = 200 && movecontact
 ;---------------------------------------------------------------------------
 ;Stand Strong Punch
 [State -1, Stand Strong Kick]
@@ -480,7 +480,7 @@ value = 630
 triggerall = command = "a"
 trigger1 = statetype = A
 trigger1 = ctrl
-trigger2 = prevstateno != 600 && stateno = 600 && movecontact
+trigger2 = prevstateno != 630 && stateno = 630 && movecontact
 ;Jump Strong Kick
 [State -1, Jump Strong Punch]
 type = ChangeState

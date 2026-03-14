@@ -1,15 +1,15 @@
 {
-  "playtime": 716.89,
+  "playtime": 2163.6,
   "modes": {
     "training": {
       "playtime": 0,
       "clear": 0
     },
     "netplayversus": {
-      "playtime": 716.89,
-      "clear": 2,
+      "playtime": 2163.6,
+      "clear": 3,
       "clearcount": {
-        "kfm": 2
+        "kfm": 3
       }
     }
   }
