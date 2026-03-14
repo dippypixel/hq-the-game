@@ -617,7 +617,7 @@ envshake.ampl = -1
 envshake.phase =90
 [State 0, VelSet]
 type = velset
-trigger1 = !time && prevstateno = 600 && vel y > -2 ;&& pos y > -80
+trigger1 = !time && prevstateno = 600 && vel y > -2 && movecontact
 y = -2
 
 [State 600, 3]

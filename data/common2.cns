@@ -2350,14 +2350,6 @@ trigger1 = Time = 1
 value = F7, 2
 volumescale = 200
 
-[State 0, EnvShake]
-type = EnvShake
-trigger1 = Time = 0
-time = 20
-freq = 60
-ampl = -4
-phase = 90
-ignorehitpause = 1
 
 [State 5100, 9]
 type = HitFallDamage
@@ -2716,7 +2708,7 @@ ignorehitpause = 1
 [State -3, High Speed Width]
 type = width
 trigger1 = statetype = A && vel x > 4 && p2bodydist x > 20&&movetype != H
-value = -10, ifelse((vel x *6)+(enemynear,vel x *6)<60,60,(vel x *6)+(enemynear,vel x *6))
+value = -10, ifelse((vel x *6)+(enemynear,vel x *6)<0,60,(vel x *6)+(enemynear,vel x *6))
 ignorehitpause = 1
 [State -3 High Speed Width]
 type = width
