@@ -867,30 +867,169 @@ trigger1 = !time && prevstateno = [600,630] && vel y > -2 ;&& pos y > -80
 y = -2
 
 ;---------------------------------------------------------------------------
-;Jump Strong Punch
-; CNS difficulty: easy
-[Statedef 10001]
-type    = U
-movetype= I
-physics = N
-juggle  = 4
-ctrl = 0
-sprpriority = 2
-velset = 0,0
-[State 0, PlayerPush]
-type = PlayerPush
-trigger1 = 1
+;ThrowProjectile
+[Statedef 900]
+type    = S                      ;State-type: S-stand, C-crouch, A-air, L-liedown
+movetype= A                      ;Move-type: A-attack, I-idle, H-gethit
+physics = S                      ;Physics: S-stand, C-crouch, A-air
+juggle  = 1                      ;Number of air juggle points move takes
+;Commonly-used controllers:                    ;Set velocity (x,y) (Def: no change)
+ctrl = 0                         ;Set ctrl (Def: no change)
+anim = 900                       ;Change animation (Def: no change)
+poweradd = 10                    ;Power to add (Def: 0)
+sprpriority = 2                  ;Set p1's sprite layering priority to 2 (in front)
+[State 0, VarSet]
+type = VarSet
+trigger1 = AnimElemtime(4)<0
+v = 9    ;fv = 10
+value = ifelse(command="holdback",-1,ifelse(command="holdfwd",1,0))
+;ignorehitpause = 
+;persistent = 
+
+[State 0, Helper]
+type = Helper
+trigger1 = AnimElem = 4
+helpertype = Normal ;Player
+name = "Projectile"
+ID = 901
+stateno = 901
+pos = 0,-50
+postype = P1    ;P2, Front, Back, Left, Right
+facing = 1
+keyctrl = 0
+ownpal = 0
+
+[State 200, 2]
+type = PlaySnd
+trigger1 = Time = 1
+value = 0, 1
+
+[State 200, 3]
+type = ChangeState
+trigger1 = AnimTime = 0
 value = 0
+ctrl = 1
+
+
+;---------------------------------------------------------------------------
+;Projectile Up
+[Statedef 901]
+type    = U                      ;State-type: S-stand, C-crouch, A-air, L-liedown
+movetype= A                      ;Move-type: A-attack, I-idle, H-gethit
+physics = N                      ;Physics: S-stand, C-crouch, A-air
+juggle  = 1                      ;Number of air juggle points move takes
+;Commonly-used controllers:                    ;Set velocity (x,y) (Def: no change)
+ctrl = 0                         ;Set ctrl (Def: no change)
+anim = 901                       ;Change animation (Def: no change)
+sprpriority = 2                  ;Set p1's sprite layering priority to 2 (in front)
+
+[State 0, VelSet]
+type = VelSet
+trigger1 = time = 1
+trigger1 = root,var(9) = -1
+x = 5*ifelse((p2bodydist x/500)<1,1,(p2bodydist x/500))
+y = -20*ifelse((p2bodydist y/500)<1,1,(p2bodydist y/500))
+[State 0, VelSet]
+type = VelSet
+trigger1 = time = 1
+trigger1 = root,var(9) = 1
+x = 20*ifelse((p2bodydist x/500)<1,1,(p2bodydist x/500))
+y = -15*ifelse((p2bodydist y/500)<1,	1,	(p2bodydist y/500))
+[State 0, VelSet]
+type = VelSet
+trigger1 = time = 1
+trigger1 = root,var(9) = 0
+x = 20*ifelse((p2bodydist x/500)<1,1,(p2bodydist x/500))
+y = 0
+[State 200, 1]
+type = HitDef
+trigger1 = time = 1
+attr = S, NA                     ;Attribute: Standing, Normal Attack
+damage = 23, 0                   ;Damage that move inflicts, guard damage
+animtype = Light                 ;Animation type: Light, Medium, Heavy, Back (def: Light)
+guardflag = MA                   ;Flags on how move is to be guarded against
+hitflag = MAF                    ;Flags of conditions that move can hit
+priority = 3, Hit                ;Attack priority: 0 (least) to 7 (most), 4 default
+;Hit/Miss/Dodge type (Def: Hit)
+pausetime = 7,12              ;Time attacker pauses, time opponent shakes
+sparkno = 0                      ;Spark anim no (Def: set above)
+sparkxy = -10, -76               ;X-offset for the "hit spark" rel. to p2,
+;Y-offset for the spark rel. to p1
+hitsound = 5, 2                  ;Sound to play on hit
+guardsound = 6, 0                ;Sound to play on guard
+ground.type = High               ;Type: High, Low, Trip (def: Normal)
+ground.slidetime = 5             ;Time that the opponent slides back
+ground.hittime  = 11             ;Time opponent is in hit state
+ground.velocity = -10             ;Velocity at which opponent is pushed
+air.velocity = -4,-10         ;X-velocity at which opponent is pushed,
+airguard.velocity = -2,-2    ;Guard velocity in air (def: (air.xvel*1.5, air.yvel/2))
+air.type = High                  ;Type: High, Low, Trip (def: same as ground.type)
+;Y-velocity at which opponent is pushed
+air.hittime = 15                 ;Time before opponent regains control in air
+envshake.time = 3
+envshake.freq =60
+envshake.ampl = -1
+envshake.phase =90
+
+[State 0, HitOverride]
+type = HitOverride
+trigger1 = 1
+attr = SCA,NA,SA,HA,NP,SP,HP,NT,ST,HT
+slot = 1
+stateno = 905
+time = 1
+forceair = 1
+
+[State 0, DestroySelf]
+type = DestroySelf
+trigger1 = time > 240
+[State 0, DestroySelf]
+type = CHANGESTATE 
+trigger1 = movehit
+VALUE = 905
 ;ignorehitpause = 
 ;persistent = 
 
 
-[State 0, PosSet]
-type = PosSet
-trigger1 = 1
-x = enemy,pos x - (enemy,vel x*10)
-y =enemy, pos y + (enemy,vel y*10)
+;---------------------------------------------------------------------------
+;ProjectileHit
+[Statedef 905]
+type    = U                      ;State-type: S-stand, C-crouch, A-air, L-liedown
+movetype= H                      ;Move-type: A-attack, I-idle, H-gethit
+physics = N                      ;Physics: S-stand, C-crouch, A-air
+ctrl = 0                         ;Set ctrl (Def: no change)
+anim = 901                       ;Change animation (Def: no change)
+sprpriority = 2                  ;Set p1's sprite layering priority to 2 (in front)
+velset = -9,-9
 
+[State 5050, 3] ;Gravity
+type = VelAdd
+trigger1 = 1
+y = const(movement.yaccel)
+;ignorehitpause = 
+;persistent = 
+
+[State 0, HitOverride]
+type = HitOverride
+trigger1 = 1
+attr = SCA,NA,SA,HA,NP,SP,HP,NT,ST,HT
+slot = 1
+stateno = 905
+time = 1
+forceair = 1
+
+
+[State 0, AngleDraw]
+type = AngleDraw
+trigger1 =1
+value = 1
+scale = 1+(time/20),1+(time/20)
+;ignorehitpause = 
+;persistent = 
+
+[State 0, DestroySelf]
+type = DestroySelf
+trigger1 = pos y > 200
 
 ;---------------------------------------------------------------------------
 ;Teleport
@@ -958,7 +1097,7 @@ ignorehitpause = 1
 type = DisplayToClipboard
 trigger1 = 1
 text = "var(10) = %f"
-params = ifelse(p2bodydist x/250<1,1,p2bodydist x/250), map(air_jump_used)
+params = gameheight
 ;ignorehitpause = 
 ;persistent = 
 ;ignorehitpause = 

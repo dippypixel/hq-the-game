@@ -152,6 +152,9 @@ command = /$D+y
 [Command]
 name = "Uppercut"
 command = /$D+y
+[Command]
+name = "Projectile"
+command = /$D+x
 [command]
 name = "SuperJump"
 command = D,U
@@ -391,6 +394,17 @@ value = 105
 trigger1 = command = "AirDashB" || command = "BB"
 trigger1 = statetype != A
 trigger1 = ctrl
+
+;---------------------------------------------------------------------------
+;Crouching Strong Punch
+[State -1, Projectile]
+type = ChangeState
+value = 900
+triggerall = command = "Projectile"
+triggerall = numhelper(901) <= 2
+triggerall = statetype != A
+trigger1 = ctrl
+trigger2 = prevstateno != 900 && stateno = 900 && AnimElemTime(4)>=1
 
 ;---------------------------------------------------------------------------
 ;Crouching Strong Punch

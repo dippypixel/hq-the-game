@@ -2695,6 +2695,36 @@ ID = 190000
 angle = fvar(2)
 trans = add1     ;None, Add, AddAlpha, Add1, Sub
 alpha = fvar(1), 256-fvar(1)
+;------------------
+;WallBounce Effects
+[Statedef 6000]
+movetype = U      ; AIHU
+physics = N       ; SCANU          ;refers to the .Air file
+sprpriority = 9   ; Stand behind everything 
+anim = 2
+[State 1027, Spark]
+type = Explod
+trigger1 = Time = 1
+anim = F50
+pos = -15, 0
+sprpriority = 10
+postype = p1 
+angle = -90
+[State 5100, 10]
+type = PlaySnd
+trigger1 = Time = 0
+value = F7, 0
+volumescale = 100+(abs(root,vel x)*10)
+freqmul = 1+(abs(root,vel x)*.015)
+[State 0, DestroySelf]
+type = DestroySelf
+trigger1 = time = 10
+ignorehitpause = 1
+
+
+
+
+
 ;-------------------------------------------------------------------------------------------------------
 [Statedef -2]
 ignorehitpause = 1
@@ -2710,12 +2740,12 @@ type = width
 trigger1 = statetype = A && vel x > 4 && p2bodydist x > 20&&movetype != H
 value = -10, ifelse((vel x *6)+(enemynear,vel x *6)<0,60,(vel x *6)+(enemynear,vel x *6))
 ignorehitpause = 1
-[State -3 High Speed Width]
+[State -3, High Speed Width]
 type = width
 trigger1 = statetype != A && vel x > 4&& p2bodydist x > 20 &&movetype != H
 value = 0, ifelse((vel x *6)+(enemynear,vel x *6)<60,60,(vel x *6)+(enemynear,vel x *6))
 ignorehitpause = 1
-[State -3State Test]
+[State -3, Air Height]
 type = Height
 trigger1 = statetype = A
 value = 0, 50
@@ -2728,6 +2758,30 @@ trigger1 = p2bodydist x < -10
 trigger1 = movetype = A && statetype = A && movehit
 ;ignorehitpause = 
 ;persistent = 
+
+[State 0, WallBounce]
+type = VelMul
+trigger1 = backedgebodydist <= 10 && vel x < 0
+trigger1 = stateno=[5030,5050] || stateno=5720
+x = -0.75
+
+[State 0, WallBounce Effects]
+type = Helper
+trigger1 = backedgebodydist <= 10 && vel x < 0
+trigger1 = stateno=[5030,5050] || stateno=5720
+trigger1 = !NumHelper(6000)
+;trigger1 = ailevel = 0 || enemynear,ailevel = 0
+helpertype = Normal 
+name = "WallBounce"
+ID = 6000
+stateno = 6000
+pos = 0,0
+postype = p1    ;P2, Front, Back, Left, Right
+keyctrl = 0
+ownpal = 1
+under = 1
+persistent = 0
+
 
 [State 0, AssertSpecial]
 type = AssertSpecial
