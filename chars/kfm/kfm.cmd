@@ -346,6 +346,7 @@ triggerall = command = "SuperJump"
 trigger1 = ctrl
 trigger1 = statetype  != A
 trigger2 = stateno=410 && movehit
+trigger3 = stateno = 900 && AnimElemTime(4)>=1
 [State -1, AirJump]
 type = ChangeState
 value = 45

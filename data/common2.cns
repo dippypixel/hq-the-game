@@ -2762,25 +2762,9 @@ trigger1 = movetype = A && statetype = A && movehit
 [State 0, WallBounce]
 type = VelMul
 trigger1 = backedgebodydist <= 10 && vel x < 0
-trigger1 = stateno=[5030,5050] || stateno=5720
+trigger1 = stateno=[5030,5050] || stateno=5720&& pos y < -100
 x = -0.75
 
-[State 0, WallBounce Effects]
-type = Helper
-trigger1 = backedgebodydist <= 10 && vel x < 0
-trigger1 = stateno=[5030,5050] || stateno=5720
-trigger1 = !NumHelper(6000)
-;trigger1 = ailevel = 0 || enemynear,ailevel = 0
-helpertype = Normal 
-name = "WallBounce"
-ID = 6000
-stateno = 6000
-pos = 0,0
-postype = p1    ;P2, Front, Back, Left, Right
-keyctrl = 0
-ownpal = 1
-under = 1
-persistent = 0
 
 
 [State 0, AssertSpecial]

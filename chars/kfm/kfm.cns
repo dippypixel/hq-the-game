@@ -888,6 +888,7 @@ value = ifelse(command="holdback",-1,ifelse(command="holdfwd",1,0))
 
 [State 0, Helper]
 type = Helper
+triggerall = numhelper(901) <= 2
 trigger1 = AnimElem = 4
 helpertype = Normal ;Player
 name = "Projectile"
@@ -928,13 +929,13 @@ type = VelSet
 trigger1 = time = 1
 trigger1 = root,var(9) = -1
 x = 5*ifelse((p2bodydist x/500)<1,1,(p2bodydist x/500))
-y = -20*ifelse((p2bodydist y/500)<1,1,(p2bodydist y/500))
+y = -20*ifelse((p2bodydist x/500)<1,1,(p2bodydist x/500))
 [State 0, VelSet]
 type = VelSet
 trigger1 = time = 1
 trigger1 = root,var(9) = 1
 x = 20*ifelse((p2bodydist x/500)<1,1,(p2bodydist x/500))
-y = -15*ifelse((p2bodydist y/500)<1,	1,	(p2bodydist y/500))
+y = -15*ifelse((p2bodydist x/500)<1,	1,	(p2bodydist x/500))
 [State 0, VelSet]
 type = VelSet
 trigger1 = time = 1
