@@ -406,9 +406,9 @@ sparkxy = -10,-70
 hitsound   = 5,2
 guardsound = 6,0
 ground.type = Low
-ground.slidetime = 8
+ground.slidetime = 5             ;Time that the opponent slides back
 ground.hittime  = 17
-ground.velocity = (vel x*-1)-2
+ground.velocity = (vel x*-1)-2 
 air.velocity = (vel x*-1)-2.2,-3.2
 envshake.time = 5
 envshake.freq =60
@@ -857,6 +857,17 @@ poweradd= 30
 ctrl = 0
 anim = 650
 sprpriority = 2
+
+[State -3, High Speed Width]
+type = width
+trigger1 = animelemtime(4)<=0
+player = 40+(vel x), (vel x *6)
+ignorehitpause = 1
+[State -3, High Speed Width]
+type = width
+trigger1 = animelemtime(4)>0
+player = 40+(vel x), (vel x *6)
+ignorehitpause = 1
 [State 0, StateTypeSet]
 type = StateTypeSet
 trigger1 = time = 1 
@@ -1896,6 +1907,12 @@ anim = 9000
 ctrl = 0
 sprpriority = 1
 facep2 = 1
+[State 0, PlayerPush]
+type = PlayerPush
+trigger1 = 1
+value = 0
+;ignorehitpause = 
+;persistent = 
 
 [State 3400,AfterImage]
 type = AfterImage
@@ -2006,9 +2023,11 @@ trigger1 = anim >= 41 && anim <= 43
 persistent = 0
 value = Anim + 3
 
-[State 0, Turn]
-type = Turn
-trigger1 = p2bodydist x < -100
+
+[State 0, PlayerPush]
+type = PlayerPush
+trigger1 = prevstateno=9000 && time < 10
+value = 0
 ;ignorehitpause = 
 ;persistent = 
 
@@ -2046,6 +2065,19 @@ x = ifelse(vel x > 10,-5,-1)
 
 
 [Statedef -3]
+
+
+[State -3, High Speed Width]
+type = width
+trigger1 = stateno !=650 
+trigger1 = statetype = A && vel x > 4
+player = (vel x), ifelse(vel x<0,0,(vel x))
+ignorehitpause = 1
+[State -3, High Speed Width]
+type = width
+trigger1 = statetype != A && vel x > 4 &&movetype = I
+player = (vel x*.5), (vel x)
+
 
 [State 0, ChangeState]
 type = ChangeState

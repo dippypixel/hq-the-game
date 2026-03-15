@@ -2556,29 +2556,12 @@ trigger1 = statetype !=A
 map = "air_jump_used"
 value = 0
 ignorehitpause = 1
-[State -3, High Speed Width]
-type = width
-trigger1 = statetype = A && vel x > 4 &&(p2bodydist x - enemynear,vel x *6) > -20&&movetype != H
-player = 0, ifelse((vel x *6)+(enemynear,vel x *6)<0,60,(vel x *6)+(enemynear,vel x *6))
-ignorehitpause = 1
-[State -3, High Speed Width]
-type = width
-trigger1 = statetype != A && vel x > 4&& p2bodydist x > -20 &&movetype != H
-player = 0, ifelse((vel x *6)+(enemynear,vel x *6)<60,60,(vel x *6)+(enemynear,vel x *6))
-ignorehitpause = 1
 [State -3, Air Height]
 type = Height
-trigger1 = statetype = A && enemynear,statetype = A
-value = 0, 50
+trigger1 = statetype = A
+value = 0, ifelse(vel y<0,0,vel y)
 ignorehitpause = 1
 
-
-[State 0, Turn]
-type = Turn
-trigger1 = p2bodydist x < -100
-trigger1 = movetype = A && statetype = A && movehit
-;ignorehitpause = 
-;persistent = 
 [State 0, WallBounce Effects]
 type = Helper
 triggerall = enemy,name = "06"

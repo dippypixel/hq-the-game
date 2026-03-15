@@ -1304,6 +1304,17 @@ ctrl = 1
 
 [Statedef -3]
 
+[State -3, High Speed Width]
+type = width
+trigger1 = stateno !=650 
+trigger1 = statetype = A && vel x > 4
+player = (vel x), ifelse(vel x<0,0,(vel x))
+ignorehitpause = 1
+[State -3, High Speed Width]
+type = width
+trigger1 = statetype != A && vel x > 4 &&movetype = I
+player = (vel x*.5), (vel x)
+ignorehitpause = 1
 [State 0, Mapset]
 type = MapSet
 trigger1 = !numtarget
