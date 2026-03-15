@@ -71,7 +71,7 @@ air.gethit.airrecover.up = -2         ;Extra y-velocity for holding up during ai
 air.gethit.airrecover.down = 1.5      ;Extra y-velocity for holding down during air recovery **MUGEN 1.0**
 
 [Movement]
-airjump.num = 1       ;Number of air jumps allowed (opt)
+airjump.num = 0       ;Number of air jumps allowed (opt)
 airjump.height = 35   ;Minimum distance from ground before you can air jump (opt)
 yaccel = .7          ;Vertical acceleration
 stand.friction = .95  ;Friction coefficient when standing
@@ -278,7 +278,7 @@ pausetime = 7,7              ;Time attacker pauses, time opponent shakes
 sparkno = 0                      ;Spark anim no (Def: set above)
 sparkxy = -10, -76               ;X-offset for the "hit spark" rel. to p2,
 ;Y-offset for the spark rel. to p1
-hitsound = 5, 0                  ;Sound to play on hit
+hitsound = S5, 2                  ;Sound to play on hit
 guardsound = 6, 0                ;Sound to play on guard
 ground.type = High               ;Type: High, Low, Trip (def: Normal)
 ground.slidetime = 5             ;Time that the opponent slides back
@@ -331,7 +331,7 @@ damage    = 63
 guardflag = MA
 sparkno = 1
 sparkxy = -10,-70
-hitsound   = 5,2
+hitsound   = S8000, 6
 guardsound = 6,0
 ground.type = Low
 ground.slidetime = 12
@@ -381,7 +381,7 @@ pausetime = 7,7               ;Time attacker pauses, time opponent shakes
 sparkno = 1
 sparkxy = -10,-70
 ;Y-offset for the spark rel. to p1
-hitsound = 5, 0                  ;Sound to play on hit
+hitsound = S8000, 1                 ;Sound to play on hit
 guardsound = 6, 0                ;Sound to play on guard
 ground.type = High               ;Type: High, Low, Trip (def: Normal)
 ground.slidetime = 5             ;Time that the opponent slides back
@@ -453,7 +453,7 @@ guardflag = MA
 pausetime = 9,9
 sparkno = 1
 sparkxy = -10,-70
-hitsound   = 5,2
+hitsound   = S8000, 3
 guardsound = 6,0
 ground.type = High
 ground.slidetime = 12
@@ -600,7 +600,7 @@ priority = 3
 pausetime = 7,7
 sparkno = 1
 sparkxy = -10,-70
-hitsound   = 5,0
+hitsound   = S5,2
 guardsound = 6,0
 ground.type = High
 ground.slidetime = 7
@@ -653,7 +653,7 @@ priority = 4
 pausetime = 9,9
 sparkno = 1
 sparkxy = -10,-70
-hitsound   = 5,3
+hitsound   = S5,1
 guardsound = 6,0
 animtype = Med
 ground.type = High
@@ -699,7 +699,7 @@ priority = 3
 pausetime = 7,7
 sparkno = 1
 sparkxy = -10,-70
-hitsound   = 5,0
+hitsound   = S5,0
 guardsound = 6,0
 ground.type = High
 ground.slidetime = 7
@@ -1147,7 +1147,142 @@ trigger1 = vel y > -pos y
 value = 52
 ctrl = 1
 
+;---------------------------------------------------------------------------
+; Air Dash Up
+[Statedef 116]
+type    = A
+movetype= I
+physics = N
+juggle  = 0
+ctrl = 0
+anim = 100
+poweradd = 0
+sprpriority = 2
+[State 0, VarSet]
+type = Varadd
+trigger1 = time = 1
+v = 18    ;fv = 10
+value = 1
+ignorehitpause = 1
+[State 210, 1]
+type = PlaySnd
+trigger1 = Time = 1
+value = 1000, 0
 
+[State 0, VelSet]
+type = VelSet
+trigger1 = !time
+x = 0
+Y = -17
+ignorehitpause = 1
+
+[State 0, VelAdd]
+type = Velset
+trigger1 = time < 10
+trigger1 = command = "holdfwd" 
+x = 10
+[State 0, VelAdd]
+type = Velset
+trigger1 = time < 10
+trigger1 = command = "holdback" 
+x = -10
+;persistent = 
+[State 0, Gravity]
+type = VelAdd
+trigger1 = statetype=A && time > 10
+y = const(movement.yaccel)
+
+
+[State 0, ChangeState]
+type = ctrlset
+trigger1 = time  = 1
+value =1
+
+[State 3400,AfterImage]
+type = AfterImage
+trigger1 = !time
+time = 20
+TimeGap  = 1
+FrameGap = 4
+length = 15
+PalBright   = 0,0,0
+PalContrast = 255,255,255
+PalMul      = .8,.8,.8
+[State 200, 3]
+type = ChangeState
+trigger1 = pos y > 0
+trigger1 = vel y > -pos y
+value = 52
+ctrl = 1
+
+
+;---------------------------------------------------------------------------
+; Air Dash Down
+[Statedef 117]
+type    = A
+movetype= I
+physics = N
+juggle  = 0
+ctrl = 0
+anim = 100
+poweradd = 0
+sprpriority = 2
+[State 0, VarSet]
+type = Varadd
+trigger1 = time = 1
+v = 18    ;fv = 10
+value = 1
+ignorehitpause = 1
+[State 210, 1]
+type = PlaySnd
+trigger1 = Time = 1
+value = 1000, 0
+
+[State 0, VelSet]
+type = VelSet
+trigger1 = !time
+x = 0
+Y = 17
+ignorehitpause = 1
+
+[State 0, VelAdd]
+type = Velset
+trigger1 = time < 10
+trigger1 = command = "holdfwd" 
+x = 10
+[State 0, VelAdd]
+type = Velset
+trigger1 = time < 10
+trigger1 = command = "holdback" 
+x = -10
+;persistent = 
+[State 0, Gravity]
+type = VelAdd
+trigger1 = statetype=A && time > 10
+y = const(movement.yaccel)
+
+
+[State 0, ChangeState]
+type = ctrlset
+trigger1 = time  = 1
+value =1
+
+[State 3400,AfterImage]
+type = AfterImage
+trigger1 = !time
+time = 20
+TimeGap  = 1
+FrameGap = 4
+length = 15
+PalBright   = 0,0,0
+PalContrast = 255,255,255
+PalMul      = .8,.8,.8
+[State 200, 3]
+type = ChangeState
+trigger1 = pos y > 0
+trigger1 = vel y > -pos y
+value = 52
+ctrl = 1
 
 
 
@@ -1187,6 +1322,8 @@ type = ChangeState
 trigger1 = AnimTime = 0
 value = 50
 ctrl = 1
+
+
 
 ;---------------------------------------------------------------------------
 ; Jump Up

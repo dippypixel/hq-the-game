@@ -183,6 +183,14 @@ time = 5
 name = "AirDashB"
 command = z + /$B
 time = 5
+[Command]
+name = "AirDashU"
+command = z + /$U
+time = 5
+[Command]
+name = "AirDashD"
+command = z + /$D
+time = 5
 
 ;-| 2/3 Button Combination |-----------------------------------------------
 [Command]
@@ -344,7 +352,7 @@ value = 110
 triggerall = !var(55)
 triggerall = var(18)<3
 triggerall = stateno != 110
-triggerall = command = "AirDashF" || command = "FF"
+triggerall = command = "AirDashF"
 triggerall = statetype = A
 trigger1 = Pos Y < -const(movement.airjump.height)
 trigger1 = ctrl 
@@ -356,7 +364,31 @@ value = 115
 triggerall = !var(55)
 triggerall = var(18)<3
 triggerall = stateno != 115
-triggerall = command = "AirDashB" || command = "BB"
+triggerall = command = "AirDashB" 
+triggerall = statetype = A
+trigger1 = Pos Y < -const(movement.airjump.height)
+trigger1 = ctrl 
+trigger2 = movehit
+;Air DashFwd
+[State -1, Air Dash]
+type = ChangeState
+value = 116
+triggerall = !var(55)
+triggerall = var(18)<3
+triggerall = stateno != 110
+triggerall = command = "AirDashU"
+triggerall = statetype = A
+trigger1 = Pos Y < -const(movement.airjump.height)
+trigger1 = ctrl 
+trigger2 = movehit
+;Air DashFwd
+[State -1, Air Dash]
+type = ChangeState
+value = 117
+triggerall = !var(55)
+triggerall = var(18)<3
+triggerall = stateno != 115
+triggerall = command = "AirDashD" 
 triggerall = statetype = A
 trigger1 = Pos Y < -const(movement.airjump.height)
 trigger1 = ctrl 
@@ -421,6 +453,7 @@ trigger1 = statetype = S
 trigger1 = ctrl
 trigger2 = (stateno = 200) && movehit
 trigger3 = (stateno = 230) && movehit
+trigger4 = (stateno = 240) && movehit && (prevstateno != 210)
 ;---------------------------------------------------------------------------
 ;Stand Light Punch
 [State -1, Stand Light Kick]
