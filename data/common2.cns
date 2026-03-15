@@ -47,9 +47,6 @@ flag = Noautoturn
 type = VelSet
 trigger1 = Time = 0
 y = 0
-
-
-
 [State 0, 4] ;Are you dead?
 type = ChangeState
 trigger1 = !alive
@@ -872,6 +869,40 @@ ctrl = 0
 type = ChangeState
 trigger1 = Time = 0
 value = 0
+
+;---------------------------------------------------------------------------
+; GO
+[Statedef 192]
+type = S
+ctrl = 1
+velset = 0,0
+anim=0
+[State 0, VarSet]
+type = VarSet
+trigger1 = !time
+v = 2    ;fv = 10
+value = 1
+[State 0, VelSet]
+type = VelSet
+trigger1 = !time&&command= "holdfwd"
+x = 40
+y = 0
+;ignorehitpause = 
+persistent = 0
+
+[State 0, EnvShake]
+type = EnvShake
+trigger1 = !time&&command= "holdfwd"
+time = 10
+freq = 60
+ampl = -3
+phase = 90
+
+[State 195, 2]
+type = ChangeState
+trigger1 = Time = 1
+value = 0
+ctrl = 1
 
 ;---------------------------------------------------------------------------
 ; Stand get-hit (shaking)
@@ -2480,11 +2511,11 @@ alpha = fvar(1), 256-fvar(1)
 movetype = U      ; AIHU
 physics = N       ; SCANU          ;refers to the .Air file
 sprpriority = 9   ; Stand behind everything 
-anim = 2
+anim = 9999
 [State 1027, Spark]
 type = Explod
 trigger1 = Time = 1
-anim = F50
+anim = F61
 pos = -15, 0
 sprpriority = 10
 postype = p1 
@@ -2492,14 +2523,21 @@ angle = -90
 [State 5100, 10]
 type = PlaySnd
 trigger1 = Time = 0
-value = F7, 0
-volumescale = 100+(abs(root,vel x)*10)
-freqmul = 1+(abs(root,vel x)*.015)
+value = F7, 2
+volumescale = 200
 [State 0, DestroySelf]
 type = DestroySelf
 trigger1 = time = 10
 ignorehitpause = 1
-
+[State 0, EnvShake]
+type = EnvShake
+trigger1 = Time = 0
+time = 5
+freq = 60
+ampl = -5
+phase = 90
+;ignorehitpause = 
+;persistent = 
 
 
 
@@ -2507,7 +2545,11 @@ ignorehitpause = 1
 ;-------------------------------------------------------------------------------------------------------
 [Statedef -2]
 ignorehitpause = 1
-
+[State 0, ROUND BOOST]
+type = ChangeState
+trigger1 = roundstate=2 && stateno!=192 && !var(2)
+VALUE=192
+persistent=0
 [State 0, Mapset]
 type = MapSet
 trigger1 = statetype !=A
@@ -2516,12 +2558,12 @@ value = 0
 ignorehitpause = 1
 [State -3, High Speed Width]
 type = width
-trigger1 = statetype = A && vel x > 4 && p2bodydist x > 20&&movetype != H
+trigger1 = statetype = A && vel x > 4 &&(p2bodydist x - enemynear,vel x *6) > -20&&movetype != H
 player = 0, ifelse((vel x *6)+(enemynear,vel x *6)<0,60,(vel x *6)+(enemynear,vel x *6))
 ignorehitpause = 1
 [State -3, High Speed Width]
 type = width
-trigger1 = statetype != A && vel x > 4&& p2bodydist x > 20 &&movetype != H
+trigger1 = statetype != A && vel x > 4&& p2bodydist x > -20 &&movetype != H
 player = 0, ifelse((vel x *6)+(enemynear,vel x *6)<60,60,(vel x *6)+(enemynear,vel x *6))
 ignorehitpause = 1
 [State -3, Air Height]
@@ -2533,17 +2575,37 @@ ignorehitpause = 1
 
 [State 0, Turn]
 type = Turn
-trigger1 = p2bodydist x < -60
+trigger1 = p2bodydist x < -100
 trigger1 = movetype = A && statetype = A && movehit
 ;ignorehitpause = 
 ;persistent = 
-
+[State 0, WallBounce Effects]
+type = Helper
+triggerall = enemy,name = "06"
+triggerall = p2bodydist x > 200
+trigger1 = backedgebodydist <= 10 && vel x < 0
+trigger1 = stateno=[5030,5050] || stateno=5720&& pos y < -100
+trigger1 = !numhelper(6000)
+helpertype = Normal 
+name = "WallBounce"
+ID = 6000
+stateno = 6000
+pos = 0,0
+postype = p1    ;P2, Front, Back, Left, Right
+keyctrl = 0
+ownpal = 1
+under = 1
+persistent = 0
 [State 0, WallBounce]
 type = VelMul
+triggerall = enemy,name = "06"
 triggerall = p2bodydist x > 200
 trigger1 = backedgebodydist <= 10 && vel x < 0
 trigger1 = stateno=[5030,5050] || stateno=5720&& pos y < -100
 x = -0.75
+
+
+
 
 
 

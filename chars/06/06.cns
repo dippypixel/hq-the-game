@@ -122,6 +122,79 @@ victory7 = "なんだと！彼女はここにもいないと？"
 
 
 ;---------------------------------------------------------------------------
+; Stand
+[Statedef 0]
+type = S
+physics = S
+sprpriority = 0
+
+[State 0, 1]
+type = ChangeAnim
+trigger1 = Anim != 0 && Anim != 5
+trigger2 = Anim = 5 && AnimTime = 0 ;Turn anim over
+value = 0
+
+[State 0, AssertSpecial]
+type = AssertSpecial
+trigger1 = 1
+flag = Noautoturn
+[State 0, 2]
+type = VelSet
+trigger1 = Time = 0
+y = 0
+[State 0, 4] ;Are you dead?
+type = ChangeState
+trigger1 = vel x >=const(velocity.run.fwd.x)*.8
+value = 100
+ctrl = 1
+[State 0, 4] ;Are you dead?
+type = ChangeState
+trigger1 = !alive
+value = 5050
+ctrl = 0
+
+
+;---------------------------------------------------------------------------
+; Walk
+[Statedef 20]
+type    = S
+physics = S
+sprpriority = 0
+
+[State 0, 4] ;Are you dead?
+type = ChangeState
+trigger1 = vel x >=const(velocity.run.fwd.x)*.8
+value = 100
+ctrl = 1
+
+[State 20, 1]
+type = VelSet
+triggerall = vel x < const(velocity.walk.fwd.x)
+trigger1 = command = "holdfwd"
+x = const(velocity.walk.fwd.x)
+
+[State 20, 2]
+type = VelSet
+triggerall = vel x > const(velocity.walk.back.x)
+trigger1 = command = "holdback"
+x = const(velocity.walk.back.x)
+
+[State 20, 3]
+type = ChangeAnim
+triggerall = vel x > 0
+trigger1 = Anim != 20 && Anim != 5
+trigger2 = Anim = 5 && AnimTime = 0
+value = 20
+
+[State 20, 4]
+type = ChangeAnim
+triggerall = vel x < 0
+trigger1 = Anim != 21 && Anim != 5
+trigger2 = Anim = 5 && AnimTime = 0
+value = 21
+
+
+;---------------------------------------------------------------------------
 ; Lose by Time Over
 ; CNS difficulty: basic
 [Statedef 170]
@@ -184,7 +257,7 @@ flag = Intro
 [State 191, 3] ;Change to stand state when done
 type = ChangeState
 trigger1 = AnimTime = 0
-value = 0
+value = 192
 
 ; You can delete the following two controllers if you're building your own
 ; character using KFM. These are the wood pieces that KFM kicks.
@@ -527,8 +600,8 @@ guardsound = 6,0
 ground.type = High
 ground.slidetime = 14
 ground.hittime  = 17
-ground.velocity = -9,-20
-air.velocity = -9,-20
+ground.velocity = (vel x*-1)-9,-20
+air.velocity = (vel x*-1)-9,-20
 fall = 1
 envshake.time = 12
 envshake.freq = 90
@@ -887,7 +960,10 @@ trigger1 =  MoveHit = 1
 value = 5800
 ID = 632
 persistent = 1
-
+[State 200, 3]
+type = ctrlset
+trigger1 = movehit 
+value = 1
 [State 200, 3]
 type = ChangeState
 trigger1 = AnimTime = 0
@@ -1049,7 +1125,7 @@ type = VelSet
 trigger1 = time = 1
 trigger1 = root,var(9) = 0
 x = 20*ifelse((p2bodydist x/500)<1,1,(p2bodydist x/500))
-y = root,vel y
+y = 0
 [State 200, 1]
 type = HitDef
 trigger1 = time = 1
@@ -1340,7 +1416,7 @@ physics = N
 sprpriority = 1
 [State 100, 1]
 type = Velset
-trigger1 = !time
+trigger1 = !time && vel x < const(velocity.run.fwd.x)*.8
 x = const(velocity.run.fwd.x)*.8
 [State 100, 1]
 type = Veladd
@@ -1932,7 +2008,7 @@ value = Anim + 3
 
 [State 0, Turn]
 type = Turn
-trigger1 = p2bodydist x < -50
+trigger1 = p2bodydist x < -100
 ;ignorehitpause = 
 ;persistent = 
 
@@ -1998,7 +2074,7 @@ ignorehitpause = 1
 type = DisplayToClipboard
 trigger1 = 1
 text = "var(10) = %f %f %f"
-params = gameheight,abs(30/vel x*4)
+params = var(2),abs(30/vel x*4)
 ;ignorehitpause = 
 ;persistent = 
 ;ignorehitpause = 

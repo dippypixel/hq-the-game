@@ -165,18 +165,18 @@ cancel.snd = 100,2
 ;Full documentation of this feature is available on Ikemen GO features wiki
 
 ; Submenu: Arcade
-menu.itemname.menuarcade = ARCADE
+menu.itemname.menuarcade = ;ARCADE
 menu.itemname.menuarcade.arcade = ;SINGLE MODE
 menu.itemname.menuarcade.teamarcade = ;TEAM ARCADE
 menu.itemname.menuarcade.teamcoop = ;TEAM CO-OP
-menu.itemname.menuarcade.back = BACK
+menu.itemname.menuarcade.back = ;BACK
 
 ; Submenu: Versus
-menu.itemname.menuversus = VS MODE
-menu.itemname.menuversus.versus = 1P VS 2P
+menu.itemname.menuversus = PLAY THE GAME
+menu.itemname.menuversus.versus = 1v1
 menu.itemname.menuversus.teamversus = ;TEAM VERSUS
 menu.itemname.menuversus.versuscoop = ;VERSUS CO-OP
-menu.itemname.menuversus.freebattle = QUICK MATCH
+menu.itemname.menuversus.freebattle = VERSUS AI
 menu.itemname.menuversus.back = BACK
 
 ; Submenu: Story Mode

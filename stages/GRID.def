@@ -12,7 +12,7 @@ starty = -30
 boundleft = -700
 boundright = 700
 boundhigh = -9999999999999999999999999
-boundlow = 0
+boundlow = 70
 
 floortension = 120
 tensionhigh = 200
@@ -33,12 +33,12 @@ verticalfollow = 1.1
 ;--------------------------------------------------------
 [PlayerInfo]
 ;--- Player 1 ---
-p1startx = 0	
+p1startx = -600	
 p1starty = 0
 p1facing = 1
 
 ;--- Player 2 ---
-p2startx = 150
+p2startx = 600
 p2starty = 0
 p2facing = -1
 
@@ -71,7 +71,7 @@ yscale = 1
 intensity = 0
 ;--------------------------------------------------------
 [Music]
-bgmusic = sound\GRID.mp3
+bgmusic = sound\GO.ogg
 bgmvolume = 100
 
 [BGdef]
