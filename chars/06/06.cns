@@ -1449,7 +1449,7 @@ sprpriority = 1
 [State 100, 1]
 type = Velset
 trigger1 = !time
-x = -const(velocity.run.fwd.x)*.8
+x = -const(velocity.run.fwd.x)*.5
 [State 100, 1]
 type = Veladd
 trigger1 = vel x <= 30 

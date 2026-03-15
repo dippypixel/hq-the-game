@@ -400,17 +400,6 @@ trigger1 = ctrl
 trigger2 = stateno = [200,240]
 trigger2 = movecontact
 
-;Jump Strong Punch
-[State -1, WallPunch]
-type = ChangeState
-value = 650
-triggerall = command = "WallPunch"
-trigger1 = statetype = A
-trigger1 = ctrl
-trigger2 = stateno = [600,620] ;jump_x or jump_a
-trigger2 = movecontact
-trigger3 = stateno = 640 ;jump_x or jump_a
-trigger3 = movecontact&& time>10
 ;===========================================================================
 ;---------------------------------------------------------------------------
 ;Stand Light Punch

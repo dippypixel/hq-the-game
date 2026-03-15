@@ -158,7 +158,7 @@ name = "Counter"
 command = D,B,y
 [Command]
 name = "Clone Spew"
-command = D,B,a
+command = D,B,x
 [command]
 name = "SuperJump"
 command = D,U
