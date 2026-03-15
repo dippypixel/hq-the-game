@@ -166,23 +166,23 @@ cancel.snd = 100,2
 
 ; Submenu: Arcade
 menu.itemname.menuarcade = ARCADE
-menu.itemname.menuarcade.arcade = SINGLE MODE
-menu.itemname.menuarcade.teamarcade = TEAM ARCADE
-menu.itemname.menuarcade.teamcoop = TEAM CO-OP
+menu.itemname.menuarcade.arcade = ;SINGLE MODE
+menu.itemname.menuarcade.teamarcade = ;TEAM ARCADE
+menu.itemname.menuarcade.teamcoop = ;TEAM CO-OP
 menu.itemname.menuarcade.back = BACK
 
 ; Submenu: Versus
 menu.itemname.menuversus = VS MODE
 menu.itemname.menuversus.versus = 1P VS 2P
-menu.itemname.menuversus.teamversus = TEAM VERSUS
-menu.itemname.menuversus.versuscoop = VERSUS CO-OP
+menu.itemname.menuversus.teamversus = ;TEAM VERSUS
+menu.itemname.menuversus.versuscoop = ;VERSUS CO-OP
 menu.itemname.menuversus.freebattle = QUICK MATCH
 menu.itemname.menuversus.back = BACK
 
 ; Submenu: Story Mode
-menu.itemname.storymode = STORY MODE
+menu.itemname.storymode = ;STORY MODE
 ; story arcs menu items are automatically added before storymode.back
-menu.itemname.storymode.back = BACK
+menu.itemname.storymode.back = ;BACK
 
 ; Submenu: Network
 menu.itemname.menunetwork = NETWORK
@@ -196,9 +196,9 @@ menu.itemname.menunetwork.serverjoin.back = BACK
 
 ; This group is hidden and should not be moved to other menus.
 ; It's opened automatically, after synchronization with online player.
-menu.itemname.server.netplayversus = VERSUS 2P
-menu.itemname.server.netplayteamcoop = ARCADE CO-OP
-menu.itemname.server.netplaysurvivalcoop = SURVIVAL CO-OP
+menu.itemname.server.netplayversus = ;VERSUS 2P
+menu.itemname.server.netplayteamcoop = ;ARCADE CO-OP
+menu.itemname.server.netplay;survivalcoop = ;SURVIVAL CO-OP
 menu.itemname.server.back = EXIT
 
 ; Submenu: Practice
@@ -207,16 +207,16 @@ menu.itemname.menupractice.training = TRAINING
 menu.itemname.menupractice.back = BACK
 
 ; Submenu: Mission
-menu.itemname.menumission = MISSION
-menu.itemname.menumission.survival = SURVIVAL
-menu.itemname.menumission.survivalcoop = SURVIVAL CO-OP
-menu.itemname.menumission.timeattack = TIME ATTACK
-menu.itemname.menumission.bonusgames = BONUS GAMES
-menu.itemname.menumission.back = BACK
+menu.itemname.menumission =; MISSION
+menu.itemname.menumission.survival = ;SURVIVAL
+menu.itemname.menumission.survivalcoop = ;SURVIVAL CO-OP
+menu.itemname.menumission.timeattack = ;TIME ATTACK
+menu.itemname.menumission.bonusgames = ;BONUS GAMES
+menu.itemname.menumission.back = ;BACK
 
 ; Submenu: Mission => Bonus Games
 ; bonus characters menu items are automatically added before bonusgames.back
-menu.itemname.menumission.bonusgames.back = BACK
+menu.itemname.menumission.bonusgames.back = ;BACK
 
 ; Submenu: Watch Mode
 menu.itemname.menuwatch = WATCH MODE
@@ -747,11 +747,11 @@ p2.teammenu.ratio7.icon.layerno = 2
 
 teammenu.itemname.single = Single
 teammenu.itemname.simul = Simul
-teammenu.itemname.tag = Tag
-teammenu.itemname.turns = Turns
-teammenu.itemname.ratio = Ratio
+teammenu.itemname.tag = ;Tag
+teammenu.itemname.turns = ;Turns
+teammenu.itemname.ratio = ;Ratio
 
-paletteselect = 3
+paletteselect = 0
 ; Enables or disables palette selection menu in select screen. Accepted values:
 ; 0 - Palette menu disabled. Palette corresponds to key pressed when selecting character
 ; 1 - Palette menu enabled. Initial selected palette is 1

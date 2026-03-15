@@ -39,6 +39,10 @@ trigger1 = Anim != 0 && Anim != 5
 trigger2 = Anim = 5 && AnimTime = 0 ;Turn anim over
 value = 0
 
+[State 0, AssertSpecial]
+type = AssertSpecial
+trigger1 = 1
+flag = Noautoturn
 [State 0, 2]
 type = VelSet
 trigger1 = Time = 0
@@ -2738,12 +2742,12 @@ ignorehitpause = 1
 [State -3, High Speed Width]
 type = width
 trigger1 = statetype = A && vel x > 4 && p2bodydist x > 20&&movetype != H
-value = -10, ifelse((vel x *6)+(enemynear,vel x *6)<0,60,(vel x *6)+(enemynear,vel x *6))
+player = -30, ifelse((vel x *6)+(enemynear,vel x *6)<0,60,(vel x *6)+(enemynear,vel x *6))
 ignorehitpause = 1
 [State -3, High Speed Width]
 type = width
 trigger1 = statetype != A && vel x > 4&& p2bodydist x > 20 &&movetype != H
-value = 0, ifelse((vel x *6)+(enemynear,vel x *6)<60,60,(vel x *6)+(enemynear,vel x *6))
+player = 0, ifelse((vel x *6)+(enemynear,vel x *6)<60,60,(vel x *6)+(enemynear,vel x *6))
 ignorehitpause = 1
 [State -3, Air Height]
 type = Height
@@ -2754,13 +2758,14 @@ ignorehitpause = 1
 
 [State 0, Turn]
 type = Turn
-trigger1 = p2bodydist x < -10
+trigger1 = p2bodydist x < -60
 trigger1 = movetype = A && statetype = A && movehit
 ;ignorehitpause = 
 ;persistent = 
 
 [State 0, WallBounce]
 type = VelMul
+triggerall = p2bodydist x > 200
 trigger1 = backedgebodydist <= 10 && vel x < 0
 trigger1 = stateno=[5030,5050] || stateno=5720&& pos y < -100
 x = -0.75
@@ -2814,19 +2819,3 @@ trigger1 = statetype != A
 v = 18    ;fv = 10
 value = 0
 ignorehitpause = 1
-[State 0, VelAdd]
-type = VelAdd
-trigger1 = statetype = A && movetype = A && movehit
-trigger1 = command = "holdfwd" && vel x < const(velocity.runjump.fwd.x)*.5
-x = 2
-[State 0, VelAdd]
-type = VelAdd
-trigger1 = statetype = A && movetype = A && movehit
-trigger1 = command = "holdback" && vel x > const(velocity.runjump.back.x)*.5
-x = -2
-
-[State 0, VelAdd]
-type = VelAdd
-trigger1 = statetype = A && movetype = A && movehit
-trigger1 = command = "holddown" && vel y < 12
-y = 1
