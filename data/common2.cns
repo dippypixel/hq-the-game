@@ -2370,17 +2370,9 @@ persistent = 0
 value = 5061
 
 
-[State 5050, 4] ;Recover near ground
-type = SelfState
-triggerall = Vel Y > 0
-triggerall = Pos Y >= Const(movement.air.gethit.groundrecover.ground.threshold)
-triggerall = alive
-trigger1 = Command = "recovery"
-value = 5200 ;Air get-hit (fall recovery on ground)
-
 [State 5050, 5]; Recover in mid air
 type = SelfState
-triggerall = Vel Y > Const(movement.air.gethit.airrecover.threshold)
+triggerall = time > 60
 triggerall = alive
 trigger1 = Command = "recovery"
 value = 5210 ;Air get-hit (fall recovery in air) 
@@ -2525,7 +2517,7 @@ ignorehitpause = 1
 [State -3, High Speed Width]
 type = width
 trigger1 = statetype = A && vel x > 4 && p2bodydist x > 20&&movetype != H
-player = -30, ifelse((vel x *6)+(enemynear,vel x *6)<0,60,(vel x *6)+(enemynear,vel x *6))
+player = 0, ifelse((vel x *6)+(enemynear,vel x *6)<0,60,(vel x *6)+(enemynear,vel x *6))
 ignorehitpause = 1
 [State -3, High Speed Width]
 type = width
