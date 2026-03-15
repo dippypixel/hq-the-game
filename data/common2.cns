@@ -2526,7 +2526,7 @@ player = 0, ifelse((vel x *6)+(enemynear,vel x *6)<60,60,(vel x *6)+(enemynear,v
 ignorehitpause = 1
 [State -3, Air Height]
 type = Height
-trigger1 = statetype = A
+trigger1 = statetype = A && enemynear,statetype = A
 value = 0, 50
 ignorehitpause = 1
 
