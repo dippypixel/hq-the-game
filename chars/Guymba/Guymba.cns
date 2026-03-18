@@ -227,6 +227,46 @@ value = F5,3
 volume = -80
 
 ;---------------------------------------------------------------------------
+; GO
+[Statedef 192]
+type = S
+ctrl = 1
+velset = 0,0
+anim=0
+[State 0, VarSet]
+type = VarSet
+trigger1 = !time
+v = 2    ;fv = 10
+value = 1
+[State 0, AssertSpecial]
+type = AssertSpecial
+trigger1 = 1
+flag = NoWalk
+
+[State 0, VelSet]
+type = VelSet
+trigger1 = !time&&command= "holdfwd"
+x = 40
+y = 0
+;ignorehitpause = 
+persistent = 0
+
+[State 0, EnvShake]
+type = EnvShake
+trigger1 = !time&&command= "holdfwd"
+time = 10
+freq = 60
+ampl = -3
+phase = 90
+
+[State 195, 2]
+type = ChangeState
+trigger1 = Time = 15
+value = 0
+ctrl = 1
+
+
+;---------------------------------------------------------------------------
 ; Taunt
 ; CNS difficulty: easy
 [Statedef 195]

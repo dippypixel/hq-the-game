@@ -164,10 +164,13 @@ name = "SuperJump"
 command = D,U
 time = 2
 [command]
-name = "SuperJump"
-command = z+/$D
-time = 5
-
+name = "SuperJump2"
+command = z+/$U
+time = 8
+[command]
+name = "SuperJump2"
+command = z,/$U
+time = 8
 ;-| Double Tap |-----------------------------------------------------------
 [Command]
 name = "FF"     ;Required (do not remove)
@@ -372,7 +375,7 @@ var(1) = 1
 [State -1, superjump]
 type = ChangeState
 value = 9000
-triggerall = command = "SuperJump"
+triggerall = command = "SuperJump"||command = "SuperJump2"
 trigger1 = ctrl && stateno != 9000
 trigger1 = statetype  != A
 trigger2 = stateno=410 && movehit
@@ -380,7 +383,7 @@ trigger3 = stateno = 900 && AnimElemTime(12)>=1
 
 ;===========================================================================
 ;---------------------------------------------------------------------------
-[State -1, Teleport]
+[State -1, Counter]
 type = ChangeState
 value = 1010
 triggerall = command = "Counter"

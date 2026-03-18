@@ -2197,6 +2197,12 @@ movetype= H
 physics = N
 velset = vel x,enemy,map(floorbounceVely)
 
+[State -3, High Speed Width]
+type = width
+trigger1 = 1
+player = -30,30
+
+
 [State 5101, 1] ;Coming hit ground anim (normal)
 type = ChangeAnim
 triggerall = time = 0
@@ -2379,7 +2385,11 @@ type = VelSet
 trigger1 = Time = 0
 x= enemy,map(wallbounceVelX)
 
-
+[State -3, High Speed Width]
+type = width
+trigger1 = 1
+player = (vel x), ifelse(vel x<0,0,(vel x))
+ignorehitpause = 1
 [State 1028, Gravity]
 type = VelAdd
 trigger1 = 1
@@ -2559,7 +2569,7 @@ ignorehitpause = 1
 [State -3, Air Height]
 type = Height
 trigger1 = statetype = A
-value = 0, ifelse(vel y<0,0,vel y)
+value = ifelse(-vel y*6<0,0,-vel y*6), ifelse(vel y*6<0,0,vel y*6)
 ignorehitpause = 1
 
 [State 0, WallBounce Effects]
