@@ -154,7 +154,7 @@ name = "Uppercut"
 command = /$D+y
 [Command]
 name = "Projectile"
-command = /$D+x
+command = ~D,DF,F,x
 [command]
 name = "SuperJump"
 command = D,U
@@ -177,19 +177,19 @@ time = 10
 
 [Command]
 name = "AirDashF"
-command = z + /$F
+command = x+y+ /$F
 time = 5
 [Command]
 name = "AirDashB"
-command = z + /$B
+command = x+y+ /$B
 time = 5
 [Command]
 name = "AirDashU"
-command = z + /$U
+command = x+y+ /$U
 time = 5
 [Command]
 name = "AirDashD"
-command = z + /$D
+command = x+y+ /$D
 time = 5
 
 ;-| 2/3 Button Combination |-----------------------------------------------
@@ -207,6 +207,11 @@ time = 1
 [Command]
 name = "down_b"
 command = /$D,b
+time = 1
+
+[Command]
+name = "Lunge"
+command = /$D+x
 time = 1
 
 ;-| Single Button |---------------------------------------------------------
@@ -352,7 +357,7 @@ value = 110
 triggerall = !var(55)
 triggerall = var(18)<3
 triggerall = stateno != 110
-triggerall = command = "AirDashF"
+triggerall = command = "AirDashF" || command = "FF"
 triggerall = statetype = A
 trigger1 = Pos Y < -const(movement.airjump.height)
 trigger1 = ctrl 
@@ -364,7 +369,7 @@ value = 115
 triggerall = !var(55)
 triggerall = var(18)<3
 triggerall = stateno != 115
-triggerall = command = "AirDashB" 
+triggerall = command = "AirDashB" || command = "BB"
 triggerall = statetype = A
 trigger1 = Pos Y < -const(movement.airjump.height)
 trigger1 = ctrl 
@@ -397,7 +402,7 @@ trigger2 = movehit
 [State -1, Run Fwd]
 type = ChangeState
 value = 100
-trigger1 = command = "AirDashF" || command = "FF"
+trigger1 = command = "recovery" || command = "FF"
 trigger1 = statetype != A
 trigger1 = ctrl
 
@@ -406,7 +411,7 @@ trigger1 = ctrl
 [State -1, Run Back]
 type = ChangeState
 value = 105
-trigger1 = command = "AirDashB" || command = "BB"
+trigger1 = command = "BB"
 trigger1 = statetype != A
 trigger1 = ctrl
 
@@ -420,6 +425,15 @@ triggerall = numhelper(901) <= 2
 triggerall = statetype != A
 trigger1 = ctrl
 trigger2 = prevstateno != 900 && stateno = 900 && AnimElemTime(4)>=1
+
+;---------------------------------------------------------------------------
+;Lunge
+[State -1, Lunge]
+type = ChangeState
+value = 700
+triggerall = command = "Lunge"
+triggerall = statetype != A
+trigger1 = ctrl
 
 ;---------------------------------------------------------------------------
 ;Crouching Strong Punch
@@ -442,7 +456,7 @@ triggerall = command = "x"
 trigger1 = statetype = S
 trigger1 = ctrl
 trigger2 = prevstateno != 200 && stateno = 200 && movecontact
-
+trigger3 = stateno = 700 && movecontact
 ;---------------------------------------------------------------------------
 ;Standing Strong Kick
 [State -1, Stand Medium Punch]
@@ -454,6 +468,7 @@ trigger1 = ctrl
 trigger2 = (stateno = 200) && movehit
 trigger3 = (stateno = 230) && movehit
 trigger4 = (stateno = 240) && movehit && (prevstateno != 210)
+trigger5 = stateno = 700 && movecontact
 ;---------------------------------------------------------------------------
 ;Stand Light Punch
 [State -1, Stand Light Kick]
