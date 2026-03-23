@@ -147,8 +147,12 @@ command.buffer.time = 1
 
 ;-| Special Motions |------------------------------------------------------
 [Command]
-name = "Strong Punch"
+name = "Spike Punch"
+command = /$D,b
+[Command]
+name = "Dash Punch"
 command = D,F,y
+
 [Command]
 name = "Launcher"
 command = /$D+y
@@ -378,8 +382,7 @@ value = 9000
 triggerall = command = "SuperJump"||command = "SuperJump2"
 trigger1 = ctrl && stateno != 9000
 trigger1 = statetype  != A
-trigger2 = stateno=410 && movehit
-trigger3 = stateno = 900 && AnimElemTime(12)>=1
+trigger2 = stateno = 900 && AnimElemTime(12)>=1
 
 ;===========================================================================
 ;---------------------------------------------------------------------------
@@ -399,12 +402,6 @@ triggerall = (abs(enemy,vel y)+abs(enemy,vel x))/2 > 6
 triggerall = command = "c"
 trigger1 = ctrl
 trigger2 = movehit
-[State -1, AirJump]
-type = ChangeState
-value = 45
-triggerall = map(air_jump_used) = 0
-triggerall = command = "up"||command = "up"&&command = "holdback"||command = "up"&&command = "holdfwd"
-trigger1 = statetype  = A&& movetype = A && movehit
 ;Run Fwd
 [State -1, Run Fwd]
 type = ChangeState
@@ -426,7 +423,7 @@ trigger1 = ctrl
 ;Crouching Strong Punch
 [State -1, Projectile]
 type = ChangeState
-value = 900
+value = 1000
 triggerall = numhelper(901) = 0
 triggerall = command = "Clone Spew"
 trigger1 = ctrl
@@ -434,9 +431,9 @@ trigger2 = stateno = [200,240]||stateno = 410||stateno = [600,650]
 trigger2 = movecontact
 ;---------------------------------------------------------------------------
 ;Crouching Strong Punch
-[State -1, Uppercut]
+[State -1, DamnSmear]
 type = ChangeState
-value = 410
+value = 250
 triggerall = command = "Launcher"||stateno =9000&&command = "y"
 triggerall = statetype != A
 trigger1 = ctrl||stateno =9000
@@ -444,15 +441,26 @@ trigger2 = stateno = [200,240]
 trigger2 = movecontact
 
 ;Jump Strong Punch
-[State -1, WallPunch]
+[State -1, Dash Punch]
 type = ChangeState
-value = 650
-triggerall = command = "Strong Punch"
+value = 1020
+triggerall = command = "Dash Punch"
 trigger1 = ctrl
 trigger2 = stateno = [600,620] ;jump_x or jump_a
 trigger2 = movecontact
-trigger3 = stateno = 640 ;jump_x or jump_a
+trigger3 = stateno = 650 ;jump_x or jump_a
 trigger3 = movecontact&& time>10
+;Jump Strong Kick
+[State -1, Spike Punch]
+type = ChangeState
+value = 650
+triggerall = command = "Spike Punch"
+trigger1 = statetype = A
+trigger1 = ctrl
+trigger2 = stateno = 600 || stateno = 630|| stateno = 610|| stateno = 640 ;jump_x or jump_a
+trigger2 = movecontact
+trigger3 = enemynear,stateno=5820
+
 ;===========================================================================
 ;---------------------------------------------------------------------------
 ;Stand Light Punch

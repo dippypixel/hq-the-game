@@ -1,6 +1,6 @@
 [Info]
-name = "GRID"
-displayname = "GRID"
+name = "Guymba's Stage"
+displayname = "Guymba's Stage"
 versiondate = 1,16,2019
 mugenversion = 1.1
 author = "VWTG"
@@ -9,8 +9,8 @@ author = "VWTG"
 [Camera]
 startx = 0
 starty = -30
-boundleft = -700
-boundright = 700
+boundleft = -400
+boundright = 400
 boundhigh = -9999999999999999999999999
 boundlow = 70
 
@@ -48,8 +48,8 @@ rightbound =  4000
 
 ;--------------------------------------------------------
 [Bound]
-screenleft = 60
-screenright = 60
+screenleft = 20
+screenright = 20
 
 [StageInfo]
 zoffset = 195
@@ -58,7 +58,8 @@ resetBG = 1
 
 [Shadow]
 color = 255,190,180
-yscale = 0
+yscale = .3
+intensity = 30
 ;--------------------------------------------------------
 [StageInfo]
 zoffset = 660
@@ -71,49 +72,51 @@ yscale = 1
 intensity = 0
 ;--------------------------------------------------------
 [Music]
-bgmusic = sound\
+bgmusic = sound
 bgmvolume = 10
 
 [BGdef]
 spr = GRID.sff
 debugbg = 0
 ;----------
-;[BG sea]
-;type = anim
-;actionno = 20
-;spriteno = 0,0
-;start = 0,220
-;delta = 0.3,0.4
-;mask = 0
-;velocity = 0
-
-[BG 0]
-type  = anim
-actionno = 0
-layerno = 0
-start = 0,195
-delta = 1,1
-trans = none
-mask  = 0
-tile  = 0, 0
-tilespacing = 0,0
-[BG Clouds]
+[BG Sky]
 type = normal
 spriteno = 40,0
-start = 0,-50
-delta = 1,1
+start = 0,196
+delta = .1,.1
 mask = 0
 velocity = 0,0
+tile = 1,0
+tilespacing = 0,0
+layerno = 0
+[BG Clouds]
+type = normal
+spriteno = 41,0
+start = 0,196
+delta = .5,.5
+mask = 1
+velocity = 1,0
 tile = 1,1
 tilespacing = 0,0
 layerno = 0
-
+trans= add
+alpha = 30,256
+[BG Mountains]
+type = normal
+spriteno = 0,1
+start = 0,140
+layerno = 0
+delta = .5,.5
+mask = 1
+velocity = 0
+tile = 1,0
+tilespacing = 0
 [BG Ground]
 type = normal
 spriteno = 0,0
-start = 0,196
+start = 0,160
 layerno = 0
-delta = 1,1
+delta = .8,.8
 mask = 1
 velocity = 0
 tile = 1,0

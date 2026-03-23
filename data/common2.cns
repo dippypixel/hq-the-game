@@ -2331,11 +2331,12 @@ trigger1 = (Time = 0) && (FrontEdgeBodyDist <= 30)
 
 [State 1027, Spark]
 type = Explod
-trigger1 = Time = 0
-anim = F72
-pos = 0, floor (screenpos y) - 50
-postype = back
-sprpriority = 3
+trigger1 = Time = 1
+anim = F61
+pos = -15, 0
+sprpriority = 10
+postype = p1 
+angle = -90
 
 [State 1027, Pos]
 type = PosAdd
@@ -2362,7 +2363,7 @@ value = 1027
 [State 5100, 10]
 type = PlaySnd
 trigger1 = Time = 0
-value = F7, 1
+value = F7, 2
 volumescale = 200
 
 [State 0, EnvShake]
@@ -2486,14 +2487,21 @@ trigger1 = 1
 value = 0
 
 ;---------------------------------------------------------------------------
-; BroadCast
+; SpeedWind
 [Statedef 190000]
 movetype = U      ; AIHU
 physics = N       ; SCANU          ;refers to the .Air file
 sprpriority = 99    ; Stand behind everything 
-anim = 99999
 ignorehitpause = 1
-[State 0, Explod]
+[State 0, ChangeAnim]
+type = ChangeAnim
+trigger1 = !TIME
+value = f9999
+;elem = 1
+;ignorehitpause = 
+;persistent = 
+
+[State 0, Wind Effect]
 type = Explod
 trigger1 = !numexplod(190000)
 anim = f190000
@@ -2502,33 +2510,97 @@ pos = screenwidth/2,screenheight/2
 postype = left  ;P2, Front, Back, Left, Right
 facing = 1
 vfacing = 1
-bindtime = 1
+bindtime = -1
 scale = .4,.4
-alpha = 
-
-[State 0, VarSet]
-type = VarSet
+[State 0, DisplayToClipboard]
+type = DisplayToClipboard
 trigger1 = 1
-fv = 2
-value = -deg(atan2(root,vel y*-1,root,vel x))
+text = "total velocity = %f %f %f"
+params = fvar(0)- fvar(1),fvar(6),fvar(7)
 ;ignorehitpause = 
 ;persistent = 
 
+[State 0, Vel X Set]
+type = VarSet
+trigger1 = root,hitpausetime=0 && enemynear,hitpausetime=0
+trigger1 = 1
+fv = 0
+value = (root,vel x - enemynear,vel x) * 0.5
+ignorehitpause = 1
+[State 0, Vel Y Set]
+type = VarSet
+trigger1 = root,hitpausetime=0 && enemynear,hitpausetime=0
+trigger1 = 1
+fv = 1
+value = (root,vel y + enemynear,vel y) * 0.5
+ignorehitpause = 1
+[State 0, Angle Calculation]
+type = VarSet
+trigger1 = 1
+fv = 2
+value = deg(atan2(fvar(1)*-1, fvar(0)))
+ignorehitpause = 1
 
-[State 0, Ease]
+[State 0, Smooth Out Motion]
+type = VarSet
+trigger1 = 1
+fvar(3) = fvar(3) + (fvar(2) - fvar(3)) * 0.1
+ignorehitpause = 1
+
+[State 0, Alpha Effect]
 type = Varset
 trigger1 = time%4=0
-fv = 1    ;fv = 10
+fv = 4    ;fv = 10
 value = 1+random%144
 
-[State 0, ModifyExplod]
+
+[State 0, Enemy Velocity]
+type = VarSet
+trigger1 = enemynear,hitpausetime=0&&root,hitpausetime=0
+fv = 6    ;fv = 10
+value = abs(enemynear,vel x - enemynear,vel y)
+[State 0, Root Velocity]
+type = VarSet
+trigger1 = enemynear,hitpausetime=0&&root,hitpausetime=0
+fv = 7    ;fv = 10
+value = abs(root,vel x - root,vel y)
+[State 0, EnableWind]
+type = VarSet
+trigger1 = fvar(6)!=0&&fvar(7)!=0
+trigger1 = abs(fvar(0) - fvar(1)) >=20
+v = 5    ;fv = 10
+value = 1
+[State 0, DisableWind]
+type = VarSet
+trigger1 = var(5)
+trigger1 = abs(fvar(0) - fvar(1)) <=13
+v = 5    ;fv = 10
+value = 0
+
+[State 0, DisableWindAnim]
 type = ModifyExplod
-trigger1 = 190000
+trigger1 = !var(5)
 ID = 190000
-angle = fvar(2)
+alpha = 0, 256
+trans = add1 
+
+[State 0, Angle]
+type = ModifyExplod
+trigger1 = var(5)
+ID = 190000
+angle = fvar(3)
+scale = .4,.4
+
+[State 0, Transparency]
+type = ModifyExplod
+trigger1 = var(5)
+ID = 190000
+alpha = fvar(4), 256-fvar(4)
 trans = add1     ;None, Add, AddAlpha, Add1, Sub
-alpha = fvar(1), 256-fvar(1)
-;------------------
+
+
+
+;------------------------------------------------------------------------------
 ;WallBounce Effects
 [Statedef 6000]
 movetype = U      ; AIHU
@@ -2573,12 +2645,6 @@ type = ChangeState
 trigger1 = roundstate=2 && stateno!=192 && !var(2)
 VALUE=192
 persistent=0
-[State 0, Mapset]
-type = MapSet
-trigger1 = statetype !=A
-map = "air_jump_used"
-value = 0
-ignorehitpause = 1
 [State -3, Air Height]
 type = Height
 trigger1 = statetype = A
@@ -2641,12 +2707,11 @@ flag2 = nocrouch
 ;flag = TimerFreeze
 ;flag = Unguardable
 
-[State 0, Helper]
-type = null;Helper
-trigger1 = vel y+enemy,vel y <-30
+[State 0, SpeedWind]
+type = Helper
 trigger1 = !numhelper(190000) && !enemy,numhelper(190000)
 helpertype = Normal ;Player
-name = "BroadCast"
+name = "SpeedWind"
 ID = 190000
 stateno = 190000
 pos = 0,-Screenpos y

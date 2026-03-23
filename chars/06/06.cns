@@ -566,16 +566,29 @@ ctrl = 1
 ;     air, because of the "M" in the guardflag, meaning it can only
 ;     be guarded "middle". The second hit has an "MA" guardflag, so
 ;     it can be guarded both on the ground and in the air.
-[Statedef 410]
-type    = C
+[Statedef 250]
+type    = S
 movetype= A
-physics = C
+physics = S
 juggle  = 6
 poweradd= 25
 ctrl = 0
 anim = 410
 sprpriority = 2
 
+[State 0, VelSet]
+type = VelSet
+trigger1 = animelemtime(3) =1
+y = -30
+[State 0, VelAdd]
+type = VelAdd
+trigger1 = statetype=A && animelemtime(3) >= 0
+y = const(movement.yaccel)
+
+[State 0, StateTypeSet]
+type = StateTypeSet
+trigger1 = animelemtime(3) >= 0
+statetype = A
 
 [State 410, 1]
 type = PlaySnd
@@ -586,56 +599,48 @@ value = 0, 0
 ;This is the second hit, triggered on the 4th element of animation.
 [State 410, 3]
 type = HitDef
-trigger1 = AnimElem = 3
+trigger1 = AnimElem = 3||AnimElem = 5||AnimElem = 7
 attr = C, NA
 damage    = 36
 animtype  = Light
 hitflag = MAF
 guardflag = MA
-pausetime = 16,16
+pausetime = 7,7
 sparkno = 1
 sparkxy = -10,-70
-hitsound   = 5,4
+hitsound   = 5,2
 guardsound = 6,0
 ground.type = High
 ground.slidetime = 14
 ground.hittime  = 17
-ground.velocity = -9,-20
-air.velocity = -9,-20
+ground.velocity = -vel x*.5,-20
+air.velocity = -vel x*.5,vel y-2
 fall = 1
-envshake.time = 12
-envshake.freq = 90
-envshake.ampl = -6
-envshake.phase = 90
+envshake.time = 5
+envshake.freq =60
+envshake.ampl = -2
+envshake.phase =90
+numhits = 3
+yaccel= const(movement.yaccel)
 
+[State 0, ChangeState]
+type = ctrlset
+trigger1 = animelemtime(7)>0 && movehit
+value = 1
 
-[State 0, AllPalFX]
-type = AllPalFX
-trigger1 = movehit
-time = 2
-mul = 0,0,0
-color = 256
-ignorehitpause = 1
-persistent = 0
+[State 0, VelAdd]
+type = VelAdd
+trigger1 = command = "holdfwd" && vel x < const(velocity.runjump.fwd.x)
+x = ifelse(vel x < -10,5,1)
+[State 0, VelAdd]
+type = VelAdd
+trigger1 = command = "holdback" && vel x > const(velocity.runjump.back.x)
+x = ifelse(vel x > 10,-5,-1)
 
-[State 0, EnvColor]
-type = EnvColor
-trigger1 = movehit
-value = 255,0, 0
-time = 2
-under = 1
-ignorehitpause = 1
-persistent = 0
-[State 410, 4]
+[State 0, ChangeState]
 type = ChangeState
-trigger1 = movehit && command = "holdup"
-value = 9000
-ctrl = 1
-
-[State 410, 4]
-type = ChangeState
-trigger1 = AnimTime = 0 && statetype!=A
-value = 0
+trigger1 = AnimTime = 0
+value = 50
 ctrl = 1
 
 ;---------------------------------------------------------------------------
@@ -802,6 +807,52 @@ ctrl = 0
 anim = 640
 sprpriority = 2
 
+[State 610, 2]
+type = PlaySnd
+trigger1 = Time = 2
+value = 0, 1
+
+[State 610, 3]
+type = HitDef
+trigger1 = Time = 0
+attr = A, NA
+damage = 72
+guardflag = HA
+priority = 4
+pausetime = 9,9
+sparkno = 1
+sparkxy = -10,-70
+hitsound   = 5,3
+guardsound = 6,0
+animtype = Med
+ground.type = High
+ground.slidetime = 14
+ground.hittime  = 14
+ground.velocity = -24
+air.velocity = (vel x*-1),ifelse(vel y > -2,-2,(vel y))+10
+envshake.time = 5
+envshake.freq =60
+envshake.ampl = -2
+envshake.phase =90
+
+[State 0, VelSet]
+type = velset
+trigger1 = !time && prevstateno = 600 && vel y > -2 ;&& pos y > -80
+trigger2 = !time && prevstateno = 630 && vel y > -2 ;&& pos y > -80
+y = -2
+
+;---------------------------------------------------------------------------
+;SpikePunch
+[Statedef 650]
+type    = A
+movetype= A
+physics = A
+juggle  = 4
+poweradd= 30
+ctrl = 0
+anim = 650
+sprpriority = 2
+
 [State 0, Mapset]
 type = MapSet
 trigger1 = !time
@@ -811,7 +862,7 @@ ignorehitpause = 1
 [State 640, 2]
 type = PlaySnd
 trigger1 = Time = 2
-value = 0, 1
+value = 0, 2
 
 [State 640, 3]
 type = HitDef
@@ -823,7 +874,7 @@ priority = 4
 pausetime = 16,16
 sparkno = 1
 sparkxy = -10,-70
-hitsound   = 5,3
+hitsound   = 5,4
 guardsound = 6,0
 animtype = Med
 ground.type = High
@@ -833,10 +884,10 @@ ground.velocity = -28
 air.velocity = (vel x)*-1,40
 ID = 631
 yaccel = .6
-envshake.time = 5
-envshake.freq =60
-envshake.ampl = -2
-envshake.phase =90
+envshake.time = 12
+envshake.freq = 90
+envshake.ampl = -6
+envshake.phase = 90
 [State 0, TargetState]
 type = TargetState
 triggerall = numtarget(631)
@@ -844,105 +895,6 @@ trigger1 =  MoveHit = 1
 value = 5700
 ID = 631
 persistent = 1
-
-;---------------------------------------------------------------------------
-;Strong Punch
-[Statedef 650]
-type    = U
-movetype= A
-physics = N
-juggle  = 4
-poweradd= 30
-ctrl = 0
-anim = 650
-sprpriority = 2
-
-
-[State -3, High Speed Width]
-type = width
-trigger1 = animelemtime(4)>=0
-player = (vel x), (vel x *5)
-ignorehitpause = 1
-
-
-[State 0, StateTypeSet]
-type = StateTypeSet
-trigger1 = time = 1 
-trigger1 = pos y != 0
-statetype = A
-[State 0, StateTypeSet]
-type = StateTypeSet
-trigger1 = time = 1
-trigger1 = pos y >= -1
-statetype = S
-
-[State 0, PosSet]
-type = PosSet
-trigger1= vel y > 0
-trigger1= pos y > -vel y
-y = 0
-[State 0, VelSet]
-type = VelSet
-trigger1= vel y > 0
-trigger1= pos y > -vel y
-y = 0
-
-[State 0, Gravity]
-type = Veladd
-trigger1 = statetype = A 
-y = const(movement.yaccel)
-[State 0, Mapset]
-type = MapSet
-trigger1 = movehit
-map = "wallbounceVelX"
-value = 10
-ignorehitpause = 1
-[State 610, 2]
-type = PlaySnd
-trigger1 =  !TIME
-value = 0, 0
-[State 610, 2]
-type = PlaySnd
-trigger1 =  animelem=4
-value = 0, 2
-
-[State 0, VelSet]
-type = VelSet
-trigger1 = animelem=4
-x = 30
-y = 0
-[State 0, VelSet]
-type = Velmul
-trigger1 = movehit && statetype=A&& frontedgebodydist > 70
-trigger1 = animelemtime(4)>0
-x = ifelse(vel x < 5,1,.95)
-
-[State 610, 3]
-type = HitDef
-trigger1 = Time = 0
-attr = A, NA
-damage = 100
-guardflag = HA
-priority = 4
-pausetime = 16,16
-sparkno = 1
-sparkxy = -10,-70
-hitsound   = 5,4
-guardsound = 6,0
-animtype = Med
-ground.type = High
-ground.slidetime = 14
-ground.hittime  = 14
-ground.velocity = -30,-10
-id = 632
-air.velocity = -30,enemy,vel y*.5
-envshake.time = 12
-envshake.freq = 90
-envshake.ampl = -6
-envshake.phase = 90
-fall.recover=0
-mindist = 80,-90
-maxdist = 80,90
 
 [State 0, AllPalFX]
 type = AllPalFX
@@ -961,45 +913,16 @@ time = 2
 under = 1
 ignorehitpause = 1
 persistent = 0
-[State 0, VelSet]
-type = VelSet
-trigger1 = movehit && frontedgebodydist < 70
-x = -20
-ignorehitpause = 1
-;persistent = 
-
-
-[State 0, TargetState]
-type = TargetState
-triggerall = numtarget(632)
-trigger1 =  MoveHit = 1
-value = 5800
-ID = 632
-persistent = 1
-[State 200, 3]
-type = ctrlset
-trigger1 = movehit 
-value = 1
-[State 200, 3]
-type = ChangeState
-trigger1 = AnimTime = 0
-value = ifelse(statetype=A,50,0)
-ctrl = 1
-[State 200, 3]
-type = ChangeState
-trigger1 = pos y=0 &&statetype=A
-value = 52
-ctrl = 1
 ;---------------------------------------------------------------------------
 ;ThrowProjectile
-[Statedef 900]
+[Statedef 1000]
 type    = U                      ;State-type: S-stand, C-crouch, A-air, L-liedown
 movetype= A                      ;Move-type: A-attack, I-idle, H-gethit
 physics = N                      ;Physics: S-stand, C-crouch, A-air
 juggle  = 1                      ;Number of air juggle points move takes
 ;Commonly-used controllers:                    ;Set velocity (x,y) (Def: no change)
 ctrl = 0                         ;Set ctrl (Def: no change)
-anim = 900                       ;Change animation (Def: no change)
+anim = 1000                       ;Change animation (Def: no change)
 poweradd = 10                    ;Power to add (Def: 0)
 sprpriority = 2                  ;Set p1's sprite layering priority to 2 (in front)
 
@@ -1059,8 +982,8 @@ type = Helper
 trigger1 = AnimElemtime(4)=0 ||AnimElemtime(6)=0||AnimElemtime(8)=0||AnimElemtime(10)=0||AnimElemtime(12)=0
 helpertype = Normal ;Player
 name = "Projectile"
-ID = 901+var(19)
-stateno = 901
+ID = 1000+var(19)
+stateno = 1001
 pos = 0,-50
 postype = P1    ;P2, Front, Back, Left, Right
 facing = 1
@@ -1081,14 +1004,14 @@ ctrl = 1
 
 ;---------------------------------------------------------------------------
 ;Projectile
-[Statedef 901]
+[Statedef 1001]
 type    = U                      ;State-type: S-stand, C-crouch, A-air, L-liedown
 movetype= A                      ;Move-type: A-attack, I-idle, H-gethit
 physics = N                      ;Physics: S-stand, C-crouch, A-air
 juggle  = 1                      ;Number of air juggle points move takes
 ;Commonly-used controllers:                    ;Set velocity (x,y) (Def: no change)
 ctrl = 0                         ;Set ctrl (Def: no change)
-anim = 901                       ;Change animation (Def: no change)
+anim = 1001                       ;Change animation (Def: no change)
 sprpriority = 2                  ;Set p1's sprite layering priority to 2 (in front)
 [State 0, VarRandom]
 type = VarRandom
@@ -1103,6 +1026,14 @@ player = 0,40
 value = 0,40
 ignorehitpause = 1
 ;persistent = 
+[State 0, DisplayToClipboard]
+type = DisplayToClipboard
+trigger1 = 1
+text = "var(10) = %d"
+params = ID
+;ignorehitpause = 
+;persistent = 
+
 
 [State 0, PalFX]
 type = PalFX
@@ -1201,7 +1132,7 @@ VALUE = 905
 
 ;---------------------------------------------------------------------------
 ;ProjectileHit
-[Statedef 905]
+[Statedef 1002]
 type    = U                      ;State-type: S-stand, C-crouch, A-air, L-liedown
 movetype= H                      ;Move-type: A-attack, I-idle, H-gethit
 physics = N                      ;Physics: S-stand, C-crouch, A-air
@@ -1332,12 +1263,11 @@ ctrl = 1
 
 
 ;---------------------------------------------------------------------------
-;Jump Strong Punch
-; CNS difficulty: easy
+;Counter - Success
 [Statedef 1011]
-type    = S
+type    = U
 movetype= A
-physics = S
+physics = N
 juggle  = 4
 poweradd= 30
 ctrl = 0
@@ -1392,6 +1322,164 @@ persistent = 1
 type = ChangeState
 trigger1 = AnimTime = 0
 value = 0
+ctrl = 1
+
+;---------------------------------------------------------------------------
+;Dash Punch
+[Statedef 1020]
+type    = U
+movetype= A
+physics = N
+juggle  = 4
+poweradd= 30
+ctrl = 0
+anim = 1020
+sprpriority = 2
+
+
+[State -3, High Speed Width]
+type = width
+trigger1 = animelemtime(4)>=0
+player = (vel x), (vel x *5)
+ignorehitpause = 1
+
+
+[State 0, StateTypeSet]
+type = StateTypeSet
+trigger1 = pos y != 0
+statetype = A
+[State 0, StateTypeSet]
+type = StateTypeSet
+trigger1 = time = 1
+trigger1 = pos y >= -1
+statetype = S
+
+[State 0, PosSet]
+type = PosSet
+trigger1= vel y > 0
+trigger1= pos y > -vel y
+y = 0
+[State 0, VelSet]
+type = VelSet
+trigger1= vel y > 0
+trigger1= pos y > -vel y
+y = 0
+
+[State 0, Gravity]
+type = Veladd
+trigger1 = statetype = A 
+y = const(movement.yaccel)
+
+[State 0, Mapset]
+type = MapSet
+trigger1 = movehit
+map = "wallbounceVelX"
+value = 10
+ignorehitpause = 1
+
+[State 610, Sound]
+type = PlaySnd
+trigger1 =  !TIME
+value = 0, 0
+[State 610, Sound]
+type = PlaySnd
+trigger1 =  animelem=4
+value = 0, 2
+
+
+[State 0, Aim Up]
+type = VelSet
+trigger1 = animelemtime(4)=0
+y = ifelse(command="holdup",-6,ifelse(command="holddown",6,0))
+
+[State 0, Launch Forward]
+type = VelSet
+trigger1 = animelemtime(4)=0
+x = ifelse(statetype=A,30,50)
+
+[State 0, Slow Down Air]
+type = Velmul
+trigger1 = movehit && statetype=A&& frontedgebodydist > 70
+trigger1 = animelemtime(4)>0
+x = .95
+[State 0, Slow Down Ground]
+type = Velmul
+trigger1 = statetype!=A
+trigger1 = animelemtime(4)>0
+x = .95
+[State 610, 3]
+type = HitDef
+trigger1 = Time = 0
+attr = A, NA
+damage = 100
+guardflag = HA
+priority = 9
+pausetime = 16,16
+sparkno = 1
+sparkxy = -10,-70
+hitsound   = 5,4
+guardsound = 6,0
+animtype = Med
+ground.type = High
+ground.slidetime = 14
+ground.hittime  = 14
+ground.velocity = -30,-10
+id = 632
+air.velocity = -30,enemy,vel y*.5
+envshake.time = 12
+envshake.freq = 90
+envshake.ampl = -6
+envshake.phase = 90
+fall.recover=0
+mindist = 80,-90
+maxdist = 80,90
+
+[State 0, AllPalFX]
+type = AllPalFX
+trigger1 = movehit
+time = 2
+mul = 0,0,0
+color = 256
+ignorehitpause = 1
+persistent = 0
+
+[State 0, EnvColor]
+type = EnvColor
+trigger1 = movehit
+value = 255,0, 0
+time = 2
+under = 1
+ignorehitpause = 1
+persistent = 0
+[State 0, Bounce Off Wall]
+type = VelSet
+trigger1 = movehit && frontedgebodydist < 70
+x = -20
+ignorehitpause = 1
+;persistent = 
+
+
+[State 0, TargetState]
+type = TargetState
+triggerall = numtarget(632)
+trigger1 =  MoveHit = 1
+value = 5800
+ID = 632
+persistent = 1
+[State 200, ctrlset after movehit]
+type = ctrlset
+trigger1 = movehit 
+trigger2 = time=20 &&!movehit
+value = 1
+[State 200, End State]
+type = ChangeState
+trigger1 = AnimTime = 0
+value = ifelse(statetype=A,50,0)
+ctrl = 1
+[State 200, Land]
+type = ChangeState
+trigger1 = pos y=0 &&statetype=A
+value = 52
 ctrl = 1
 
 ;---------------------------------------------------------------------------
@@ -2067,11 +2155,22 @@ player = (vel x), ifelse(vel x<0,0,(vel x))
 ignorehitpause = 1
 
 
-[State 0, ChangeState]
+[State 0, JumpOutofMovehit]
 type = ChangeState
+triggerall = !map(air_jump_used)
+triggerall = hitpausetime=0
+triggerall = command = "up"||command = "up"&&command = "holdback"||command = "up"&&command = "holdfwd"
 trigger1 = statetype = A && movetype = A && movehit
-trigger1 = command = "holdup" 
+trigger1 = stateno !=410
 value = 45
+[State 0, AirJumpReset]
+type = MapSet
+trigger1 = statetype !=A
+map = "air_jump_used"
+value = 0
+ignorehitpause = 1
+
+
 [State 0, VelAdd]
 type = VelAdd
 trigger1 = statetype = A && movetype = A && movehit
@@ -2083,32 +2182,15 @@ trigger1 = statetype = A && movetype = A && movehit
 trigger1 = command = "holdback" && vel x > const(velocity.runjump.back.x)*.5
 x = -2
 
-
-[State 0, Mapset]
-type = MapSet
-trigger1 = !numtarget
-map = "movement_ability_used"
-value = 0
-ignorehitpause = 1
 [State 0, DisplayToClipboard]
 type = DisplayToClipboard
 trigger1 = 1
 text = "var(10) = %f %f %f"
-params = var(2),abs(30/vel x*4),frontedgebodydist
+params = var(2),abs(30/vel x*4),map(air_jump_used)
 ;ignorehitpause = 
 ;persistent = 
 ;ignorehitpause = 
 ;persistent = 
-[State -3, stagrevear]
-type = null;ModifyStageVar
-trigger1 = enemy,stateno = 5800 && enemy,time = 1
-camera.zoomout = camerazoom
-ignorehitpause =1
-[State -3, stagrevear]
-type = null;ModifyStageVar
-trigger1 = enemy,stateno = 5820 && stagevar(camera.zoomout)
-camera.zoomout= .1
-ignorehitpause =1
 ;This controller plays a sound everytime KFM lands from a jump, or
 ;from his back-dash.
 
