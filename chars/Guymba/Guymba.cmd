@@ -431,7 +431,7 @@ trigger2 = prevstateno != 900 && stateno = 900 && AnimElemTime(4)>=1
 [State -1, Lunge]
 type = ChangeState
 value = 700
-triggerall = command = "Lunge"
+triggerall = command = "Lunge" && command != "holdback"
 triggerall = statetype != A
 trigger1 = ctrl
 
