@@ -71,8 +71,8 @@ yscale = 1
 intensity = 0
 ;--------------------------------------------------------
 [Music]
-bgmusic = sound\GO.ogg
-bgmvolume = 100
+bgmusic = sound\
+bgmvolume = 10
 
 [BGdef]
 spr = GRID.sff
