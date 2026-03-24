@@ -789,22 +789,40 @@ ctrl = 1
 ;---------------------------------------------------------------------------
 ;ThrowProjectile
 [Statedef 900]
-type    = S                      ;State-type: S-stand, C-crouch, A-air, L-liedown
+type    = U                      ;State-type: S-stand, C-crouch, A-air, L-liedown
 movetype= A                      ;Move-type: A-attack, I-idle, H-gethit
-physics = S                      ;Physics: S-stand, C-crouch, A-air
+physics = N                      ;Physics: S-stand, C-crouch, A-air
 juggle  = 1                      ;Number of air juggle points move takes
 ;Commonly-used controllers:                    ;Set velocity (x,y) (Def: no change)
 ctrl = 0                         ;Set ctrl (Def: no change)
 anim = 900                       ;Change animation (Def: no change)
 poweradd = 10                    ;Power to add (Def: 0)
 sprpriority = 2                  ;Set p1's sprite layering priority to 2 (in front)
-[State 0, VarSet]
-type = VarSet
-trigger1 = AnimElemtime(4)<0
-v = 9    ;fv = 10
-value = ifelse(command="holdback",-1,ifelse(command="holdfwd",1,0))
-;ignorehitpause = 
-;persistent = 
+[State 0, StateTypeSet]
+type = StateTypeSet
+trigger1 = pos y != 0
+statetype = A
+[State 0, StateTypeSet]
+type = StateTypeSet
+trigger1 = pos y >= -1
+statetype = S
+
+[State 0, PosSet]
+type = PosSet
+trigger1= vel y > 0
+trigger1= pos y > -vel y
+y = 0
+[State 0, VelSet]
+type = VelSet
+trigger1= vel y > 0
+trigger1= pos y > -vel y
+y = 0
+
+[State 0, Gravity]
+type = Veladd
+trigger1 = statetype = A 
+y = const(movement.yaccel)
+
 
 [State 0, Helper]
 type = Helper
@@ -828,7 +846,7 @@ value = 0, 1
 [State 200, 3]
 type = ChangeState
 trigger1 = AnimTime = 0
-value = 0
+value = ifelse(statetype=A,50,0)
 ctrl = 1
 
 
@@ -874,14 +892,6 @@ air.type = High                  ;Type: High, Low, Trip (def: same as ground.typ
 ;Y-velocity at which opponent is pushed
 air.hittime = 15                 ;Time before opponent regains control in air
 
-[State 0, HitOverride]
-type = HitOverride
-trigger1 = 1
-attr = SCA,NA,SA,HA,NP,SP,HP,NT,ST,HT
-slot = 1
-stateno = 905
-time = 1
-forceair = 1
 
 [State 0, DestroySelf]
 type = DestroySelf

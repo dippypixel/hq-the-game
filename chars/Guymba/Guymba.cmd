@@ -421,8 +421,7 @@ trigger1 = ctrl
 type = ChangeState
 value = 900
 triggerall = command = "Projectile"
-triggerall = numhelper(901) <= 2
-triggerall = statetype != A
+triggerall = numhelper(901) <= 1
 trigger1 = ctrl
 trigger2 = prevstateno != 900 && stateno = 900 && AnimElemTime(4)>=1
 
