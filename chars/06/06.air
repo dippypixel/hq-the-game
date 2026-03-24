@@ -527,10 +527,8 @@ Clsn2Default: 1
 1000,6, 0,0, 2
 1000,7, 0,0, 2
 [Begin Action 1001]
-Clsn2Default: 1
-  Clsn2[0] = -45, -64, 56, 50
 Clsn1Default: 1
-  Clsn1[0] = -40, -48, 45, 39
+  Clsn1[0] = -40, -49, 63, 61
 1000,4, -1,46, 8
 ; GUARD (stand)
 [Begin Action 1010]

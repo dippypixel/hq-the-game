@@ -6,9 +6,9 @@
 ;some modes added to future proof but does not do anything if no screenpack support ai also automatically will disable stick as there input cheaters
 ;------------P1-----------
 arcade                 = 0
-versus                 = 1
-versuscoop             = 1
-teamcoop               = 1
+versus                 = 0
+versuscoop             = 0
+teamcoop               = 0
 training               = 1
 netplayteamcoop        = 0
 netplayversus          = 0
@@ -25,10 +25,10 @@ watch                  = 0
 
 ;------------P2-----------
 arcadeP2                 = 0
-versusP2                 = 1
-versuscoopP2             = 1
-teamcoopP2               = 1
-trainingP2               = 1
+versusP2                 = 0
+versuscoopP2             = 0
+teamcoopP2               = 0
+trainingP2               = 0
 bonusP2                  = 0
 bossrushP2               = 0
 demoP2                   = 0
@@ -48,8 +48,8 @@ watchP2                  = 0
 stylej 	  = 0 ;##0- joystick capcom style 1-snk style
 style 	  = 0 ;##0- button capcom style 1-snk style
 styleu 	  = 0 ;## 0-underlay capcom style 1- snk style 
-underlay = 1; ## background explod 0-off 1-on
-plainunderlay = 1; ##semi-transparent underlay only works if underlay = 1
+underlay = 0; ## background explod 0-off 1-on
+plainunderlay = 0; ##semi-transparent underlay only works if underlay = 1
 #top row >>>>left to right
 showx 	  = 1
 showy  	  = 1
@@ -68,8 +68,8 @@ showstart = 1
 stylejp2 	  = 0 ;##0- joystick capcom style 1-snk style
 stylep2 	  = 0 ;##0- buttons capcom style 1-snk style
 styleup2 	  = 0 ;## 0-underlay capcom style 1- snk style 
-underlayp2 = 1; ## background explod 0-off 1-on
-plainunderlayp2 = 1; ##semi - transparent underlay only works if underlay = 1
+underlayp2 = 0; ## background explod 0-off 1-on
+plainunderlayp2 = 0; ##semi - transparent underlay only works if underlay = 1
 #top row >>>>left to right
 showxp2 	  = 1
 showyp2  	  = 1
