@@ -757,11 +757,10 @@ bindtime = 1
 removetime = -2
 pausemovetime = 0
 scale = 1,1
-
 [State 0, VelSet]
 type = VelSet
 trigger1 = time = 0
-x = 30
+x = ifelse(p2bodydist x < 30,10,30)
 
 [State 0, VelSet]
 type = VelAdd
@@ -1458,7 +1457,7 @@ ctrl = 1
 [State -3, High Speed Width]
 type = width
 trigger1 = vel x > 0
-player = (vel x), ifelse(vel x<0,0,(vel x))
+player = (vel x)*.3, ifelse(vel x<0,0,(vel x))
 ignorehitpause = 1
 [State 0, Mapset]
 type = MapSet

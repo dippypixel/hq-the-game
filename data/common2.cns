@@ -39,10 +39,6 @@ trigger1 = Anim != 0 && Anim != 5
 trigger2 = Anim = 5 && AnimTime = 0 ;Turn anim over
 value = 0
 
-[State 0, AssertSpecial]
-type = AssertSpecial
-trigger1 = 1
-flag = Noautoturn
 [State 0, 2]
 type = VelSet
 trigger1 = Time = 0

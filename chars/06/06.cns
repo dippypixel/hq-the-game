@@ -1041,7 +1041,7 @@ type = HitOverride
 trigger1 = 1
 attr = SCA,NA,SA,HA,NP,SP,HP,NT,ST,HT
 slot = 1
-stateno = 905
+stateno = 1002
 time = 1
 forceair = 1
 
@@ -2077,9 +2077,8 @@ x = ifelse(vel x > 10,-5,-1)
 [State -3, High Speed Width]
 type = width
 trigger1 = stateno !=650 && vel x > 0
-player = (vel x), ifelse(vel x<0,0,(vel x))
+player = (vel x)*.3, ifelse(vel x<0,0,(vel x))
 ignorehitpause = 1
-
 
 [State 0, JumpOutofMovehit]
 type = ChangeState
