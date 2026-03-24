@@ -148,7 +148,7 @@ command.buffer.time = 1
 ;-| Special Motions |------------------------------------------------------
 [Command]
 name = "SGS"
-command = /$D+b
+command = /$D+a
 [Command]
 name = "Uppercut"
 command = /$D+y
