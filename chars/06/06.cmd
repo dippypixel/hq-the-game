@@ -368,10 +368,12 @@ var(1) = 0
 type = VarSet
 trigger1 = statetype != A
 trigger1 = ctrl
-trigger2 = (stateno = [200,299]) || (stateno = [400,499])
-trigger2 = stateno != 440 ;Except for sweep kick
+trigger2 = (stateno = [200,299])
 trigger2 = movecontact
-trigger3 = stateno = 1310 || stateno = 1330 ;From blocking
+trigger3 = stateno = 650 ;jump_x or jump_a
+trigger3 = movecontact&& time>10
+trigger4 = (stateno = [600,640])
+trigger4 = movecontact
 var(1) = 1
 
 ;===========================================================================
@@ -511,10 +513,9 @@ value = 600
 triggerall = command = "x"
 trigger1 = statetype = A
 trigger1 = ctrl
-trigger2 = prevstateno != 600 && stateno = 600 && movecontact
-trigger3 = stateno = 640 ;jump_x or jump_a
-trigger3 = movecontact&& time>10
-trigger4 = enemynear,stateno=5820
+trigger2 = stateno = 650
+trigger2 = movecontact&& time>10
+trigger3 = enemynear,stateno=5820
 
 ;---------------------------------------------------------------------------
 ;Jump Strong Punch
@@ -527,19 +528,21 @@ trigger1 = ctrl
 trigger2 = stateno = 600 || stateno = 630 ;jump_x or jump_a
 trigger2 = movecontact
 trigger3 = stateno = 640 && movehit && time > 10 ;Air blocking
-
+trigger4 = stateno = 650
+trigger4 = movecontact&& time>10
 ;---------------------------------------------------------------------------
 
 ;---------------------------------------------------------------------------
 ;Jump Light Punch
-[State -1, Jump Light Punch]
+[State -1, Jump Light Kick]
 type = ChangeState
 value = 630
 triggerall = command = "a"
 trigger1 = statetype = A
 trigger1 = ctrl
-trigger2 = prevstateno != 630 && stateno = 630 && movecontact
-trigger3 = stateno = 600 && movehit 
+trigger2 = stateno = 600 && movehit 
+trigger3 = stateno = 650
+trigger3 = movecontact&& time>10
 ;Jump Strong Kick
 [State -1, Jump Strong Punch]
 type = ChangeState
@@ -550,3 +553,5 @@ trigger1 = ctrl
 trigger2 = stateno = 600 || stateno = 630|| stateno = 610 ;jump_x or jump_a
 trigger2 = movecontact
 trigger3 = enemynear,stateno=5820
+trigger4 = stateno = 650
+trigger4 = movecontact&& time>10

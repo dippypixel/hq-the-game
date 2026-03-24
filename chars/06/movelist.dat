@@ -1,4 +1,19 @@
-
-Dash Punch						_D_DF_F^Y
-Clone Spew					_D_DB_B^X
-Counter					_D_DF_F^B
+(EVERYTHING HERE IS SUBJECT TO CHANGE)
+<#f0f000>:Movement Ability:</>
+Air Jump   						_U
+_!Requires move to hit
+<#f0f000>:Command Normals:</>
+Damn Smear						_D^Y
+Spike Punch_AIR					_D^B
+Counter							_D_DF_F^B
+<#f0f000>:Specials:</>
+Dash Punch(Air OK)				_D_DF_F^Y
+_!Aim Up						_U
+_!Aim Down						_D
+Clone Spew(Air OK)				_D_DB_B^X
+_!Aim Up						_U
+_!Aim Down						_D
+<#f0f000>:Supers:</>
+BUUUUUUUAAAAAAAAAAAAA(Air OK)				
+Vector Spasm(Air OK)
+Comedy Central(Air OK)
