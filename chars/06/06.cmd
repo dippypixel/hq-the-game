@@ -159,7 +159,7 @@ command = /$D+y
 
 [Command]
 name = "Counter"
-command = D,F,b
+command = D,D,a
 [Command]
 name = "Clone Spew"
 command = D,B,x
