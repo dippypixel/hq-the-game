@@ -1,0 +1,283 @@
+[Constants]
+;-----------------------------------------------------------------------------------------
+; ###################### constants for STICK  #############################
+;-----------------------------------------------------------------------------------------
+;-----------configure game modes----------------------
+;some modes added to future proof but does not do anything if no screenpack support ai also automatically will disable stick as there input cheaters
+;------------P1-----------
+arcade                 = 0
+versus                 = 1
+versuscoop             = 1
+teamcoop               = 1
+training               = 1
+netplayteamcoop        = 0
+netplayversus          = 0
+bonus                  = 0
+bossrush               = 0
+demo                   = 0
+freebattle             = 0
+netplaysurvivalcoop    = 0
+randomtest             = 0
+survival               = 0
+survivalcoop           = 0
+timeattack             = 0
+watch                  = 0
+
+;------------P2-----------
+arcadeP2                 = 0
+versusP2                 = 1
+versuscoopP2             = 1
+teamcoopP2               = 1
+trainingP2               = 1
+bonusP2                  = 0
+bossrushP2               = 0
+demoP2                   = 0
+freebattleP2             = 0
+netplaysurvivalcoopP2    = 0
+netplayteamcoopP2        = 0
+netplayversusP2          = 0
+randomtestP2             = 0
+survivalP2               = 0
+survivalcoopP2           = 0
+timeattackP2             = 0
+watchP2                  = 0
+
+
+----------------------configure-P1-----
+##1/on 0/off buttons
+stylej 	  = 0 ;##0- joystick capcom style 1-snk style
+style 	  = 0 ;##0- button capcom style 1-snk style
+styleu 	  = 0 ;## 0-underlay capcom style 1- snk style 
+underlay = 1; ## background explod 0-off 1-on
+plainunderlay = 1; ##semi-transparent underlay only works if underlay = 1
+#top row >>>>left to right
+showx 	  = 1
+showy  	  = 1
+showz	  = 1
+showtagsb = 1
+#bottom row >>>>left to right
+showa 	  = 1
+showb	  = 1
+showc 	  = 1
+showtagsf = 1
+#start button
+showstart = 1
+;--------------
+----------------------configure-P2-----
+##1/on 0/off buttons
+stylejp2 	  = 0 ;##0- joystick capcom style 1-snk style
+stylep2 	  = 0 ;##0- buttons capcom style 1-snk style
+styleup2 	  = 0 ;## 0-underlay capcom style 1- snk style 
+underlayp2 = 1; ## background explod 0-off 1-on
+plainunderlayp2 = 1; ##semi - transparent underlay only works if underlay = 1
+#top row >>>>left to right
+showxp2 	  = 1
+showyp2  	  = 1
+showzp2	      = 1
+showtagsbp2   = 1
+#bottom row >>>>left to right
+showap2 	  = 1
+showbp2	  	  = 1
+showcp2 	  = 1
+showtagsfp2   = 1
+#start button
+showstartp2 = 1
+;--------------button press delay -------------------
+
+buttondelay = 6 ; 6 frame default before button resets position
+;--------------------------------------------------------------
+
+
+;offsets for stick
+
+;-------------------------p1-------------------------
+;--------------offset entire layout-------------------
+
+stickxoffset = 0 
+;##moves stick display to the right##
+;174= (4/3 resolution) 198 =(16/9 widescreen) 
+;max value to see all 9 buttons on right hand side
+;default= 0
+---------------------------------------
+stickyoffset = 0 
+;##moves stick display higher##
+;154(16/9 widescreen) or 204 (4/3 resolution) 
+;max value to see at highest possible pos
+;default= 0
+
+
+;--------------offset just joystick layout-------------------
+stickjoyxoffset = 0
+;##moves just the joystick display in relation to button pos##
+;positive values will move right negative moves left
+;default= 0
+
+stickjoyyoffset = 0
+;##moves just the joystick display in relation to button pos##
+;positive values will move higher negative moves lower
+;default= 0
+
+;--------------------------p2---------------------------
+;--------------offset entire layout-------------------
+
+stickxoffsetp2 = 0
+;##moves stick display to the right##
+;174= (4/3 resolution) 198 =(16/9 widescreen) 
+;max value to see all 9 buttons on right hand side
+;default= 0
+---------------------------------------
+stickyoffsetp2 = 0 
+;##moves stick display higher##
+;154(16/9 widescreen) or 204 (4/3 resolution) 
+;max value to see at highest possible pos
+;default= 0
+
+
+;--------------offset just joystick layout-------------------
+stickjoyxoffsetp2 = 0
+;##moves just the joystick display in relation to button pos##
+;positive values will move right negative moves left
+;default= 0
+
+stickjoyyoffsetp2 = 0
+;##moves just the joystick display in relation to button pos##
+;positive values will move higher negative moves lower
+;default= 0
+
+
+
+
+;#------------------button animations------------
+;# included some colours on dif anims	
+;# black  = 41,40
+;# white  = 43,42
+;# blue   = 45,44
+;# red    = 47,46
+;# green  = 49,48
+;# brown  = 51,50
+;# purple = 53,52
+;# orange = 55,54
+;# cyan   = 57,56
+;# yellow = 59,58
+;# pink   = 61,60
+;# green  = 63,62
+
+;###p1
+;#########yellow on button press new default#########
+#top row  >>>>left to right
+cnx   = 47	
+cnxd  = 46	
+cny   = 49
+cnyd  = 48
+cnz   = 51
+cnzd  = 50
+cntsbd  = 53
+cntsbdd = 52
+
+#bottom row >>>>left to right
+cna   = 41
+cnad  = 40
+cnb   = 43
+cnbd  = 42
+cnc   = 45
+cncd  = 44
+cntsfw  = 55
+cntsfwd = 54
+#start button
+cnst  = 57
+cnstd = 56
+
+;###p2
+;#########yellow on button press new default#########
+#top row  >>>>left to right
+p2cnx   = 47	
+p2cnxd  = 46	
+p2cny   = 49
+p2cnyd  = 48
+p2cnz   = 51
+p2cnzd  = 50
+p2cntsbd  = 53
+p2cntsbdd = 52
+
+#bottom row >>>>left to right
+p2cna   = 41
+p2cnad  = 40
+p2cnb   = 43
+p2cnbd  = 42
+p2cnc   = 45
+p2cncd  = 44
+p2cntsfw  = 55
+p2cntsfwd = 54
+#start button
+p2cnst  = 57
+p2cnstd = 56
+
+;;;;;;;;;;;;;;;;;;;;EXAMPLE all black;;;;;;;;;;;;;;;;;;;;;;;
+;;; #top row  >>>>left to right
+;;; cnx   = 41	
+;;; cnxd  = 40	
+;;; cny   = 41
+;;; cnyd  = 40
+;;; cnz   = 41
+;;; cnzd  = 40
+;;; cntsfw  = 41
+;;; cntsfwd = 40
+;;; #bottom row >>>>left to right
+;;; cna   = 41
+;;; cnad  = 40
+;;; cnb   = 41
+;;; cnbd  = 40
+;;; cnc   = 41
+;;; cncd  = 40
+;;; cntsbd  = 41
+;;; cntsbdd = 40
+;;; #start button
+;;; cnst  = 41
+;;; cnstd = 40
+
+;;;;;;;;;;;;;;;;;;;;EXAMPLE;;;;;;;;;;;;;;;;;;;;;;;
+;;; #top row  >>>>left to right
+;;; cnx   = 41	
+;;; cnxd  = 40	
+;;; cny   = 43
+;;; cnyd  = 42
+;;; cnz   = 45
+;;; cnzd  = 44
+;;; cntsfw  = 47
+;;; cntsfwd = 46
+;;; #bottom row >>>>left to right
+;;; cna   = 49
+;;; cnad  = 48
+;;; cnb   = 51
+;;; cnbd  = 50
+;;; cnc   = 53
+;;; cncd  = 52
+;;; cntsbd  = 55
+;;; cntsbdd = 54
+;;; #start button
+;;; cnst  = 57
+;;; cnstd = 56
+
+;;;;;;;;;;;;;;;;;;;;EXAMPLE;;;;;;;;;;;;;;;;;;;;;;;
+;;; #top row  >>>>left to right
+;;; cnx   = 43	
+;;; cnxd  = 42	
+;;; cny   = 45
+;;; cnyd  = 44
+;;; cnz   = 47
+;;; cnzd  = 46
+;;; cntsfw  = 57
+;;; cntsfwd = 56
+;;; #bottom row >>>>left to right
+;;; cna   = 43
+;;; cnad  = 42
+;;; cnb   = 45
+;;; cnbd  = 44
+;;; cnc   = 47
+;;; cncd  = 46
+;;; cntsbd  = 55
+;;; cntsbdd = 54
+;;; #start button
+;;; cnst  = 41
+;;; cnstd = 40
+;;; 

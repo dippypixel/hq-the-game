@@ -1,0 +1,383 @@
+#===============================================================================
+#STICK 
+#ALL ASSETTS/CODE MADE BY HORSE
+#06/03/25
+#20/07/25 v2.5 (snk styles , removed .cmd uses input time instead)
+#===============================================================================
+#===============================================================================
+#Stick helper
+#===============================================================================
+ [Statedef 45991100; type: S; movetype: I; physics: N;
+ anim: ARSTK 999; sprpriority: -4; ctrl: 0; poweradd:0; juggle:0; ]
+
+notHitBy{value: SCA; time: -1}
+#-> setting maps
+ignoreHitPause if roundstate != 0 {
+if root,map(xy) = 0{root,map(xy):= (screenheight/180);}
+if root,localCoord x !=0{root,map(localcordx) := (root,localCoord x/320);}
+if root,localCoord x !=0{root,map(localcordxs) := (screenwidth/screenheight) < 1.77;}
+if root,map(buttondelay) <1 {root,map(buttondelay):=root,const(buttondelay);}
+if root,InputTime(B) > 0 {root,map(commandmap):= 1;}
+if root,InputTime(F) > 0 {root,map(commandmap):= 2;}
+if root,InputTime(U) > 0 {root,map(commandmap):= 3;}
+if root,InputTime(D) > 0 {root,map(commandmap):= 4;}
+if root,InputTime(B) > 0 && root,InputTime(U) > 0 {root,map(commandmap):= 10;}
+if root,InputTime(F) > 0 && root,InputTime(U) > 0 {root,map(commandmap):= 11;}
+if root,InputTime(B) > 0 && root,InputTime(D) > 0 {root,map(commandmap):= 20;}
+if root,InputTime(F) > 0 && root,InputTime(D) > 0 {root,map(commandmap):= 21;}
+if root,InputTime(F) < 0 && root,InputTime(B) < 0 && root,InputTime(U) < 0 && root,InputTime(D) < 0{root,map(commandmap):= 0;}
+if root,InputTime(x) > 0 {root,map(commandx):= root,map(buttondelay);}
+if root,InputTime(y) > 0 {root,map(commandy):= root,map(buttondelay);}
+if root,InputTime(z) > 0 {root,map(commandz):= root,map(buttondelay);}
+if root,InputTime(a) > 0 {root,map(commanda):= root,map(buttondelay);}
+if root,InputTime(b) > 0 {root,map(commandb):= root,map(buttondelay);}
+if root,InputTime(c) > 0 {root,map(commandc):= root,map(buttondelay);}
+if root,InputTime(d) > 0 {root,map(commandShiftBack):= root,map(buttondelay);}
+if root,InputTime(w) > 0 {root,map(commandShiftFwd):= root,map(buttondelay);}
+if root,InputTime(s) > 0 {root,map(commandstart):= root,map(buttondelay);}
+
+
+#-> stick
+	ignoreHitPause if numExplod(888770) <2{
+	removeexplod{id:888770;}
+	if const(underlay) = 1 && ((root,const(stylej) = 0  && root,const(styleu) = 0) || (root,const(stylej) = 1  && root,const(styleu) = 1))  { explod{id:8887760; anim:ARSTK (100 * Cond(root,const(styleu)=0,1,10)) + root,const(plainunderlay)  ; postype: left; space: screen; pos: (20+ (const(stickxoffset)+const(stickjoyxoffset)))*root,map(localcordx), (((166*root,map(xy))- const(stickyoffset))-const(stickjoyyoffset)); velocity: 0, 0; accel: 0, 0; removetime: 1;scale:1.33,1.33;under:0;ontop:1; superMoveTime: 0; pauseMoveTime: 0; } }
+	if const(underlay) = 1 && ((root,const(stylej) = 1  && root,const(styleu) = 0) || (root,const(stylej) = 0  && root,const(styleu) = 1))  { explod{id:8887760; anim:ARSTK (200 * Cond(root,const(styleu)=0,1,10)) + root,const(plainunderlay)  ; postype: left; space: screen; pos: (20+ (const(stickxoffset)+const(stickjoyxoffset)))*root,map(localcordx), (((166*root,map(xy))- const(stickyoffset))-const(stickjoyyoffset)); velocity: 0, 0; accel: 0, 0; removetime: 1;scale:1.33,1.33;under:0;ontop:1; superMoveTime: 0; pauseMoveTime: 0; } }
+	
+
+	explod{id:888770; anim:ARSTK 
+		 Cond(root,map(commandmap)=1,Cond(root,facing=1,33,34), ##back
+		 Cond(root,map(commandmap)=2 ,Cond(root,facing=1,34,33), #forward
+		 Cond(root,map(commandmap)=3 ,38,#up
+		 Cond(root,map(commandmap)=4 ,32,#down
+		 Cond(root,map(commandmap)=10 ,Cond(root,facing=1,36,37),#up bk
+		 Cond(root,map(commandmap)=11 ,Cond(root,facing=1,37,36),#up frwd
+		 Cond(root,map(commandmap)=20 ,Cond(root,facing=1,30,31),#down bk
+		 Cond(root,map(commandmap)=21 ,Cond(root,facing=1,31,30),#down frwd
+		 Cond(root,map(commandmap)=0 ,35,#reset
+
+		   
+		 35))))))))) * Cond(root,const(stylej)=0,1,10) ; postype: left; space: screen; pos: (20+ (const(stickxoffset)+const(stickjoyxoffset)))*root,map(localcordx), (((166*root,map(xy))- const(stickyoffset))-const(stickjoyyoffset))-  Cond(root,const(stylej)=0,0,3); velocity: 0, 0; accel: 0, 0; removetime: 1;scale:1,1;under:0;ontop:1; superMoveTime: 0; pauseMoveTime: 0; } 
+	}
+	
+
+
+#-> buttons
+#-> x
+	ignoreHitPause if numExplod(888870) <2 && const(showx) = 1{
+	explod{id:888870; anim:ARSTK 
+		 Cond(root,map(commandx)>0,const(cnx), 
+		   
+		 const(cnxd))* Cond(root,const(style)=0,1,10); postype: left; space: screen; pos: (50 + const(stickxoffset))*root,map(localcordx), ((162*root,map(xy))- const(stickyoffset)); velocity: 0, 0; accel: 0, 0; removetime: 1;scale:1,1;under:0;ontop:1; superMoveTime: 0; pauseMoveTime: 0;} 
+	}
+
+#-> y
+	ignoreHitPause if numExplod(888871) <2 && const(showy) = 1{
+	explod{id:888871; anim:ARSTK 
+		 Cond(root,map(commandy)>0,const(cny), 
+		   
+		 const(cnyd))* Cond(root,const(style)=0,1,10); postype: left; space: screen; pos: (66+(cond(root,map(localcordxs) = 1,5,0)+ const(stickxoffset)))*root,map(localcordx), ((162*root,map(xy))- const(stickyoffset)); velocity: 0, 0; accel: 0, 0; removetime: 1;scale:1,1;under:0;ontop:1; superMoveTime: 0; pauseMoveTime: 0;} 
+	}
+
+#-> z
+	ignoreHitPause if numExplod(888872) <2 && const(showz) = 1{
+	explod{id:888872; anim:ARSTK 
+		 Cond(root,map(commandz)>0,const(cnz), 
+		   
+		 const(cnzd))* Cond(root,const(style)=0,1,10); postype: left; space: screen; pos: (82+(cond(root,map(localcordxs) = 1,10,0)+ const(stickxoffset)))*root,map(localcordx), ((162*root,map(xy))- const(stickyoffset)); velocity: 0, 0; accel: 0, 0; removetime: 1;scale:1,1;under:0;ontop:1; superMoveTime: 0; pauseMoveTime: 0;} 
+	}
+	
+#-> commandShiftBack
+	ignoreHitPause if numExplod(888873) <2 && const(showtagsb) = 1{
+	explod{id:888873; anim:ARSTK 
+		 Cond(root,map(commandShiftBack)>0,const(cntsbd), 
+		   
+		 const(cntsbdd))* Cond(root,const(style)=0,1,10); postype: left; space: screen; pos: (98+(cond(root,map(localcordxs) = 1,15,0)+ const(stickxoffset)))*root,map(localcordx), ((162*root,map(xy))- const(stickyoffset)); velocity: 0, 0; accel: 0, 0; removetime: 1;scale:1,1;under:0;ontop:1; superMoveTime: 0; pauseMoveTime: 0} 
+	}
+
+
+#-> a
+	ignoreHitPause if numExplod(888874) <2 && const(showa) = 1{
+	explod{id:888874; anim:ARSTK 
+		 Cond(root,map(commanda)>0,const(cna), 
+		   
+		 const(cnad))* Cond(root,const(style)=0,1,10); postype: left; space: screen; pos: (50+ const(stickxoffset))*root,map(localcordx), ((170*root,map(xy))- const(stickyoffset)); velocity: 0, 0; accel: 0, 0; removetime: 1;scale:1,1;under:0;ontop:1; superMoveTime: 0; pauseMoveTime: 0;} 
+	}
+
+#-> b
+	ignoreHitPause if numExplod(888875) <2 && const(showb) = 1{
+	explod{id:888875; anim:ARSTK 
+		 Cond(root,map(commandb)>0,const(cnb), 
+		   
+		 const(cnbd))* Cond(root,const(style)=0,1,10); postype: left; space: screen; pos: (66+(cond(root,map(localcordxs) = 1,5,0)+ const(stickxoffset)))*root,map(localcordx), ((170*root,map(xy))- const(stickyoffset)); velocity: 0, 0; accel: 0, 0; removetime: 1;scale:1,1;under:0;ontop:1; superMoveTime: 0; pauseMoveTime: 0;} 
+	}
+
+#-> c
+	ignoreHitPause if numExplod(888876) <2 && const(showc) = 1{
+	explod{id:888876; anim:ARSTK 
+		 Cond(root,map(commandc)>0,const(cnc), 
+		   
+		 const(cncd))* Cond(root,const(style)=0,1,10); postype: left; space: screen; pos: (82+(cond(root,map(localcordxs) = 1,10,0)+ const(stickxoffset)))*root,map(localcordx), ((170*root,map(xy))- const(stickyoffset)); velocity: 0, 0; accel: 0, 0; removetime: 1;scale:1,1;under:0;ontop:1; superMoveTime: 0; pauseMoveTime: 0;} 
+	}
+	
+#-> commandShiftFwd
+	ignoreHitPause if numExplod(888877) <2 && const(showtagsf) = 1{
+	explod{id:888877; anim:ARSTK 
+		 Cond(root,map(commandShiftFwd)>0,const(cntsfw), 
+		   
+		 const(cntsfwd))* Cond(root,const(style)=0,1,10); postype: left; space: screen; pos: (98+(cond(root,map(localcordxs) = 1,15,0)+ const(stickxoffset)))*root,map(localcordx), ((170*root,map(xy))- const(stickyoffset)); velocity: 0, 0; accel: 0, 0; removetime: 1;scale:1,1;under:0;ontop:1; superMoveTime: 0; pauseMoveTime: 0;} 
+	}
+	
+
+	
+#-> commandstart
+	ignoreHitPause if numExplod(888878) <2 && const(showstart) = 1{
+	explod{id:888878; anim:ARSTK 
+		 Cond(root,map(commandstart)>0,const(cnst), const(cnstd))* Cond(root,const(style)=0,1,10);
+		   
+		  postype: left; space: screen; pos: (114+(cond(root,map(localcordxs) = 1,20,0)+ const(stickxoffset)))*root,map(localcordx), ((166*root,map(xy))- const(stickyoffset)); velocity: 0, 0; accel: 0, 0; removetime: 1;scale:1,1;under:0;ontop:1; superMoveTime: 0; pauseMoveTime: 0} 
+	}
+	
+
+}
+
+		
+if root,playerno != teamLeader || root,map(stickoff) =1 || root,aILevel >0{
+   removeexplod{}
+   destroySelf{}
+}
+ 
+#===============================================================================
+#Stick helper
+#===============================================================================
+ [Statedef 45991102; type: S; movetype: I; physics: N;
+ anim: ARSTK 999; sprpriority: -4; ctrl: 0; poweradd:0; juggle:0; ]
+
+notHitBy{value: SCA; time: -1}
+#-> setting maps
+ignoreHitPause if roundstate != 0 {
+if root,map(xy) = 0{root,map(xy):= (screenheight/180);}
+if root,localCoord x !=0{root,map(localcordx) := (root,localCoord x/320);}
+if root,localCoord x !=0{root,map(localcordxs) := (screenwidth/screenheight) < 1.77;}
+if root,map(buttondelay) <1 {root,map(buttondelay):=root,const(buttondelay);}
+if root,InputTime(B) > 0 {root,map(commandmap):= 1;}
+if root,InputTime(F) > 0 {root,map(commandmap):= 2;}
+if root,InputTime(U) > 0 {root,map(commandmap):= 3;}
+if root,InputTime(D) > 0 {root,map(commandmap):= 4;}
+if root,InputTime(B) > 0 && root,InputTime(U) > 0 {root,map(commandmap):= 10;}
+if root,InputTime(F) > 0 && root,InputTime(U) > 0 {root,map(commandmap):= 11;}
+if root,InputTime(B) > 0 && root,InputTime(D) > 0 {root,map(commandmap):= 20;}
+if root,InputTime(F) > 0 && root,InputTime(D) > 0 {root,map(commandmap):= 21;}
+if root,InputTime(F) < 0 && root,InputTime(B) < 0 && root,InputTime(U) < 0 && root,InputTime(D) < 0{root,map(commandmap):= 0;}
+if root,InputTime(x) > 0 {root,map(commandx):= root,map(buttondelay);}
+if root,InputTime(y) > 0 {root,map(commandy):= root,map(buttondelay);}
+if root,InputTime(z) > 0 {root,map(commandz):= root,map(buttondelay);}
+if root,InputTime(a) > 0 {root,map(commanda):= root,map(buttondelay);}
+if root,InputTime(b) > 0 {root,map(commandb):= root,map(buttondelay);}
+if root,InputTime(c) > 0 {root,map(commandc):= root,map(buttondelay);}
+if root,InputTime(d) > 0 {root,map(commandShiftBack):= root,map(buttondelay);}
+if root,InputTime(w) > 0 {root,map(commandShiftFwd):= root,map(buttondelay);}
+if root,InputTime(s) > 0 {root,map(commandstart):= root,map(buttondelay);}
+
+#-> stick
+	ignoreHitPause if numExplod(888770) <2{
+	removeexplod{id:888770;}
+	if const(underlayp2) = 1 && ((const(styleup2) = 0 && const(stylejp2) = 0)|| (const(styleup2) = 1 && const(stylejp2) = 1)){explod{id:8887760; anim:ARSTK (100 * Cond(root,const(styleup2)=0,1,10)) + root,const(plainunderlayp2)  ; postype: right; space: screen; pos: (-111+ (const(stickxoffsetp2)+const(stickjoyxoffsetp2)))*root,map(localcordx), (((166*root,map(xy))- const(stickyoffsetp2))-const(stickjoyyoffsetp2)); velocity: 0, 0; accel: 0, 0; removetime: 1;scale:1.33,1.33;under:0;ontop:1; superMoveTime: 0; pauseMoveTime: 0; } }
+	if const(underlayp2) = 1 && ((const(styleup2) = 1 && const(stylejp2) = 0)|| (const(styleup2) = 0 && const(stylejp2) = 1)){ explod{id:8887760; anim:ARSTK (200 * Cond(root,const(styleup2)=0,1,10)) + root,const(plainunderlayp2)  ; postype: right; space: screen; pos: (-111+ (const(stickxoffsetp2)+const(stickjoyxoffsetp2)))*root,map(localcordx), (((166*root,map(xy))- const(stickyoffsetp2))-const(stickjoyyoffsetp2)); velocity: 0, 0; accel: 0, 0; removetime: 1;scale:1.33,1.33;under:0;ontop:1; superMoveTime: 0; pauseMoveTime: 0; } }
+	
+	explod{id:888770; anim:ARSTK 
+		 Cond(root,map(commandmap)=1,Cond(root,facing=1,33,34), ##back
+		 Cond(root,map(commandmap)=2 ,Cond(root,facing=1,34,33), #forward
+		 Cond(root,map(commandmap)=3 ,38,#up
+		 Cond(root,map(commandmap)=4 ,32,#down
+		 Cond(root,map(commandmap)=10 ,Cond(root,facing=1,36,37),#up bk
+		 Cond(root,map(commandmap)=11 ,Cond(root,facing=1,37,36),#up frwd
+		 Cond(root,map(commandmap)=20 ,Cond(root,facing=1,30,31),#down bk
+		 Cond(root,map(commandmap)=21 ,Cond(root,facing=1,31,30),#down frwd
+		 Cond(root,map(commandmap)=0 ,35,#reset
+
+		   
+		 35))))))))) * Cond(root,const(stylejp2)=0,1,10); postype: right; space: screen; pos: (-111+ (const(stickxoffsetp2)+const(stickjoyxoffsetp2)))*root,map(localcordx), (((166*root,map(xy))- const(stickyoffsetp2))-const(stickjoyyoffsetp2))-  Cond(root,const(stylejp2)=0,0,3); velocity: 0, 0; accel: 0, 0; removetime: 1;scale:1,1;under:0;ontop:1; superMoveTime: 0; pauseMoveTime: 0; } 
+	}
+	
+
+
+#-> buttons
+#-> x
+	ignoreHitPause if numExplod(888870) <2 && const(showxp2) = 1{
+	explod{id:888870; anim:ARSTK 
+		 Cond(root,map(commandx)>0,const(p2cnx), 
+		   
+		 const(p2cnxd))* Cond(root,const(stylep2)=0,1,10); postype: right; space: screen; pos: (-81 + const(stickxoffsetp2))*root,map(localcordx), ((162*root,map(xy))- const(stickyoffsetp2)); velocity: 0, 0; accel: 0, 0; removetime: 1;scale:1,1;under:0;ontop:1; superMoveTime: 0; pauseMoveTime: 0;} 
+	}
+
+#-> y
+	ignoreHitPause if numExplod(888871) <2 && const(showyp2) = 1{
+	explod{id:888871; anim:ARSTK 
+		 Cond(root,map(commandy)>0,const(p2cny), 
+		   
+		 const(p2cnyd))* Cond(root,const(stylep2)=0,1,10); postype: right; space: screen; pos: (-65+(cond(root,map(localcordxs) = 1,5,0)+ const(stickxoffsetp2)))*root,map(localcordx), ((162*root,map(xy))- const(stickyoffsetp2)); velocity: 0, 0; accel: 0, 0; removetime: 1;scale:1,1;under:0;ontop:1; superMoveTime: 0; pauseMoveTime: 0;} 
+	}
+
+#-> z
+	ignoreHitPause if numExplod(888872) <2 && const(showzp2) = 1{
+	explod{id:888872; anim:ARSTK 
+		 Cond(root,map(commandz)>0,const(p2cnz), 
+		   
+		 const(p2cnzd))* Cond(root,const(stylep2)=0,1,10); postype: right; space: screen; pos: (-49+(cond(root,map(localcordxs) = 1,10,0)+ const(stickxoffsetp2)))*root,map(localcordx), ((162*root,map(xy))- const(stickyoffsetp2)); velocity: 0, 0; accel: 0, 0; removetime: 1;scale:1,1;under:0;ontop:1; superMoveTime: 0; pauseMoveTime: 0;} 
+	}
+	
+#-> commandShiftBack
+	ignoreHitPause if numExplod(888873) <2 && const(showtagsbp2) = 1{
+	explod{id:888873; anim:ARSTK 
+		 Cond(root,map(commandShiftBack)>0,const(p2cntsbd), 
+		   
+		 const(p2cntsbdd))* Cond(root,const(stylep2)=0,1,10); postype: right; space: screen; pos: (-33+(cond(root,map(localcordxs) = 1,15,0)+ const(stickxoffsetp2)))*root,map(localcordx), ((162*root,map(xy))- const(stickyoffsetp2)); velocity: 0, 0; accel: 0, 0; removetime: 1;scale:1,1;under:0;ontop:1; superMoveTime: 0; pauseMoveTime: 0} 
+	}
+
+
+#-> a
+	ignoreHitPause if numExplod(888874) <2 && const(showap2) = 1{
+	explod{id:888874; anim:ARSTK 
+		 Cond(root,map(commanda)>0,const(p2cna), 
+		   
+		 const(p2cnad))* Cond(root,const(stylep2)=0,1,10); postype: right; space: screen; pos: (-81+ const(stickxoffsetp2))*root,map(localcordx), ((170*root,map(xy))- const(stickyoffsetp2)); velocity: 0, 0; accel: 0, 0; removetime: 1;scale:1,1;under:0;ontop:1; superMoveTime: 0; pauseMoveTime: 0;} 
+	}
+
+#-> b
+	ignoreHitPause if numExplod(888875) <2 && const(showbp2) = 1{
+	explod{id:888875; anim:ARSTK 
+		 Cond(root,map(commandb)>0,const(p2cnb), 
+		   
+		 const(p2cnbd))* Cond(root,const(stylep2)=0,1,10); postype: right; space: screen; pos: (-65+(cond(root,map(localcordxs) = 1,5,0)+ const(stickxoffsetp2)))*root,map(localcordx), ((170*root,map(xy))- const(stickyoffsetp2)); velocity: 0, 0; accel: 0, 0; removetime: 1;scale:1,1;under:0;ontop:1; superMoveTime: 0; pauseMoveTime: 0;} 
+	}
+
+#-> c
+	ignoreHitPause if numExplod(888876) <2 && const(showcp2) = 1{
+	explod{id:888876; anim:ARSTK 
+		 Cond(root,map(commandc)>0,const(p2cnc), 
+		   
+		 const(p2cncd))* Cond(root,const(stylep2)=0,1,10); postype: right; space: screen; pos: (-49+(cond(root,map(localcordxs) = 1,10,0)+ const(stickxoffsetp2)))*root,map(localcordx), ((170*root,map(xy))- const(stickyoffsetp2)); velocity: 0, 0; accel: 0, 0; removetime: 1;scale:1,1;under:0;ontop:1; superMoveTime: 0; pauseMoveTime: 0;} 
+	}
+	
+#-> commandShiftFwd
+	ignoreHitPause if numExplod(888877) <2 && const(showtagsfp2) = 1{
+	explod{id:888877; anim:ARSTK 
+		 Cond(root,map(commandShiftFwd)>0,const(p2cntsfw), 
+		   
+		 const(p2cntsfwd))* Cond(root,const(stylep2)=0,1,10); postype: right; space: screen; pos: (-33+(cond(root,map(localcordxs) = 1,15,0)+ const(stickxoffsetp2)))*root,map(localcordx), ((170*root,map(xy))- const(stickyoffsetp2)); velocity: 0, 0; accel: 0, 0; removetime: 1;scale:1,1;under:0;ontop:1; superMoveTime: 0; pauseMoveTime: 0;} 
+	}
+	
+
+	
+#-> commandstart
+	ignoreHitPause if numExplod(888878) <2 && const(showstartp2) = 1{
+	explod{id:888878; anim:ARSTK 
+		 Cond(root,map(commandstart)>0,const(p2cnst), const(p2cnstd))* Cond(root,const(stylep2)=0,1,10);
+		   
+		  postype: right; space: screen; pos: (-17+(cond(root,map(localcordxs) = 1,20,0)+ const(stickxoffsetp2)))*root,map(localcordx), ((166*root,map(xy))- const(stickyoffsetp2)); velocity: 0, 0; accel: 0, 0; removetime: 1;scale:1,1;under:0;ontop:1; superMoveTime: 0; pauseMoveTime: 0} 
+	}
+	
+
+}
+
+		
+if !root,alive || root,playerno != teamLeader || root,map(stickoff) =1 || root,aILevel >0{
+   removeexplod{}
+   destroySelf{}
+}
+####################################################
+[statedef +1] 
+#-> helper spawn on teamleader
+ignoreHitPause if roundstate != 0 && teamside = 1 && playerno = teamLeader && 
+    ((const(arcade)              = 1   && gamemode = "arcade") ||  
+    (const(bonus)               = 1   && gamemode = "bonus")  ||  
+    (const(bossrush)            = 1   && gamemode = "bossrush") ||  
+    (const(demo)                = 1   && gamemode = "demo") ||  
+    (const(freebattle)          = 1   && gamemode = "freebattle") ||  
+    (const(netplaysurvivalcoop) = 1   && gamemode = "netplaysurvivalcoop") || 
+    (const(netplayteamcoop)     = 1   && gamemode = "netplayteamcoop") ||  
+    (const(netplayversus)       = 1   && gamemode = "netplayversus") ||  
+    (const(randomtest)          = 1   && gamemode = "randomtest") ||  
+    (const(survival)            = 1   && gamemode = "survival") ||  
+    (const(survivalcoop)        = 1   && gamemode = "survivalcoop") ||  
+    (const(teamcoop)            = 1   && gamemode = "teamcoop") ||  
+    (const(timeattack)          = 1   && gamemode = "timeattack") ||  
+    (const(training)            = 1   && gamemode = "training") ||  
+    (const(versus)              = 1   && gamemode = "versus") ||  
+    (const(versuscoop)          = 1   && gamemode = "versuscoop"))  {  
+ignoreHitPause if !numhelper(45991100) && alive && map(stickoff) = 0 && aILevel = 0{
+helper{helpertype: normal; name:"stick"; stateno:45991100; id:45991100;	postype: p1; pos: -1000, -1000; superMoveTime:999; pauseMoveTime:999; }
+}
+
+#-----------------------------------------
+
+#-> turn off
+ignoreHitPause if roundstate != 0 && teamside = 1 && playerno = teamLeader && (InputTime(s) > 0) && 
+(InputTime(w) > 0 || InputTime(d) > 0  ) && 
+map(stickonofftoggle) = 0 {
+map(stickonofftoggle):=15;
+teammapset{map:"stickoff"; value:Cond(map(stickoff) < 1,1,0)} ##on/off
+}
+
+
+
+
+#-> reset map cooldown
+ignorehitpause if map(commandx) > 0 {mapadd{map:"commandx";value:-1}}	
+ignorehitpause if map(commandy) > 0 {mapadd{map:"commandy";value:-1}}	
+ignorehitpause if map(commandz) > 0 {mapadd{map:"commandz";value:-1}}	
+ignorehitpause if map(commanda) > 0 {mapadd{map:"commanda";value:-1}}	
+ignorehitpause if map(commandb) > 0 {mapadd{map:"commandb";value:-1}}	
+ignorehitpause if map(commandc) > 0 {mapadd{map:"commandc";value:-1}}	
+ignorehitpause if map(commandShiftBack) > 0 {mapadd{map:"commandShiftBack";value:-1}}	
+ignorehitpause if map(commandShiftFwd) > 0 {mapadd{map:"commandShiftFwd";value:-1}}	
+ignorehitpause if map(commandstart) > 0 {mapadd{map:"commandstart";value:-1}}	
+ignorehitpause if map(stickonofftoggle) > 0 {mapadd{map:"stickonofftoggle";value:-1}}	
+	}
+	
+	
+	##############################p2##############################
+#-> helper spawn on teamleader
+ignoreHitPause if roundstate != 0 && teamside = 2 && playerno = teamLeader &&  
+    ((const(arcadep2)              = 1   && gamemode = "arcade") ||  
+    (const(bonusp2)               = 1   && gamemode = "bonus")  ||  
+    (const(bossrushp2)            = 1   && gamemode = "bossrush") ||  
+    (const(demop2)                = 1   && gamemode = "demo") ||  
+    (const(freebattlep2)          = 1   && gamemode = "freebattle") ||  
+    (const(netplaysurvivalcoopp2) = 1   && gamemode = "netplaysurvivalcoop") || 
+    (const(netplayteamcoopp2)     = 1   && gamemode = "netplayteamcoop") ||  
+    (const(netplayversusp2)       = 1   && gamemode = "netplayversus") ||  
+    (const(randomtestp2)          = 1   && gamemode = "randomtest") ||  
+    (const(survivalp2)            = 1   && gamemode = "survival") ||  
+    (const(survivalcoopp2)        = 1   && gamemode = "survivalcoop") ||  
+    (const(teamcoopp2)            = 1   && gamemode = "teamcoop") ||  
+    (const(timeattackp2)          = 1   && gamemode = "timeattack") ||  
+    (const(trainingp2)            = 1   && gamemode = "training") ||  
+    (const(versusp2)              = 1   && gamemode = "versus") ||  
+    (const(versuscoopp2)          = 1   && gamemode = "versuscoop")) {  
+ignoreHitPause if !numhelper(45991102) && alive && map(stickoff) = 0 && aILevel = 0{
+helper{helpertype: normal; name:"stickp2"; stateno:45991102; id:45991102;	postype: p1; pos: -1000, -1000; superMoveTime:999; pauseMoveTime:999; }
+}
+#-> turn off
+ignoreHitPause if roundstate != 0 && teamside = 2 && playerno = teamLeader && (InputTime(s) > 0) && 
+(InputTime(w) > 0 || InputTime(d) > 0 ) && 
+map(stickonofftoggle) = 0 {
+map(stickonofftoggle):=15;
+teammapset{map:"stickoff"; value:Cond(map(stickoff) < 1,1,0)} ##on/off
+}
+
+
+
+
+#-> reset map cooldown
+ignorehitpause if map(commandx) > 0 {mapadd{map:"commandx";value:-1}}	
+ignorehitpause if map(commandy) > 0 {mapadd{map:"commandy";value:-1}}	
+ignorehitpause if map(commandz) > 0 {mapadd{map:"commandz";value:-1}}	
+ignorehitpause if map(commanda) > 0 {mapadd{map:"commanda";value:-1}}	
+ignorehitpause if map(commandb) > 0 {mapadd{map:"commandb";value:-1}}	
+ignorehitpause if map(commandc) > 0 {mapadd{map:"commandc";value:-1}}	
+ignorehitpause if map(commandShiftBack) > 0 {mapadd{map:"commandShiftBack";value:-1}}	
+ignorehitpause if map(commandShiftFwd) > 0 {mapadd{map:"commandShiftFwd";value:-1}}	
+ignorehitpause if map(commandstart) > 0 {mapadd{map:"commandstart";value:-1}}	
+ignorehitpause if map(stickonofftoggle) > 0 {mapadd{map:"stickonofftoggle";value:-1}}	
+	}

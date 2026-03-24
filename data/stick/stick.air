@@ -1,0 +1,347 @@
+; down back
+[Begin Action 300]
+55,0, 0,0, 9999
+
+; down frw
+[Begin Action 310]
+55,1, 0,0, -1
+
+
+; down
+[Begin Action 320]
+55,2, 0,0, -1
+
+
+; left
+[Begin Action 330]
+55,3, 0,0, -1
+
+
+; right
+[Begin Action 340]
+55,4, 0,0, -1
+
+
+; center
+[Begin Action 350]
+55,5, 0,0, -1
+
+
+; up left
+[Begin Action 360]
+55,6, 0,0, -1
+
+
+; up right
+[Begin Action 370]
+55,7, 0,0, -1
+
+
+; up
+[Begin Action 380]
+55,8, 0,0, -1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+; down back
+[Begin Action 30]
+5,0, 0,0, 9999
+
+; down frw
+[Begin Action 31]
+5,1, 0,0, -1
+
+
+; down
+[Begin Action 32]
+5,2, 0,0, -1
+
+
+; left
+[Begin Action 33]
+5,3, 0,0, -1
+
+
+; right
+[Begin Action 34]
+5,4, 0,0, -1
+
+
+; center
+[Begin Action 35]
+5,5, 0,0, -1
+
+
+; up left
+[Begin Action 36]
+5,6, 0,0, -1
+
+
+; up right
+[Begin Action 37]
+5,7, 0,0, -1
+
+
+; up
+[Begin Action 38]
+5,8, 0,0, -1
+
+
+
+; black button up
+[Begin Action 40]
+6,0, 0,0, -1
+
+
+; black button down
+[Begin Action 41]
+6,1, 0,0, -1
+
+; white button up
+[Begin Action 42]
+7,0, 0,0, -1
+
+
+; white button down
+[Begin Action 43]
+7,1, 0,0, -1
+
+
+; blue button up
+[Begin Action 44]
+8,0, 0,0, -1
+
+; blue button down
+[Begin Action 45]
+8,1, 0,0, -1
+
+; red button up
+[Begin Action 46]
+9,0, 0,0, -1
+
+; red button down
+[Begin Action 47]
+9,1, 0,0, -1
+
+; dark blue button up
+[Begin Action 48]
+10,0, 0,0, -1
+
+; dark blue button down
+[Begin Action 49]
+10,1, 0,0, -1
+
+
+; brown button up
+[Begin Action 50]
+11,0, 0,0, -1
+
+; brown button down
+[Begin Action 51]
+11,1, 0,0, -1
+
+
+; purple button up
+[Begin Action 52]
+12,0, 0,0, -1
+
+; purple button down
+[Begin Action 53]
+12,1, 0,0, -1
+
+; orange button up
+[Begin Action 54]
+13,0, 0,0, -1
+
+; orange button down
+[Begin Action 55]
+13,1, 0,0, -1
+
+; cyan button up
+[Begin Action 56]
+14,0, 0,0, -1
+
+; cyan button down
+[Begin Action 57]
+14,1, 0,0, -1
+
+; yellow button up
+[Begin Action 58]
+15,0, 0,0, -1
+
+; yellow button down
+[Begin Action 59]
+15,1, 0,0, -1
+
+; pink button up
+[Begin Action 60]
+16,0, 0,0, -1
+
+; pink button down
+[Begin Action 61]
+16,1, 0,0, -1
+
+; green button up
+[Begin Action 62]
+17,0, 0,0, -1
+
+; green button down
+[Begin Action 63]
+17,1, 0,0, -1
+
+
+
+; black button up
+[Begin Action 400]
+60,0, 0,0, -1
+
+
+; black button down
+[Begin Action 410]
+60,1, 0,0, -1
+
+; white button up
+[Begin Action 420]
+70,0, 0,0, -1
+
+
+; white button down
+[Begin Action 430]
+70,1, 0,0, -1
+
+
+; blue button up
+[Begin Action 440]
+80,0, 0,0, -1
+
+; blue button down
+[Begin Action 450]
+80,1, 0,0, -1
+
+; red button up
+[Begin Action 460]
+90,0, 0,0, -1
+
+; red button down
+[Begin Action 470]
+90,1, 0,0, -1
+
+; dark blue button up
+[Begin Action 480]
+100,0, 0,0, -1
+
+; dark blue button down
+[Begin Action 490]
+100,1, 0,0, -1
+
+
+; brown button up
+[Begin Action 500]
+110,0, 0,0, -1
+
+; brown button down
+[Begin Action 510]
+110,1, 0,0, -1
+
+
+; purple button up
+[Begin Action 520]
+120,0, 0,0, -1
+
+; purple button down
+[Begin Action 530]
+120,1, 0,0, -1
+
+; orange button up
+[Begin Action 540]
+130,0, 0,0, -1
+
+; orange button down
+[Begin Action 550]
+130,1, 0,0, -1
+
+; cyan button up
+[Begin Action 560]
+140,0, 0,0, -1
+
+; cyan button down
+[Begin Action 570]
+140,1, 0,0, -1
+
+; yellow button up
+[Begin Action 580]
+150,0, 0,0, -1
+
+; yellow button down
+[Begin Action 590]
+150,1, 0,0, -1
+
+; pink button up
+[Begin Action 600]
+160,0, 0,0, -1
+
+; pink button down
+[Begin Action 610]
+160,1, 0,0, -1
+
+; green button up
+[Begin Action 620]
+170,0, 0,0, -1
+
+; green button down
+[Begin Action 630]
+170,1, 0,0, -1
+
+[Begin Action 999]
+-1,0, 0,0, -1
+
+; capcom style
+[Begin Action 100]
+4,0, 0,0, 999
+
+; capcom underlay plain
+[Begin Action 101]
+4,2, 0,0, 999
+
+; neo style
+[Begin Action 1000]
+4,1, 0,0, 10
+
+; neo underlay plain
+[Begin Action 1001]
+4,2, 0,0, 10
+
+; capcom style snk stick
+[Begin Action 200]
+4,10, 0,0, 999
+
+; capcom underlay snk stick plain
+[Begin Action 201]
+4,2, 0,0, 999
+
+; neo style capcom stick
+[Begin Action 2000]
+4,11, 0,0, 10
+
+; neo underlay capcom stick plain
+[Begin Action 2001]
+4,2, 0,0, 10
