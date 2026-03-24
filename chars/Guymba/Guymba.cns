@@ -506,7 +506,7 @@ guardflag = MA
 pausetime = 12,12
 sparkno = 1
 sparkxy = -10,-70
-hitsound   = 5,4
+hitsound   = S8000, 3
 guardsound = 6,0
 ground.type = High
 ground.slidetime = 14
@@ -515,24 +515,6 @@ ground.velocity = -5,-20
 air.velocity = -5,-20
 fall = 1
 
-
-[State 0, AllPalFX]
-type = AllPalFX
-trigger1 = movehit
-time = 2
-mul = 0,0,0
-color = 256
-ignorehitpause = 1
-persistent = 0
-
-[State 0, EnvColor]
-type = EnvColor
-trigger1 = movehit
-value = 255,0, 0
-time = 2
-under = 1
-ignorehitpause = 1
-persistent = 0
 [State 410, 4]
 type = ChangeState
 trigger1 = movehit && command = "holdup"
@@ -579,7 +561,7 @@ ground.type = High
 ground.slidetime = 7
 ground.hittime  = 8
 ground.velocity = (vel x*-1)
-air.velocity = (vel x*-1),ifelse(vel y > -2,-2,(vel y))
+air.velocity = (vel x*-1),(vel y)+3
 air.hittime = 14
 mindist = 20,-20
 maxdist = 60,80
@@ -670,7 +652,7 @@ ground.type = High
 ground.slidetime = 7
 ground.hittime  = 8
 ground.velocity = (vel x*-1)
-air.velocity = (vel x*-1),ifelse(vel y > -2,-2,(vel y))
+air.velocity = (vel x*-1),vel y +3
 air.hittime = 14
 air.hittime = 15                 ;Time before opponent regains control in air
 [State 0, VelSet]
@@ -718,7 +700,7 @@ priority = 4
 pausetime = 12,12
 sparkno = 1
 sparkxy = -10,-70
-hitsound   = 5,3
+hitsound   = S8000, 3
 guardsound = 6,0
 animtype = Med
 ground.type = High
@@ -1364,7 +1346,7 @@ value = Anim + 3
 
 [State 0, Turn]
 type = Turn
-trigger1 = p2bodydist x < -50
+trigger1 = p2dist x < -50
 ;ignorehitpause = 
 ;persistent = 
 

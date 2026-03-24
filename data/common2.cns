@@ -2524,7 +2524,7 @@ type = VarSet
 trigger1 = root,hitpausetime=0 && enemynear,hitpausetime=0
 trigger1 = 1
 fv = 0
-value = (root,vel x - enemynear,vel x) * 0.5
+value = (root,vel x - enemynear,vel x) * 0.5 
 ignorehitpause = 1
 [State 0, Vel Y Set]
 type = VarSet
@@ -2550,7 +2550,7 @@ ignorehitpause = 1
 type = Varset
 trigger1 = time%4=0
 fv = 4    ;fv = 10
-value = 1+random%144
+value = 1+random%70
 
 
 [State 0, Enemy Velocity]
@@ -2572,7 +2572,7 @@ value = 1
 [State 0, DisableWind]
 type = VarSet
 trigger1 = var(5)
-trigger1 = abs(fvar(0) - fvar(1)) <=13
+trigger1 = abs(fvar(0) - fvar(1)) <=20
 v = 5    ;fv = 10
 value = 0
 
@@ -2587,7 +2587,7 @@ trans = add1
 type = ModifyExplod
 trigger1 = var(5)
 ID = 190000
-angle = fvar(3)
+angle = fvar(3)*(root,facing)+180*(root,facing=-1)
 scale = .4,.4
 
 [State 0, Transparency]
