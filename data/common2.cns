@@ -2212,9 +2212,12 @@ velset = vel x,enemy,map(floorbounceVely)
 
 [State -3, High Speed Width]
 type = width
-trigger1 = 1
+trigger1 = p2bodydist x >-50 && facing != enemynear,facing
 player = -30,30
-
+[State -3, High Speed Width]
+type = width
+trigger1 = p2bodydist x <-50 && facing = enemynear,facing
+player = 30,-30
 
 [State 5101, 1] ;Coming hit ground anim (normal)
 type = ChangeAnim

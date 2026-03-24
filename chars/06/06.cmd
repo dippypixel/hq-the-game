@@ -513,9 +513,10 @@ value = 600
 triggerall = command = "x"
 trigger1 = statetype = A
 trigger1 = ctrl
-trigger2 = stateno = 650
-trigger2 = movecontact&& time>10
-trigger3 = enemynear,stateno=5820
+trigger2 = prevstateno != 600 && stateno = 600 && movecontact
+trigger3 = stateno = 650
+trigger3 = movecontact&& time>10
+trigger4 = enemynear,stateno=5820
 
 ;---------------------------------------------------------------------------
 ;Jump Strong Punch
