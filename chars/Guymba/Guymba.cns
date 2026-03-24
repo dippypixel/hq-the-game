@@ -36,8 +36,8 @@ FloatPersistIndex = 40
 [Size]
 xscale = 1           ;Horizontal scaling factor.
 yscale = 1           ;Vertical scaling factor.
-air.back = 60       ;Player width (back, air)
-air.front = 0       ;Player width (front, air)
+air.back = 30       ;Player width (back, air)
+air.front = 30       ;Player width (front, air)
 ground.back = 30     ;Player width (back, ground)
 ground.front = 30    ;Player width (front, ground)
 height = 100          ;Height of player (for opponent to jump over)
@@ -1457,14 +1457,8 @@ ctrl = 1
 
 [State -3, High Speed Width]
 type = width
-trigger1 = stateno !=650 
-trigger1 = statetype = A && vel x > 4
+trigger1 = vel x > 0
 player = (vel x), ifelse(vel x<0,0,(vel x))
-ignorehitpause = 1
-[State -3, High Speed Width]
-type = width
-trigger1 = statetype != A && vel x > 4 &&movetype = I
-player = (vel x*.5), (vel x)
 ignorehitpause = 1
 [State 0, Mapset]
 type = MapSet

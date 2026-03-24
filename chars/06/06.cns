@@ -509,7 +509,11 @@ poweradd= 25
 ctrl = 0
 anim = 410
 sprpriority = 2
-
+[State 0, VelMul]
+type = VelMul
+trigger1 = vel x >25 && movehit
+x = .5
+ignorehitpause=0
 [State 410, 1]
 type = PlaySnd
 trigger1 = Time = 1
@@ -531,8 +535,8 @@ guardsound = 6,0
 ground.type = High
 ground.slidetime = 14
 ground.hittime  = 17
-ground.velocity = ifelse(-vel x*.5>-9,-9,-vel x*.5),-20
-air.velocity = ifelse(-vel x*.5>-9,-9,-vel x*.5),-20
+ground.velocity = ifelse(-vel x*.3>-9,-9,-vel x*.3),-20
+air.velocity = ifelse(-vel x*.3>-9,-9,-vel x*.3),-20
 fall = 1
 envshake.time = 12
 envshake.freq = 90
@@ -600,7 +604,7 @@ ground.type = High
 ground.slidetime = 7
 ground.hittime  = 8
 ground.velocity = (vel x*-1)
-air.velocity = (vel x*-1),vel y
+air.velocity = (vel x*-1),vel y+3
 air.hittime = 14
 mindist = 20,-20
 maxdist = 60,80
@@ -809,6 +813,7 @@ envshake.time = 12
 envshake.freq = 90
 envshake.ampl = -6
 envshake.phase = 90
+fall.recover=0
 [State 0, TargetState]
 type = TargetState
 triggerall = numtarget(631)
@@ -1046,7 +1051,7 @@ trigger1 = pos y < root,pos y + -400/(camerazoom*2)
 [State 0, DestroySelf]
 type = CHANGESTATE 
 trigger1 = movehit
-VALUE = 905
+VALUE = 1002
 ;ignorehitpause = 
 ;persistent = 
 

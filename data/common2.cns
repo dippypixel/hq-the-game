@@ -406,7 +406,7 @@ physics = S
 [State 120, 3]
 type = StateTypeSet
 trigger1 = Time = 0 && statetype = C
-physics = C
+physics = S
 
 [State 120, 4]
 type = StateTypeSet
@@ -416,8 +416,8 @@ physics = A
 [State 120, Hi to Lo]
 type = StateTypeSet
 trigger1 = statetype = S && command = "holddown"
-statetype = C
-physics = C
+statetype = S
+physics = S
 
 [State 120, Lo to Hi]
 type = StateTypeSet
@@ -1138,7 +1138,7 @@ value = 1
 [State 5011, 6]
 type = ChangeState
 trigger1 = HitOver
-value = 11
+value = 0
 ctrl = 1
 
 ;---------------------------------------------------------------------------
