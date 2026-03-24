@@ -147,8 +147,8 @@ command.buffer.time = 1
 
 ;-| Special Motions |------------------------------------------------------
 [Command]
-name = "WallPunch"
-command = /$D+y
+name = "SGS"
+command = /$D+b
 [Command]
 name = "Uppercut"
 command = /$D+y
@@ -415,6 +415,14 @@ trigger1 = command = "BB"
 trigger1 = statetype != A
 trigger1 = ctrl
 
+;Jump Strong Kick
+[State -1, Jump Strong Punch]
+type = ChangeState
+value = 650
+triggerall = command = "SGS"
+trigger1 = ctrl
+trigger2 = stateno = 600 || stateno = 630|| stateno = 610|| stateno = 640 ;jump_x or jump_a
+trigger2 = movecontact
 ;---------------------------------------------------------------------------
 ;Crouching Strong Punch
 [State -1, Projectile]
@@ -500,7 +508,7 @@ trigger1 = ctrl
 trigger2 = prevstateno != 600 && stateno = 600 && movecontact
 trigger3 = stateno = 640 ;jump_x or jump_a
 trigger3 = movecontact&& time>10
-trigger4 = enemynear,stateno=5820
+trigger4 = movecontact&&stateno = 650
 
 ;---------------------------------------------------------------------------
 ;Jump Strong Punch
@@ -510,10 +518,9 @@ value = 610
 triggerall = command = "y"
 trigger1 = statetype = A
 trigger1 = ctrl
-trigger2 = stateno = 600 || stateno = 630 ;jump_x or jump_a
+trigger2 = stateno = 600 || stateno = 630 ||stateno = 650;jump_x or jump_a
 trigger2 = movecontact
 trigger3 = stateno = 640 && movehit && time > 10 ;Air blocking
-
 ;---------------------------------------------------------------------------
 
 ;---------------------------------------------------------------------------
@@ -525,7 +532,8 @@ triggerall = command = "a"
 trigger1 = statetype = A
 trigger1 = ctrl
 trigger2 = prevstateno != 630 && stateno = 630 && movecontact
-trigger3 = stateno = 600 && movehit 
+trigger3 = stateno = 600 ||stateno = 650
+trigger3 = movecontact
 ;Jump Strong Kick
 [State -1, Jump Strong Punch]
 type = ChangeState
@@ -533,6 +541,6 @@ value = 640
 triggerall = command = "b"
 trigger1 = statetype = A
 trigger1 = ctrl
-trigger2 = stateno = 600 || stateno = 630|| stateno = 610 ;jump_x or jump_a
+trigger2 = stateno = 600 || stateno = 630|| stateno = 610||stateno = 650 ;jump_x or jump_a
 trigger2 = movecontact
 trigger3 = enemynear,stateno=5820

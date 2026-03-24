@@ -697,7 +697,7 @@ attr = A, NA
 damage    = 70
 guardflag = HA
 priority = 4
-pausetime = 12,12
+pausetime = 9,9
 sparkno = 1
 sparkxy = -10,-70
 hitsound   = S8000, 3
@@ -710,6 +710,82 @@ ground.velocity = -28
 air.velocity = (vel x)*-1,ifelse(vel y > -2,-2,(vel y))
 ID = 631
 yaccel = .6
+
+;---------------------------------------------------------------------------
+;SGS
+[Statedef 650]
+type    = U
+movetype= A
+physics = N
+juggle  = 4
+poweradd= 30
+ctrl = 0
+anim = 650
+sprpriority = 2
+
+[State 0, VelSet]
+type = VelSet
+trigger1 = animelem = 3
+y = -8
+
+
+[State 0, StateTypeSet]
+type = StateTypeSet
+trigger1 = pos y != 0
+statetype = A
+[State 0, StateTypeSet]
+type = StateTypeSet
+trigger1 = pos y >= -1
+statetype = S
+
+[State 0, PosSet]
+type = PosSet
+trigger1= vel y > 0
+trigger1= pos y > -vel y
+y = 0
+[State 0, VelSet]
+type = VelSet
+trigger1= vel y > 0
+trigger1= pos y > -vel y
+y = 0
+
+[State 0, Gravity]
+type = Veladd
+trigger1 = statetype = A 
+y = const(movement.yaccel)
+
+
+[State 640, 2]
+type = PlaySnd
+trigger1 = animelem = 3
+value = s650, 0
+
+[State 640, 3]
+type = HitDef
+trigger1 = Time = 0
+attr = A, NA
+damage    = 70
+guardflag = HA
+priority = 4
+pausetime = 9,9
+sparkno = 1
+sparkxy = -10,-70
+hitsound   = 0,0
+guardsound = 6,0
+animtype = Med
+ground.type = High
+ground.slidetime = 14
+ground.hittime  = 15
+ground.velocity = 0,-8
+air.velocity = (vel x)*-1,-3
+ID = 631
+yaccel = .6
+
+[State 200, 3]
+type = ChangeState
+trigger1 = AnimTime = 0
+value = ifelse(statetype=A,50,0)
+ctrl = 1
 
 ;---------------------------------------------------------------------------
 ; Lunge
@@ -920,16 +996,7 @@ type = VelAdd
 trigger1 = 1
 y = const(movement.yaccel)
 ;ignorehitpause = 
-;persistent = 
-
-[State 0, HitOverride]
-type = HitOverride
-trigger1 = 1
-attr = SCA,NA,SA,HA,NP,SP,HP,NT,ST,HT
-slot = 1
-stateno = 905
-time = 1
-forceair = 1
+;persistent =
 
 
 [State 0, AngleDraw]

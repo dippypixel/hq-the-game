@@ -429,8 +429,6 @@ value = 1000
 triggerall = numhelper(901) = 0
 triggerall = command = "Clone Spew"
 trigger1 = ctrl
-trigger2 = stateno = [200,240]||stateno = 410||stateno = [600,650]
-trigger2 = movecontact
 ;---------------------------------------------------------------------------
 ;Crouching Strong Punch
 [State -1, DamnSmear]

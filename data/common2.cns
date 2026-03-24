@@ -399,11 +399,6 @@ type = StateTypeSet
 trigger1 = Time = 0 && statetype = S
 physics = S
 
-[State 120, 3]
-type = StateTypeSet
-trigger1 = Time = 0 && statetype = C
-physics = S
-
 [State 120, 4]
 type = StateTypeSet
 trigger1 = Time = 0 && statetype = A
@@ -524,7 +519,7 @@ value = 150
 [State 150, 2]
 type = ChangeState
 trigger1 = HitShakeOver
-value = 151 + 2*(command = "holddown")
+value = 151 
 
 [State 150, 3]
 type = ForceFeedback
@@ -555,12 +550,6 @@ x = 0
 type = CtrlSet
 trigger1 = Time = GetHitVar(ctrltime)
 value = 1
-
-[State 151, Lo to Hi]
-type = StateTypeSet
-trigger1 = statetype = C && command != "holddown"
-statetype = S
-physics = S
 
 [State 151, 4]
 type = ChangeState
@@ -2100,7 +2089,7 @@ x = Const(movement.down.bounce.offset.x)
 [State 5050, 3] ;Gravity
 type = VelAdd
 trigger1 = 1
-y = const(movement.yaccel)*.5
+y = (const(movement.yaccel)*.5) /enemynear,fvar(20)
 
 [State 5101, 7] ;Hit ground
 trigger1 = Vel Y > 0
@@ -2235,11 +2224,8 @@ physics = N
 [State 1028, Vel Y]
 type = VelSet
 trigger1 = Time = 0
-y = -6 
-[State 1028, Vel X]
-type = VelSet
-trigger1 = Time = 0
 x= enemy,map(wallbounceVelX)
+y = enemy,map(wallbounceVelY)
 
 [State -3, High Speed Width]
 type = width
@@ -2249,7 +2235,7 @@ ignorehitpause = 1
 [State 1028, Gravity]
 type = VelAdd
 trigger1 = 1
-y = .35
+y = .35/enemynear,fvar(20)
 
 [State 1028, Anim 5060] ;Coming down - normal
 type = ChangeAnim
@@ -2482,6 +2468,7 @@ phase = 90
 ;-------------------------------------------------------------------------------------------------------
 [Statedef -2]
 ignorehitpause = 1
+
 [State 0, ROUND BOOST]
 type = ChangeState
 trigger1 = roundstate=2 && stateno!=192 && !var(2)

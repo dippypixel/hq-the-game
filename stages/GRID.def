@@ -9,8 +9,8 @@ author = "VWTG"
 [Camera]
 startx = 0
 starty = -30
-boundleft = -400
-boundright = 400
+boundleft = -700
+boundright = 700
 boundhigh = -9999999999999999999999999
 boundlow = 70
 

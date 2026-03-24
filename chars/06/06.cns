@@ -69,10 +69,10 @@ air.gethit.airrecover.up = -2         ;Extra y-velocity for holding up during ai
 air.gethit.airrecover.down = 1.5      ;Extra y-velocity for holding down during air recovery **MUGEN 1.0**
 
 [Movement]
-airjump.num = 1       ;Number of air jumps allowed (opt)
+airjump.num = 0       ;Number of air jumps allowed (opt)
 airjump.height = 35   ;Minimum distance from ground before you can air jump (opt)
 yaccel = .7          ;Vertical acceleration
-stand.friction = .95  ;Friction coefficient when standing
+stand.friction = .90  ;Friction coefficient when standing
 crouch.friction = .95 ;Friction coefficient when crouching
 stand.friction.threshold = 0          ;If player's speed drops below this threshold while standing, stop his movement **MUGEN 1.0**
 crouch.friction.threshold = 0      ;If player's speed drops below this threshold while crouching, stop his movement **MUGEN 1.0**
@@ -140,7 +140,7 @@ trigger1 = Time = 0
 y = 0
 [State 0, 4] ;Are you dead?
 type = ChangeState
-trigger1 = vel x >=const(velocity.run.fwd.x)*.8
+trigger1 = vel x >=const(velocity.run.fwd.x)*.8 && prevstateno!=1020
 value = 100
 ctrl = 1
 [State 0, 4] ;Are you dead?
@@ -273,7 +273,7 @@ sprpriority = 2                  ;Set p1's sprite layering priority to 2 (in fro
 type = HitDef
 trigger1 = AnimElem = 3
 attr = S, NA                     ;Attribute: Standing, Normal Attack
-damage = 25, 0                   ;Damage that move inflicts, guard damage
+damage = 20, 0                   ;Damage that move inflicts, guard damage
 animtype = Light                 ;Animation type: Light, Medium, Heavy, Back (def: Light)
 guardflag = MA                   ;Flags on how move is to be guarded against
 hitflag = MAF                    ;Flags of conditions that move can hit
@@ -298,6 +298,16 @@ envshake.time = 3
 envshake.freq =60
 envshake.ampl = -1
 envshake.phase =90
+yaccel = .7/fvar(20)
+
+[State 200, Velocity Dampen]
+type = varset
+trigger1 = movehit
+trigger1 = numtarget
+trigger1 = target, statetype = A
+fvar(20) = fvar(20)*.925
+ignorehitpause = 1
+persistent = 0
 [State 200, 2]
 type = PlaySnd
 trigger1 = Time = 1
@@ -348,6 +358,16 @@ envshake.time = 5
 envshake.freq =60
 envshake.ampl = -2
 envshake.phase =90
+yaccel = .7/fvar(20)
+
+[State 200, Velocity Dampen]
+type = varset
+trigger1 = movehit
+trigger1 = numtarget
+trigger1 = target, statetype = A
+fvar(20) = fvar(20)*.925
+ignorehitpause = 1
+persistent = 0
 [State 240, 3]
 type = PosAdd
 trigger1 = AnimElem = 7
@@ -402,6 +422,16 @@ envshake.time = 3
 envshake.freq =60
 envshake.ampl = -1
 envshake.phase =90
+yaccel = .7/fvar(20)
+
+[State 200, Velocity Dampen]
+type = varset
+trigger1 = movehit
+trigger1 = numtarget
+trigger1 = target, statetype = A
+fvar(20) = fvar(20)*.925
+ignorehitpause = 1
+persistent = 0
 [State 200, 2]
 type = PlaySnd
 trigger1 = Time = 1
@@ -471,6 +501,16 @@ envshake.time = 5
 envshake.freq =60
 envshake.ampl = -2
 envshake.phase =90
+yaccel = .7/fvar(20)
+
+[State 200, Velocity Dampen]
+type = varset
+trigger1 = movehit
+trigger1 = numtarget
+trigger1 = target, statetype = A
+fvar(20) = fvar(20)*.925
+ignorehitpause = 1
+persistent = 0
 [State 210, 3]
 type = ChangeAnim
 trigger1 = AnimElemTime(5) > 0 && AnimElemTime(6) <= 0
@@ -523,7 +563,7 @@ value = 0, 0
 type = HitDef
 trigger1 = AnimElem = 3
 attr = C, NA
-damage    = 75
+damage    = 75*fvar(20)
 animtype  = Light
 hitflag = MAF
 guardflag = MA
@@ -535,13 +575,23 @@ guardsound = 6,0
 ground.type = High
 ground.slidetime = 14
 ground.hittime  = 17
-ground.velocity = ifelse(-vel x*.3>-9,-9,-vel x*.3),-20
-air.velocity = ifelse(-vel x*.3>-9,-9,-vel x*.3),-20
+ground.velocity = ifelse(-vel x*.3>-9,-9,-vel x*.3),-25
+air.velocity = ifelse(-vel x*.3>-9,-9,-vel x*.3),-25
 fall = 1
 envshake.time = 12
 envshake.freq = 90
 envshake.ampl = -6
 envshake.phase = 90
+yaccel = .7/fvar(20)
+
+[State 200, Velocity Dampen]
+type = varset
+trigger1 = movehit
+trigger1 = numtarget
+trigger1 = target, statetype = A
+fvar(20) = fvar(20)*.925
+ignorehitpause = 1
+persistent = 0
 [State 0, AllPalFX]
 type = AllPalFX
 trigger1 = movehit
@@ -592,7 +642,7 @@ value = 0, 0
 type = HitDef
 trigger1 = Time = 0
 attr = A, NA
-damage    = 25
+damage    = 20
 guardflag = HA
 priority = 3
 pausetime = 9,9
@@ -613,6 +663,17 @@ envshake.time = 3
 envshake.freq =60
 envshake.ampl = -1
 envshake.phase =90
+yaccel = .7/fvar(20)
+
+[State 200, Velocity Dampen]
+type = varset
+trigger1 = movehit
+trigger1 = numtarget
+trigger1 = target, statetype = A
+fvar(20) = fvar(20)*.925
+ignorehitpause = 1
+persistent = 0
+
 [State 600, 3]
 type = CtrlSet
 trigger1 = Time = 17
@@ -640,7 +701,7 @@ value = 0, 1
 type = HitDef
 trigger1 = Time = 0
 attr = A, NA
-damage = 50
+damage = 40
 guardflag = HA
 priority = 4
 pausetime = 9,9
@@ -658,6 +719,17 @@ envshake.time = 5
 envshake.freq =60
 envshake.ampl = -2
 envshake.phase =90
+yaccel = .7/fvar(20)
+
+[State 200, Velocity Dampen]
+type = varset
+trigger1 = movehit
+trigger1 = numtarget
+trigger1 = target, statetype = A
+fvar(20) = fvar(20)*.925
+ignorehitpause = 1
+persistent = 0
+
 
 [State 0, VelSet]
 type = velset
@@ -687,7 +759,7 @@ value = 0, 0
 type = HitDef
 trigger1 = Time = 0
 attr = A, NA
-damage    = 25
+damage    = 20
 guardflag = HA
 priority = 3
 pausetime = 9,9
@@ -706,6 +778,17 @@ envshake.time = 3
 envshake.freq =60
 envshake.ampl = -1
 envshake.phase =90
+yaccel = .7/fvar(20)
+
+[State 200, Velocity Dampen]
+type = varset
+trigger1 = movehit
+trigger1 = numtarget
+trigger1 = target, statetype = A
+fvar(20) = fvar(20)*.925
+ignorehitpause = 1
+persistent = 0
+
 [State 0, VelSet]
 type = velset
 triggerall =!time&& vel y > -2
@@ -740,7 +823,7 @@ value = 0, 1
 type = HitDef
 trigger1 = Time = 0
 attr = A, NA
-damage = 50
+damage = 40
 guardflag = HA
 priority = 4
 pausetime = 9,9
@@ -758,6 +841,16 @@ envshake.time = 5
 envshake.freq =60
 envshake.ampl = -2
 envshake.phase =90
+yaccel = .7/fvar(20)
+
+[State 200, Velocity Dampen]
+type = varset
+trigger1 = movehit
+trigger1 = numtarget
+trigger1 = target, statetype = A
+fvar(20) = fvar(20)*.925
+ignorehitpause = 1
+persistent = 0
 
 [State 0, VelSet]
 type = velset
@@ -778,12 +871,6 @@ ctrl = 0
 anim = 650
 sprpriority = 2
 
-[State 0, Mapset]
-type = MapSet
-trigger1 = !time
-map = "floorbounceVelY"
-value = -20
-ignorehitpause = 1
 [State 640, 2]
 type = PlaySnd
 trigger1 = Time = 2
@@ -793,7 +880,7 @@ value = 0, 2
 type = HitDef
 trigger1 = Time = 0
 attr = A, NA
-damage    = 75
+damage    = 75*fvar(20)
 guardflag = HA
 priority = 4
 pausetime = 16,16
@@ -814,6 +901,18 @@ envshake.freq = 90
 envshake.ampl = -6
 envshake.phase = 90
 fall.recover=0
+
+[State 200, Velocity Dampen]
+type = varset
+trigger1 = movehit
+trigger1 = numtarget
+trigger1 = target, statetype = A
+fvar(20) = fvar(20)*.925
+ignorehitpause = 1
+persistent = 0
+
+
+
 [State 0, TargetState]
 type = TargetState
 triggerall = numtarget(631)
@@ -985,19 +1084,19 @@ freqmul = 0.9+(random/5333.0)
 type = VelSet
 trigger1 = time = 1
 trigger1 = root,var(9) = -1
-x = (20+(var(1)/10))*ifelse((p2bodydist x/500)<1,1,(p2bodydist x/500))
+x = (20+(var(1)/10))*ifelse((p2bodydist x/700)<1,1,(p2bodydist x/700))
 y = (15+(var(1)/10))
 [State 0, VelSet]
 type = VelSet
 trigger1 = time = 1
 trigger1 = root,var(9) = 1
-x = (20+(var(1)/10))*ifelse((p2bodydist x/500)<1,1,(p2bodydist x/500))
+x = (20+(var(1)/10))*ifelse((p2bodydist x/700)<1,1,(p2bodydist x/700))
 y = (-15+(var(1)/10))
 [State 0, VelSet]
 type = VelSet
 trigger1 = time = 1
 trigger1 = root,var(9) = 0
-x = 20*ifelse((p2bodydist x/500)<1,1,(p2bodydist x/500))
+x = 20*ifelse((p2bodydist x/700)<1,1,(p2bodydist x/700))
 y = 0
 [State 200, 1]
 type = HitDef
@@ -1027,7 +1126,17 @@ envshake.time = 3
 envshake.freq =60
 envshake.ampl = -1
 envshake.phase =90
-
+guard.hittime  = 11             ;Time opponent is in hit state
+airguard.hittime  = 11             ;Time opponent is in hit state
+yaccel = .7/root,fvar(20)
+[State 200, Velocity Dampen]
+type = varset
+trigger1 = movehit
+trigger1 = numtarget
+trigger1 = target, statetype = A
+fvar(20) = fvar(20)*.97
+ignorehitpause = 1
+persistent = 0
 [State 0, DestroySelf]
 type = playsnd 
 trigger1 = movehit
@@ -1302,7 +1411,12 @@ trigger1 = movehit
 map = "wallbounceVelX"
 value = 10
 ignorehitpause = 1
-
+[State 0, Mapset]
+type = MapSet
+trigger1 = movehit
+map = "wallbounceVelY"
+value = vel y-6/fvar(20)
+ignorehitpause = 1
 [State 610, Sound]
 type = PlaySnd
 trigger1 =  !TIME
@@ -1337,7 +1451,7 @@ x = .95
 type = HitDef
 trigger1 = Time = 0
 attr = A, NA
-damage = 125
+damage = 125*fvar(20)
 guardflag = HA
 priority = 9
 pausetime = 16,16
@@ -1359,7 +1473,7 @@ envshake.phase = 90
 fall.recover=0
 mindist = 80,-90
 maxdist = 80,90
-
+yaccel = .7/fvar(20)
 [State 0, AllPalFX]
 type = AllPalFX
 trigger1 = movehit
@@ -1379,8 +1493,8 @@ ignorehitpause = 1
 persistent = 0
 [State 0, Bounce Off Wall]
 type = VelSet
-trigger1 = movehit && frontedgebodydist < 70
-x = -20
+trigger1 = movehit && enemy,BackEdgeBodyDist < 20 && p2bodydist x < 30
+x = -15
 ignorehitpause = 1
 ;persistent = 
 
@@ -1528,7 +1642,7 @@ trigger1 = !time
 x = -const(velocity.run.fwd.x)*.5
 [State 100, 1]
 type = Veladd
-trigger1 = vel x <= 30 
+trigger1 = vel x >= -30 
 x = -.2
 
 [State 0, VarSet]
@@ -1963,7 +2077,7 @@ sysvar(1) = -1
 [State 40, 4]
 type = VelSet
 trigger1 = AnimTime = 0
-y = (const(velocity.jump.y))*ifelse(enemynear,vel y>6,ifelse((enemynear,vel y*5/40)<1.2,1.2,(enemynear,vel y*5/40)),2.2)
+y = (const(velocity.jump.y))*ifelse(enemynear,vel y>6,ifelse((enemynear,vel y*5/40*fvar(20))<.5,.5,(enemynear,vel y*5/40*fvar(20))),2.2)
 [State 40, 4]
 type = VelSet
 trigger1 = AnimTime = 0
@@ -2073,7 +2187,24 @@ x = ifelse(vel x > 10,-5,-1)
 
 [Statedef -3]
 
+[State 0, Mapset]
+type = MapSet
+trigger1 = 1
+map = "floorbounceVelY"
+value = -20
+ignorehitpause = 1
 
+[State 0, ScreenBound]
+type = ScreenBound
+trigger1 = enemynear,stateno = [5800,5820]
+value = 1
+movecamera = 0,1
+;ignorehitpause = 
+;persistent = 
+
+[State -3, TurnInAir]
+type = Turn
+trigger1 = p2dist x < -5 && statetype = A && ctrl
 [State -3, High Speed Width]
 type = width
 trigger1 = stateno !=650 && vel x > 0
@@ -2111,7 +2242,7 @@ x = -2
 type = DisplayToClipboard
 trigger1 = 1
 text = "%f %f %f"
-params = var(20)
+params = fvar(20)
 
 [State -3, Landing Sound]
 type = PlaySnd
@@ -2119,3 +2250,18 @@ triggerall = Time = 1
 trigger1 = stateno = 52 ;Jump land
 trigger2 = stateno = 106 ;Run-back land
 value = 42, 0
+
+;Velocity Deterioration system (Edited from RicePigeon's Damage Proration system)
+[State -2, Reset velocity dampener]
+type = Varset
+trigger1 = numenemy
+trigger1 = (enemynear,statetype!=A)
+trigger1 = (enemynear,movetype!=H)
+trigger2 = !numenemy
+fvar(20) = 1.0
+[State 0, Make sure it never goes under the limit]
+type = VarSet
+trigger1 = fvar(20) < 0.25
+fv = 20 
+value = 0.25
+ignorehitpause = 1

@@ -47,6 +47,7 @@ ending.storyboard = ending.def
 
 [Map]
 wallbounceVelX = 1
+wallbounceVelY = 1
 floorbounceVelY = 1
 air_jump_used = 0
 movement_ability_used = 0
