@@ -1993,7 +1993,17 @@ trigger1 = Time = 0
 trigger1 = GetHitVar(fall.yvel) = 0
 value = 5110 ;Downed get-hit (lying down)
 
-
+[State 0, WallBounce Effects]
+type = Helper
+trigger1 = !numhelper(570000) && !time
+helpertype = Normal 
+name = "WallBounce"
+ID = 570000
+stateno = 570000
+pos = 0,0
+postype = p1    ;P2, Front, Back, Left, Right
+ownpal = 1
+persistent = 0
 ;cool effects
 [State 5100, 8]
 type = Explod
@@ -2009,6 +2019,15 @@ trigger1 = Time = 1
 value = F7, 2
 volumescale = 200
 
+[State 0, EnvShake]
+type = EnvShake
+trigger1 = time = 0
+time = 5
+freq = 120
+ampl = -4
+;phase = 90
+;ignorehitpause = 
+;persistent = 
 
 [State 5100, 9]
 type = HitFallDamage
@@ -2206,7 +2225,6 @@ ampl = -4
 ;phase = 90
 ;ignorehitpause = 
 ;persistent = 
-
 
 [State 1027, State]
 type = ChangeState
@@ -2428,6 +2446,195 @@ trans = add1     ;None, Add, AddAlpha, Add1, Sub
 
 
 
+;---------------------------------------------------------------------------
+; Debris Summoner
+[Statedef 570000]
+movetype = U      ; AIHU
+physics = N       ; SCANU          ;refers to the .Air file
+sprpriority = 99    ; Stand behind everything 
+ignorehitpause = 1
+[State 0, ChangeAnim]
+type = ChangeAnim
+trigger1 = !TIME
+value = f9999
+
+[State 0, PlaySnd]
+type = PlaySnd
+trigger1 = !time
+value = f57,1
+volumescale = 150
+
+[State 0, Crater]
+type = Explod
+trigger1 = !time
+anim = f57001
+ID = 57001
+pos = 0,0
+postype = P1  ;P2, Front, Back, Left, Right
+facing = 1
+bindtime = 1
+under=1
+scale = .5,.5
+
+
+[State 0, Helper]
+type = Helper
+trigger1 = time < 10
+trigger1 = numhelper(570001)<10
+helpertype = Normal ;Player
+name = "Debris"
+ID = 570001
+stateno = 570001
+pos = 0,0
+postype = P1    ;P2, Front, Back, Left, Right
+facing = 1
+ownpal = 1
+
+
+[State 0, Fade Away]
+type = VarAdd
+trigger1 = time > 70
+v = 5     ;fv = 
+value = 10
+
+[State 0, ModifyExplod]
+type = ModifyExplod
+trigger1 = time > 70
+ID = 57001
+trans = Add1     ;None, Add, AddAlpha, Add1, Sub
+alpha = 256-var(5), var(5)
+[State 0, DestroySelf]
+type = DestroySelf
+trigger1 = var(5) > 256
+;ignorehitpause = 
+;persistent = 
+
+
+;---------------------------------------------------------------------------
+; Debris
+[Statedef 570001]
+type    = A
+movetype= A
+physics = N
+sprpriority = 99    ; Stand behind everything 
+ignorehitpause = 1
+
+
+[State 0, YSet]
+type = VarSet
+trigger1 = !time
+v = 3   
+value = 1+random%4
+[State 0, ChangeAnim]
+type = ChangeAnim
+trigger1 = 1
+value = f57000
+elem = var(3)
+
+[State 0, XSet]
+type = VarSet
+trigger1 = !time
+fv = 1    
+value = -10+(random/50.0)
+[State 0, YSet]
+type = VarSet
+trigger1 = !time
+fv = 2   
+value = (-14-(random/100.0))+(enemy,map(floorbounceVely)*.2)
+
+[State 0, Velocity Set]
+type = VelSet
+trigger1 = !time
+x = fvar(1)
+y = fvar(2)
+
+[State 0, Size Set]
+type = VarSet
+trigger1 = !time
+fv = 3
+value = .5+(random/2500.0)
+;ignorehitpause = 
+;persistent = 
+
+[State 0, Z axis direction setting]
+type = VarSet
+trigger1 = !time
+fv = 4
+value = -.01+(random/50000.0)*(enemy,map(floorbounceVely)*.1)
+
+
+[State 0, Time]
+type = VarSet
+trigger1 = statetype=A
+fv = 5
+value = fvar(4)
+;ignorehitpause = 
+;persistent = 
+[State 0, AngleDraw]
+type = AngleDraw
+trigger1 = 1
+ignorehitpause = 1
+scale = fvar(3)+fvar(5),fvar(3)+fvar(5)
+
+
+[State 1201, uh]
+type = AngleAdd
+trigger1 = 1
+value = -vel x*2.0
+
+[State 0, VelAdd]
+type = VelMul
+trigger1 = statetype!=A
+x = .9
+[State 0, VelAdd]
+type = VelAdd
+trigger1 = statetype=A
+y = .9
+
+[State 0, StateTypeSet]
+type = StateTypeSet
+trigger1 = vel y < 2
+trigger1 = pos y > -vel y
+statetype = S
+physics = N
+[State 0, PosSet]
+type = PosSet
+trigger1 = vel y > 0
+trigger1 = pos y > - vel y
+y = 0
+[State 0, VelSet]
+type = VelSet
+trigger1 = vel y > 0
+trigger1 = pos y > - vel y
+x = vel x * .5
+y = ifelse(vel y < 2, 0, -vel y *.3)
+
+
+[State 0, Fade]
+type = VarSet
+trigger1 = abs(vel x-vel y) < .01
+v = 4    ;fv = 10
+value = 1
+[State 0, Fade Away]
+type = VarAdd
+trigger1 = var(4)
+v = 5     ;fv = 
+value = 10
+
+
+[State 0, Trans]
+type = Trans
+trigger1 = abs(vel x-vel y) < .01
+trans = Add1     ;None, Add, AddAlpha, Add1, Sub
+alpha = 256-var(5), var(5)
+
+
+[State 0, DestroySelf]
+type = DestroySelf
+trigger1 = var(5) > 256
+;ignorehitpause = 
+;persistent = 
+
 ;------------------------------------------------------------------------------
 ;WallBounce Effects
 [Statedef 6000]
@@ -2462,12 +2669,137 @@ phase = 90
 ;ignorehitpause = 
 ;persistent = 
 
+;CAMERA Velocity
+[Statedef 100001]
+movetype = U      ; AIHU
+physics = N       ; SCANU          ;refers to the .Air file
+sprpriority = 99    ; Stand behind everything 
+ignorehitpause = 1
+anim = f9999 
+
+[State 0, Camera VelocityX]
+type = VarSet
+trigger1 = HitPauseTime=0&&enemy,HitPauseTime=0
+v = 0          ; store velocity in var(0)
+value = (camerapos x - var(1)) * 0.3 + var(0) * 0.7  ; X velocity
+
+[State 0, Update CamPos]
+type = VarSet
+trigger1 = HitPauseTime=0&&enemy,HitPauseTime=0
+v = 1
+value = camerapos x
 
 
+[State 0, Camera VelocityY]
+type = VarSet
+trigger1 = HitPauseTime=0&&enemy,HitPauseTime=0
+v = 2          ; store velocity in var(0)
+value = (camerapos y - var(3)) * 0.3 + var(2) * 0.7  ; Y velocity
+
+[State 0, Update CamPos]
+type = VarSet
+trigger1 = HitPauseTime=0&&enemy,HitPauseTime=0
+v = 3
+value = camerapos y
+
+[State 0, Update CamPos]
+type = VarSet
+trigger1 = 1
+v = 4
+value = abs(var(0))+abs(var(2))
+
+
+;DOPPLER
+[Statedef 100000]
+movetype = U      ; AIHU
+physics = N       ; SCANU          ;refers to the .Air file
+sprpriority = 99    ; Stand behind everything 
+ignorehitpause = 1
+anim = f9999 
+
+[State 0, PlaySnd]
+type = PlaySnd
+trigger1 = !time
+value = f9000,0
+channel = 9
+loop = 1
+[State 0, XFacing]
+type = VarSet
+trigger1 = 1
+v = 0    ;fv = 10
+value = ifelse(root,vel x*root,facing<0,-1,1)
+
+[State 0, XCalculation]
+type = VarSet
+trigger1 = 1
+fv = 1
+value = ((root, pos x - enemy, pos x) * root, facing) * abs(root, vel x / 30) * -var(0)
+
+
+[State 0, YCalculation]
+type = VarSet
+trigger1 = 1
+fv = 3
+value = ((root, pos y - enemy, pos y) * ifelse((root, vel y > 0) && ((root, pos y - enemy, pos y) < 0), -1, 1)) * abs(root, vel y / 50)
+
+[State 0, Average XY]
+type = VarSet
+trigger1 = 1
+fv = 4
+value = (fvar(1) + fvar(3)) / 2
+
+[State 0, FinalCalc]
+type = VarSet
+trigger1 = 1
+fv = 2
+value = 1 + ifelse(fvar(4) / 200.0 < -0.7, -0.7,ifelse(fvar(4) / 200.0 > 1.3, 1.3, fvar(4) / 200.0))
+[State 0, PlaySnd]
+type = ModifySnd
+trigger1 = abs(root,vel x) + abs(root,vel y) > 6
+channel = 9
+volumescale = ((abs(root,vel x)+abs(root,vel y))*(camerazoom*1.666))*3
+freqmul = fvar(2)
+[State 0, PlaySnd]
+type = ModifySnd
+trigger1 = abs(root,vel x) + abs(root,vel y) < 6
+channel = 9
+volumescale = 0
+freqmul = 0
 
 ;-------------------------------------------------------------------------------------------------------
 [Statedef -2]
 ignorehitpause = 1
+
+[State 0, DisplayToClipboard]
+type = DisplayToClipboard
+trigger1 = 1
+text = "%d  %d   %d "
+params = helper(100001),var(0),helper(100001),var(4)
+;ignorehitpause = 
+;persistent = 
+
+[State 0, DopplerCalculator]
+type = Helper
+trigger1 = !numhelper(100000)
+helpertype = Normal 
+name = "DopplerCalculator"
+ID = 100000
+stateno = 100000
+pos = 0,0
+postype = p1    ;P2, Front, Back, Left, Right
+keyctrl = 0
+persistent = 0
+[State 0, CamSpeedCalculator]
+type = Helper
+trigger1 = !numhelper(100001) && !enemy,numhelper(100001)
+helpertype = Normal 
+name = "CamSpeedCalculator"
+ID = 100001
+stateno = 100001
+pos = 0,0
+postype = p1    ;P2, Front, Back, Left, Right
+keyctrl = 0
+persistent = 0
 
 [State 0, ROUND BOOST]
 type = ChangeState
@@ -2479,7 +2811,6 @@ type = Height
 trigger1 = statetype = A
 value = ifelse(-vel y*6<0,0,-vel y*6), ifelse(vel y*6<0,0,vel y*6)
 ignorehitpause = 1
-
 [State 0, WallBounce Effects]
 type = Helper
 triggerall = enemy,name = "06"

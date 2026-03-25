@@ -571,6 +571,29 @@ if numenemy {
 				pos: map(_pots_attackdata_cfg_text_x) + 1.3*map(_pots_attackdata_cfg_text_columnspacing), map(_pots_attackdata_cfg_text_y) + 7 * map(_pots_attackdata_cfg_text_linespacing);
 				scale: map(_pots_attackdata_cfg_text_scale), map(_pots_attackdata_cfg_text_scale);
 			}
+			# vel x text
+			text{
+				font: F map(_pots_attackdata_cfg_font);
+				text: "Vel X";
+				removetime: 1;
+				layerno: map(_pots_attackdata_cfg_layer);
+				align: 1;
+				localcoord: 320, 240;
+				pos: map(_pots_attackdata_cfg_text_x), map(_pots_attackdata_cfg_text_y) + 8 * map(_pots_attackdata_cfg_text_linespacing);
+				scale: map(_pots_attackdata_cfg_text_scale), map(_pots_attackdata_cfg_text_scale);
+			}
+			# vel x value
+			text{
+				font: F map(_pots_attackdata_cfg_font);
+				text: "%f";
+				params: enemynear,vel x;
+				removetime: 1;
+				layerno: map(_pots_attackdata_cfg_layer);
+				align: -1;
+				localcoord: 320, 240;
+				pos: map(_pots_attackdata_cfg_text_x) + 1.3*map(_pots_attackdata_cfg_text_columnspacing), map(_pots_attackdata_cfg_text_y) + 8 * map(_pots_attackdata_cfg_text_linespacing);
+				scale: map(_pots_attackdata_cfg_text_scale), map(_pots_attackdata_cfg_text_scale);
+			}
 		} else {
 			# Press Start indicator
 			text{

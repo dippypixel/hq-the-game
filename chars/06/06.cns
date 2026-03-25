@@ -587,8 +587,8 @@ anim = 410
 sprpriority = 2
 [State 0, VelMul]
 type = VelMul
-trigger1 = vel x >25 && movehit
-x = .5
+trigger1 = vel x >35 && movehit
+x = .7
 ignorehitpause=0
 [State 410, 1]
 type = PlaySnd
@@ -941,7 +941,12 @@ poweradd= 30
 ctrl = 0
 anim = 650
 sprpriority = 2
-
+[State 0, Mapset]
+type = MapSet
+trigger1 = 1
+map = "floorbounceVelY"
+value = (-20+pos y/40)*fvar(20)
+ignorehitpause = 1
 [State 640, 2]
 type = PlaySnd
 trigger1 = Time = 2
@@ -2021,7 +2026,7 @@ type = PlaySnd
 trigger1 = AnimTime = 0
 value = S40,ifelse(prevstateno = 100,2,0)
 volume = 0
-channel = -1
+channel = 8
 [State 40, 6]
 type = ChangeState
 trigger1 = AnimTime = 0
@@ -2165,26 +2170,36 @@ type = VarSet
 trigger1 = command = "holdback"
 sysvar(1) = -1
 
+[State 0, DisplayToClipboard]
+type = DisplayToClipboard
+trigger1 = 1
+text = "%f %f %f"
+params = fvar(20),-enemynear,vel y/20
 
-[State 40, 4]
+[State 40, YVelset]
 type = VelSet
 trigger1 = AnimTime = 0
-y = (const(velocity.jump.y))*ifelse(enemynear,vel y>6,ifelse((enemynear,vel y*5/40*fvar(20))<.5,.5,(enemynear,vel y*5/40*fvar(20))),2.2)
-[State 40, 4]
+y = ifelse(enemynear,vel y = 0,	-25,ifelse(enemynear,vel y < 0,	-25+enemynear,vel y/4,	 ifelse(-25+enemynear,vel y>-15,-15,-25+enemynear,vel y)))
+
+
+
+[State 40, Jump Nowhere]
 type = VelSet
 trigger1 = AnimTime = 0
 trigger1 = sysvar(1)=0
 x = const(velocity.jump.neu.x)
-[State 40, 4]
+
+[State 40, Jump Back]
 type = VelSet
 trigger1 = AnimTime = 0
 trigger1 = sysvar(1)=-1
 x = -15
-[State 40, 4]
+
+[State 40, Jump Forward]
 type = VelSet
 trigger1 = AnimTime = 0
 trigger1 = sysvar(1)=1
-x = ifelse((p2bodydist x/220*10)>20,20,10*ifelse(p2bodydist x/220<1,1,p2bodydist x/220))
+x = ifelse(	(p2bodydist x/200*10)>20,	20,	10*ifelse(p2bodydist x/200<1,1,p2bodydist x/200))
 
 
 [State 0, PlaySnd]
@@ -2193,8 +2208,7 @@ trigger1 = AnimTime = 0
 trigger1 = vel x > 17
 value = S40,2
 volume = 0
-channel = 0
-freqmul = 0.9+(random/4000)
+channel = 8
 [State 40, 6]
 type = ChangeState
 trigger1 = AnimTime = 0
@@ -2279,20 +2293,19 @@ x = ifelse(vel x > 10,-5,-1)
 
 [Statedef -3]
 
-[State 0, Mapset]
-type = MapSet
-trigger1 = 1
-map = "floorbounceVelY"
-value = -20
-ignorehitpause = 1
-
 [State 0, ScreenBound]
 type = ScreenBound
 trigger1 = enemynear,stateno = [5800,5820]
 value = 1
 movecamera = 0,1
-;ignorehitpause = 
-;persistent = 
+
+
+[State 0, PlaySnd]
+type = ModifySnd
+trigger1 = 1
+channel = 8
+volumescale = 100*(camerazoom*5)
+freqmul = helper(100000),fvar(2)*.1+.8
 
 [State -3, TurnInAir]
 type = Turn
@@ -2329,12 +2342,6 @@ type = VelAdd
 trigger1 = statetype = A && movetype = A && movehit
 trigger1 = command = "holdback" && vel x > const(velocity.runjump.back.x)*.5
 x = -2
-
-[State 0, DisplayToClipboard]
-type = DisplayToClipboard
-trigger1 = 1
-text = "%f %f %f"
-params = fvar(20)
 
 [State -3, Landing Sound]
 type = PlaySnd
