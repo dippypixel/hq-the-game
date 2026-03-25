@@ -2755,13 +2755,13 @@ fv = 2
 value = 1 + ifelse(fvar(4) / 200.0 < -0.7, -0.7,ifelse(fvar(4) / 200.0 > 1.3, 1.3, fvar(4) / 200.0))
 [State 0, PlaySnd]
 type = ModifySnd
-trigger1 = abs(root,vel x) + abs(root,vel y) > 6
+trigger1 = root, statetype=A
 channel = 9
 volumescale = ((abs(root,vel x)+abs(root,vel y))*(camerazoom*1.666))*3
 freqmul = fvar(2)
 [State 0, PlaySnd]
 type = ModifySnd
-trigger1 = abs(root,vel x) + abs(root,vel y) < 6
+trigger1 = root, statetype!=A
 channel = 9
 volumescale = 0
 freqmul = 0
