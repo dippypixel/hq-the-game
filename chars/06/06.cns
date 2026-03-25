@@ -2021,12 +2021,6 @@ type = VelSet
 trigger1 = AnimTime = 0
 x = ifelse(sysvar(1) = 0, const(velocity.jump.neu.x), ifelse(sysvar(1) = 1, ifelse(prevstateno = 100, (vel x)*1.2, const(velocity.jump.fwd.x)),ifelse(prevstateno = [105,106], (vel x)*1.2, const(velocity.jump.back.x)))*ifelse(command="holdup", 1, 1.334))
 y = ifelse(command!="holdup",const(velocity.jump.y)*0.667,const(velocity.jump.y))
-[State 0, PlaySnd]
-type = PlaySnd
-trigger1 = AnimTime = 0
-value = S40,ifelse(prevstateno = 100,2,0)
-volume = 0
-channel = 8
 [State 40, 6]
 type = ChangeState
 trigger1 = AnimTime = 0
@@ -2202,13 +2196,6 @@ trigger1 = sysvar(1)=1
 x = ifelse(	(p2bodydist x/200*10)>20,	20,	10*ifelse(p2bodydist x/200<1,1,p2bodydist x/200))
 
 
-[State 0, PlaySnd]
-type = PlaySnd
-trigger1 = AnimTime = 0
-trigger1 = vel x > 17
-value = S40,2
-volume = 0
-channel = 8
 [State 40, 6]
 type = ChangeState
 trigger1 = AnimTime = 0
