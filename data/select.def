@@ -268,7 +268,7 @@ randomselect
  ; stages/mybg.def, order=3
  ;
  ;Insert your stages below.
-stages/GRID.def
+stages/GUYMBASTAGE.def
 
 
 
