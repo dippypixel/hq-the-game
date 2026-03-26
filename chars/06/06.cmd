@@ -448,6 +448,7 @@ trigger2 = movecontact&& time>10
 [State -1, Dash Punch]
 type = ChangeState
 value = 1020
+triggerall = !var(11)
 triggerall = power > 500
 triggerall = command = "Dash Punch"
 triggerall = prevstateno!=1020
@@ -474,7 +475,7 @@ triggerall = command = "Spike Punch"
 trigger1 = statetype = A
 trigger1 = ctrl
 trigger2 = stateno = 600 || stateno = 630|| stateno = 610|| stateno = 640 ;jump_x or jump_a
-trigger2 = movecontact
+trigger2 = movecontact 
 trigger3 = enemynear,stateno=5820
 
 ;===========================================================================
@@ -528,9 +529,8 @@ triggerall = command = "x"
 trigger1 = statetype = A
 trigger1 = ctrl
 trigger2 = stateno = 650
-trigger2 = movecontact&& time>10
+trigger2 = movecontact&& enemy,stateno=5720 && p2bodydist y -enemynear,vel y*6 =[-60, 400]
 trigger3 = enemynear,stateno=5820
-
 ;---------------------------------------------------------------------------
 ;Jump Strong Punch
 [State -1, Jump Medium Punch]
@@ -543,7 +543,7 @@ trigger2 = stateno = 600 || stateno = 630 ;jump_x or jump_a
 trigger2 = movecontact
 trigger3 = stateno = 640 && movehit && time > 10 ;Air blocking
 trigger4 = stateno = 650
-trigger4 = movecontact&& time>10
+trigger4 = movecontact&& enemy,stateno=5720 && p2bodydist y -enemynear,vel y*6 =[-60, 400]
 ;---------------------------------------------------------------------------
 
 ;---------------------------------------------------------------------------
@@ -556,7 +556,7 @@ trigger1 = statetype = A
 trigger1 = ctrl
 trigger2 = stateno = 600 && movehit 
 trigger3 = stateno = 650
-trigger3 = movecontact&& time>10
+trigger3 = movecontact&& enemy,stateno=5720 && p2bodydist y -enemynear,vel y*6 =[-60, 400]
 ;Jump Strong Kick
 [State -1, Jump Strong Punch]
 type = ChangeState
@@ -568,4 +568,4 @@ trigger2 = stateno = 600 || stateno = 630|| stateno = 610 ;jump_x or jump_a
 trigger2 = movecontact
 trigger3 = enemynear,stateno=5820
 trigger4 = stateno = 650
-trigger4 = movecontact&& time>10
+trigger4 = movecontact&& enemy,stateno=5720 && p2bodydist y -enemynear,vel y*6 =[-60, 400]

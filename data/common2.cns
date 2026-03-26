@@ -2720,7 +2720,7 @@ angle = -90
 type = PlaySnd
 trigger1 = Time = 0
 value = F7, 2
-volumescale = 200
+volumescale = 140
 [State 0, DestroySelf]
 type = DestroySelf
 trigger1 = time = 10
@@ -2905,7 +2905,7 @@ type = ModifySnd
 trigger1 = name = "06"
 trigger1 = statetype=A&&!hitpausetime
 channel = 9
-volumescale = ((abs(vel x)+abs(vel y))*(camerazoom*1.666))*ifelse(helper(400),stateno=400,abs(vel x)*.25,5)
+volumescale = ((abs(vel x)+abs(vel y))*(camerazoom*1.666))*ifelse(helper(400),stateno=400,abs(vel x)*.1,2)
 freqmul = 1 + ifelse(helper(400),stateno=400,0,helper(100000),fvar(2))
 ignorehitpause=1
 
@@ -2997,6 +2997,12 @@ triggerall = p2bodydist x > 200
 trigger1 = backedgebodydist <= 10 && vel x < 0
 trigger1 = stateno=[5030,5050] || stateno=5720&& pos y < -100
 x = -0.75
+[State 0, AssertSpecial]
+type = AssertSpecial
+trigger1 = enemy,movetype=H
+flag = nostandguard
+flag2 = nocrouchguard
+flag3 = noairguard
 
 [State 0, AssertSpecial]
 type = AssertSpecial

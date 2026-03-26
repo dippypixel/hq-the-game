@@ -73,7 +73,7 @@ intensity = 0
 ;--------------------------------------------------------
 [Music]
 bgmusic = sound/GUYMBASTAGE.ogg
-bgmvolume = 40
+bgmvolume = 0
 
 [BGdef]
 spr = GUYMBASTAGE.sff
