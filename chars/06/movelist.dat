@@ -3,7 +3,7 @@
 Air Jump   						_U
 _!Requires move to hit
 <#f0f000>:Command Normals:</>
-Damn Smear						_D^Y
+Damn Smear						_D_F^B
 Spike Punch_AIR					_D^B
 Counter							_D_DF_F^B
 <#f0f000>:Specials:</>
