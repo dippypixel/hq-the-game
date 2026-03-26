@@ -1063,13 +1063,7 @@ trigger1 = animelemtime(3)=-8
 value = s650, 3
 freqmul = 0.92+(random/7333.0)
 volumescale = 100
-[State 600, VelAdd]
-type = VelAdd
-trigger1 = AnimTime = 11
-x = 0
-y = 25
-;ignorehitpause = 
-;persistent = 
+
 [State 640, 3]
 type = HitDef
 trigger1 = Time = 0
@@ -1723,7 +1717,7 @@ type = Veladd
 trigger1 = vel x <= 30 
 x = .2
 [State 100, EnvShake]
-type = EnvShake
+type = null;EnvShake
 trigger1 = animelemtime(1)=0 
 trigger2 = animelemtime(4)=0
 time = 1
@@ -1763,7 +1757,7 @@ trigger1 = animelemtime(1)=0
 trigger2 = animelemtime(4)=0
 time = 5
 freq = 60
-ampl = -1*(camerazoom*2.2)
+ampl = -2*(camerazoom*2.2)
 phase = 90
 
 [State -3, Landing Sound]
