@@ -4,6 +4,7 @@ Dash/AirDash   						X^Y + Direction
 <#f0f000>:Command Normals:</>
 Uppercut						_D^Y
 Lunge						_D^X
+Super Shotgun Jump(Air OK)  _D^A
 <#f0f000>:Specials:</>
 Standard Fireball(Air OK) _D_DF_F^X
 <#f0f000>:Supers:</>
