@@ -395,7 +395,7 @@ trigger2 = stateno = 900 && AnimElemTime(12)>=1
 ;---------------------------------------------------------------------------
 [State -1, Counter]
 type = ChangeState
-value = 1010
+value = 300
 triggerall = command = "Counter"
 trigger1 = ctrl
 
@@ -435,9 +435,10 @@ triggerall = numhelper(901) = 0
 triggerall = command = "Clone Spew"
 trigger1 = ctrl
 ;Jump Strong Punch
-[State -1, Dash Punch]
+[State -1, Smear]
 type = ChangeState
-value = 660
+value = 1010
+triggerall = power > 500
 triggerall = statetype = A
 triggerall = command = "Smear"
 trigger1 = ctrl
@@ -447,7 +448,9 @@ trigger2 = movecontact&& time>10
 [State -1, Dash Punch]
 type = ChangeState
 value = 1020
+triggerall = power > 500
 triggerall = command = "Dash Punch"
+triggerall = prevstateno!=1020
 trigger1 = ctrl
 trigger2 = stateno = [600,620] ;jump_x or jump_a
 trigger2 = movecontact
@@ -524,10 +527,9 @@ value = 600
 triggerall = command = "x"
 trigger1 = statetype = A
 trigger1 = ctrl
-trigger2 = prevstateno != 600 && stateno = 600 && movecontact
-trigger3 = stateno = 650
-trigger3 = movecontact&& time>10
-trigger4 = enemynear,stateno=5820
+trigger2 = stateno = 650
+trigger2 = movecontact&& time>10
+trigger3 = enemynear,stateno=5820
 
 ;---------------------------------------------------------------------------
 ;Jump Strong Punch

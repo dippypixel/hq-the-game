@@ -23,7 +23,7 @@ guard.sparkno = 40
 KO.echo = 0
 ;Volume offset (negative for softer)
 volume = 0
-power = 3000
+power = 2000
 ;Variables with this index and above will not have their values
 ;reset to 0 between rounds or matches. There are 60 int variables,
 ;indexed from 0 to 59, and 40 float variables, indexed from 0 to 39.
@@ -296,7 +296,6 @@ ground.type = High               ;Type: High, Low, Trip (def: Normal)
 ground.slidetime = 5             ;Time that the opponent slides back
 ground.hittime  = 11             ;Time opponent is in hit state
 ground.velocity = (vel x*-1)-2             ;Velocity at which opponent is pushed
-airguard.velocity = (vel x*-1)-1.9,-.8     ;Guard velocity in air (def: (air.xvel*1.5, air.yvel/2))
 air.type = High                  ;Type: High, Low, Trip (def: same as ground.type)
 air.velocity = (vel x*-1)-1,0           ;X-velocity at which opponent is pushed,
 ;Y-velocity at which opponent is pushed
@@ -365,8 +364,8 @@ sparkxy = -10,-70
 guardsound = 6,0
 ground.type = Low
 ground.slidetime = 5             ;Time that the opponent slides back
-ground.hittime  = 17
-ground.velocity = (vel x*-1)-2 
+ground.hittime  = 11             ;Time opponent is in hit state
+ground.velocity = (vel x*-1)-2             ;Velocity at which opponent is pushed
 air.velocity = (vel x*-1)-1.5,0
 envshake.time = 5
 envshake.freq =60
@@ -475,19 +474,6 @@ ctrl = 1
 
 ;---------------------------------------------------------------------------
 ; Standing strong punch
-; CNS difficulty: easy
-; Note the width controller. It makes KFM's push box larger, so he doesn't
-; stand so close to the opponent. Hit Ctrl-C and look at the red bar at his
-; feet.
-; The sprpriority for this state is at -1, instead of the usual 2 for
-; attacks. This makes KFM appear behind the opponent initially.
-; The SprPriority controller in [State 210, 4] brings KFM to the front when
-; his arm has swung over.
-; To stop KFM from pausing in his swing frame, there is a ChangeAnim in
-; [State 210, 3] that detects if the hit has come in contact with the
-; opponent during that frame, and switches to the next animation element
-; (notice the elem=6 parameter). If you don't see what I mean, try commenting
-; out that controller, then hit someone with this attack.
 [Statedef 240]
 type    = S
 movetype= A
@@ -569,14 +555,7 @@ value = 0
 ctrl = 1
 
 ;---------------------------------------------------------------------------
-;Crouching strong punch
-; CNS difficulty: easy
-; Description: This is a 2-hit move. It is done by having two HitDefs
-;     triggered, one for each frame of animation that hits.
-;     Notice how the first hit cannot be guarded by an opponent in the
-;     air, because of the "M" in the guardflag, meaning it can only
-;     be guarded "middle". The second hit has an "MA" guardflag, so
-;     it can be guarded both on the ground and in the air.
+;Uppercut
 [Statedef 250]
 type    = S
 movetype= A
@@ -612,7 +591,7 @@ ground.type = High
 ground.slidetime = 14
 ground.hittime  = 17
 ground.velocity = ifelse(-vel x*.3>-8,-8,-vel x*.3),-25
-air.velocity = ifelse(-vel x*.3>-8,-8,-vel x*.3),-25
+air.velocity = ifelse(-vel x*.3>-8,-8,-vel x*.3),-25*fvar(20)
 fall = 1
 envshake.time = 12
 envshake.freq = 90
@@ -665,6 +644,142 @@ value = 0
 ctrl = 1
 
 ;---------------------------------------------------------------------------
+;Counter
+[Statedef 300]
+type    = U
+movetype= A
+physics = N
+juggle  = 0
+poweradd= 0
+anim = 300
+ctrl = 0
+sprpriority = 2
+[State 0, StateTypeSet]
+type = StateTypeSet
+trigger1 = time = 1 
+trigger1 = pos y != 0
+statetype = A
+[State 0, StateTypeSet]
+type = StateTypeSet
+trigger1 = time = 1
+trigger1 = pos y >= -1
+statetype = S
+
+[State 0, PosSet]
+type = PosSet
+trigger1= vel y > 0
+trigger1= pos y > -vel y
+y = 0
+[State 0, VelSet]
+type = VelSet
+trigger1= vel y > 0
+trigger1= pos y > -vel y
+y = 0
+
+[State 0, Gravity]
+type = Veladd
+trigger1 = statetype = A 
+y = const(movement.yaccel)
+[State 610, 2]
+type = PlaySnd
+trigger1 = Time = 2
+value = S0, 3
+freqmul = 0.96+(random/7333.0)
+[State 0, ReversalDef]
+type = ReversalDef
+trigger1 = animelem = 2
+reversal.attr = SA,NA,SA,HA,NT,ST           ;SCA,NA,SA,HA,NP,SP,HP,NT,ST,HT
+pausetime = 12,12
+hitsound = 5,0
+p1stateno = 301
+
+
+
+[State 0, NotHitBy]
+type = NotHitBy
+trigger1 = time = 2 
+value = SCA,NA,SA,HA,NP,SP,NT,ST
+;value2 = S,NA
+time = 3
+
+
+[State 200, 3]
+type = ChangeState
+trigger1 = AnimTime = 0
+value = ifelse(statetype=A,50,0)
+ctrl = 1
+
+
+;---------------------------------------------------------------------------
+;Counter - Success
+[Statedef 301]
+type    = U
+movetype= A
+physics = N
+juggle  = 4
+poweradd= 30
+ctrl = 0
+anim = 210
+sprpriority = 2
+
+[State 0, Mapset]
+type = MapSet
+trigger1 = movehit
+map = "wallbounceVelX"
+value = 4+(p2bodydist x/80)
+ignorehitpause = 1
+[State 0, Mapset]
+type = MapSet
+trigger1 = movehit
+map = "wallbounceVely"
+value = -5
+ignorehitpause = 1
+[State 610, 2]
+type = PlaySnd
+trigger1 = Time = 2
+value = 0, 1
+
+[State 610, 3]
+type = HitDef
+trigger1 = Time = 0
+attr = A, NA
+damage = 100
+guardflag = HA
+priority = 4
+pausetime = 16,16
+sparkno = 1
+sparkxy = -10,-70
+hitsound   = 5,3
+guardsound = 6,0
+animtype = Med
+ground.type = High
+ground.slidetime = 14
+ground.hittime  = 14
+ground.velocity = -30,-10
+id = 632
+air.velocity = -30,enemy,vel y
+envshake.time = 12
+envshake.freq = 90
+envshake.ampl = -6
+envshake.phase = 90
+fall.recover=0
+mindist = 80,-90
+maxdist = 80,90
+[State 0, TargetState]
+type = TargetState
+triggerall = numtarget(632)
+trigger1 =  MoveHit = 1
+value = 5800
+ID = 632
+persistent = 1
+[State 240, 4]
+type = ChangeState
+trigger1 = AnimTime = 0
+value = 0
+ctrl = 1
+
+
+;---------------------------------------------------------------------------
 ;Jump Light Punch
 ; CNS difficulty: easy
 [Statedef 600]
@@ -699,8 +814,8 @@ ground.hittime  = 8
 ground.velocity = (vel x*-1)
 air.velocity = (vel x*-1),vel y+3
 air.hittime = 14
-mindist = 20,-20
-maxdist = 60,80
+mindist = 20,-120
+maxdist = 60,120
 air.hittime = 15                 ;Time before opponent regains control in air
 envshake.time = 3
 envshake.freq =60
@@ -942,16 +1057,12 @@ poweradd= 30
 ctrl = 0
 anim = 650
 sprpriority = 2
-[State 0, Mapset]
-type = MapSet
-trigger1 = 1
-map = "floorbounceVelY"
-value = (-20+pos y/40)*fvar(20)
-ignorehitpause = 1
-[State 640, 2]
+[State 600, 1]
 type = PlaySnd
-trigger1 = Time = 2
-value = 0, 2
+trigger1 = animelemtime(3)=-8
+value = s650, 3
+freqmul = 0.92+(random/7333.0)
+volumescale = 100
 [State 640, 3]
 type = HitDef
 trigger1 = Time = 0
@@ -969,17 +1080,31 @@ ground.slidetime = 14
 ground.hittime  = 15
 ground.velocity = (vel x)*-1,40
 air.velocity = (vel x)*-1,40
-ID = 631
+air.hittime = 15                 ;Time before opponent regains control in air
+guard.hittime  = 5 
+p2stateno = 5700
 yaccel = .6
 envshake.time = 12
 envshake.freq = 90
 envshake.ampl = -6
 envshake.phase = 90
 fall.recover=0
+
+[State 1027, Spark]
+type = Explod
+trigger1 = movehit
+anim = F61
+pos = 0, -20
+sprpriority = 10
+postype = p1 
+angle = 0
+persistent=0
+ignorehitpause = 1
+scale = 5,5
 [State 0, HitSnd]
 type = PlaySnd
 trigger1 = movehit
-value = f5,4
+value = s650,1
 volumescale = 100
 channel = -1
 ignorehitpause = 1
@@ -993,16 +1118,6 @@ trigger1 = target, statetype = A
 fvar(20) = fvar(20)*.925
 ignorehitpause = 1
 persistent = 0
-
-
-
-[State 0, TargetState]
-type = TargetState
-triggerall = numtarget(631)
-trigger1 =  MoveHit = 1
-value = 5700
-ID = 631
-persistent = 1
 
 [State 0, AllPalFX]
 type = AllPalFX
@@ -1021,80 +1136,6 @@ time = 2
 under = 1
 ignorehitpause = 1
 persistent = 0
-;---------------------------------------------------------------------------
-;Jump Light Punch
-; CNS difficulty: easy
-[Statedef 660]
-type    = A
-movetype= A
-physics = A
-juggle  = 2
-poweradd = -250 
-ctrl = 0
-anim = 660
-sprpriority = 2
-
-
-[State 0, VelSet]
-type = VelSet
-trigger1 = animelem=3
-x = ifelse(((p2bodydist x + p2bodydist y)/50)>20,20,ifelse((p2bodydist x + p2bodydist y)/50<10,10,(p2bodydist x + p2bodydist y)/50))
-y = ifelse(((p2bodydist x + p2bodydist y)/50)>20,20,ifelse((p2bodydist x + p2bodydist y)/50<10,10,(p2bodydist x + p2bodydist y)/50))*.5
-;ignorehitpause = 
-;persistent = 
-
-[State 600, 1]
-type = PlaySnd
-trigger1 = Time = 1
-value = 0, 0
-freqmul = 0.96+(random/7333.0)
-[State 600, 1]
-type = PlaySnd
-trigger1 = animelem=3
-value = 0, 2
-freqmul = 0.96+(random/7333.0)
-[State 600, 2]
-type = HitDef
-trigger1 = hitcount<3 &&(animelem=3||animelem =4||animelem =5)
-attr = A, NA
-damage    = 15
-guardflag = HA
-priority = 3
-pausetime = 9,9
-sparkno = 1
-sparkxy = -10,-70
-hitsound = 5,2
-hitsound.freqmul = 0.96+(random/7333.0)
-guardsound = 6,0
-ground.type = High
-ground.slidetime = 7
-ground.hittime  = 8
-ground.velocity = (vel x*-1)
-air.velocity = (vel x*-1),vel y-3
-air.hittime = 14
-mindist = 20,-20
-maxdist = 60,80
-air.hittime = 15                 ;Time before opponent regains control in air
-envshake.time = 3
-envshake.freq =60
-envshake.ampl = -1
-envshake.phase =90
-yaccel = .7/fvar(20)
-[State 200, Velocity Dampen]
-type = varset
-trigger1 = movehit
-trigger1 = numtarget
-trigger1 = target, statetype = A
-fvar(20) = fvar(20)*.925
-ignorehitpause = 1
-persistent = 0
-
-[State 600, 3]
-type = CtrlSet
-trigger1 = Time = 17
-value = 1
-
-
 ;---------------------------------------------------------------------------
 ;CloneSpew
 [Statedef 1000]
@@ -1127,7 +1168,10 @@ type = VelSet
 trigger1= vel y > 0
 trigger1= pos y > -vel y
 y = 0
-
+[State 0, Gravity]
+type = Velmul
+trigger1 = statetype != A 
+x = .9
 [State 0, Gravity]
 type = Veladd
 trigger1 = statetype = A 
@@ -1220,6 +1264,12 @@ text = "var(10) = %d"
 params = ID
 ;ignorehitpause = 
 ;persistent = 
+[State 0, PlayerPush]
+type = PlayerPush
+trigger1 = 1
+value = 0
+ignorehitpause =1 
+;persistent = 
 
 
 [State 0, VarSet]
@@ -1248,19 +1298,19 @@ freqmul = 0.9+(random/5333.0)
 type = VelSet
 trigger1 = time = 1
 trigger1 = root,var(9) = -1
-x = (20+(var(1)/10))*ifelse((p2bodydist x/700)<1,1,(p2bodydist x/700))
+x = (20+(var(1)/10))*ifelse((p2bodydist x/900)<1,1,(p2bodydist x/900))
 y = (15+(var(1)/10))
 [State 0, VelSet]
 type = VelSet
 trigger1 = time = 1
 trigger1 = root,var(9) = 1
-x = (20+(var(1)/10))*ifelse((p2bodydist x/700)<1,1,(p2bodydist x/700))
+x = (20+(var(1)/10))*ifelse((p2bodydist x/900)<1,1,(p2bodydist x/900))
 y = (-15+(var(1)/10))
 [State 0, VelSet]
 type = VelSet
 trigger1 = time = 1
 trigger1 = root,var(9) = 0
-x = 20*ifelse((p2bodydist x/700)<1,1,(p2bodydist x/700))
+x = 20*ifelse((p2bodydist x/900)<1,1,(p2bodydist x/900))
 y = 0
 [State 200, 1]
 type = HitDef
@@ -1290,10 +1340,16 @@ envshake.time = 3
 envshake.freq =60
 envshake.ampl = -1
 envshake.phase =90
-guard.hittime  = 11             ;Time opponent is in hit state
-airguard.hittime  = 11             ;Time opponent is in hit state
+guard.hittime  = 5             ;Time opponent is in hit state
+airguard.hittime  = 5             ;Time opponent is in hit state
 yaccel = .7/root,fvar(20)
 givepower = 0
+
+[State 200, 3]
+type = CtrlSet
+trigger1 = movehit
+value = 1
+redirectID= root, id
 [State 200, Velocity Dampen]
 type = varset
 trigger1 = movehit
@@ -1339,7 +1395,11 @@ physics = N                      ;Physics: S-stand, C-crouch, A-air
 ctrl = 0                         ;Set ctrl (Def: no change)
 anim = 901                       ;Change animation (Def: no change)
 sprpriority = 2                  ;Set p1's sprite layering priority to 2 (in front)
-
+[State 0, PlayerPush]
+type = PlayerPush
+trigger1 = 1
+value = 0
+ignorehitpause =1 
 [State 0, PalFXWiz]
 type = PalFX
 trigger1 = !time
@@ -1391,139 +1451,82 @@ type = DestroySelf
 trigger1 = pos y > 200
 
 ;---------------------------------------------------------------------------
-;Counter
+;Smear
 [Statedef 1010]
-type    = U
+type    = A
 movetype= A
-physics = N
-juggle  = 0
-poweradd= 0
-anim = 1010
+physics = A
+juggle  = 2
+poweradd = -500 
 ctrl = 0
+anim = 1010
 sprpriority = 2
-[State 0, StateTypeSet]
-type = StateTypeSet
-trigger1 = time = 1 
-trigger1 = pos y != 0
-statetype = A
-[State 0, StateTypeSet]
-type = StateTypeSet
-trigger1 = time = 1
-trigger1 = pos y >= -1
-statetype = S
+[State 0, VelSet]
+type = Velmul
+trigger1 = !time
+x = .5
 
-[State 0, PosSet]
-type = PosSet
-trigger1= vel y > 0
-trigger1= pos y > -vel y
-y = 0
+
 [State 0, VelSet]
 type = VelSet
-trigger1= vel y > 0
-trigger1= pos y > -vel y
-y = 0
+trigger1 = animelem=3
+x = 20
+y = 15
+;ignorehitpause = 
+;persistent = 
 
-[State 0, Gravity]
-type = Veladd
-trigger1 = statetype = A 
-y = const(movement.yaccel)
-[State 610, 2]
+[State 600, 1]
 type = PlaySnd
-trigger1 = Time = 2
-value = S0, 3
+trigger1 = Time = 1
+value = 0, 0
 freqmul = 0.96+(random/7333.0)
-[State 0, ReversalDef]
-type = ReversalDef
-trigger1 = animelem = 2
-reversal.attr = SA,NA,SA,HA,NT,ST           ;SCA,NA,SA,HA,NP,SP,HP,NT,ST,HT
-pausetime = 12,12
-hitsound = 5,0
-p1stateno = 1011
-
-
-
-[State 0, NotHitBy]
-type = NotHitBy
-trigger1 = time = 2 
-value = SCA,NA,SA,HA,NP,SP,NT,ST
-;value2 = S,NA
-time = 3
-
-
-[State 200, 3]
-type = ChangeState
-trigger1 = AnimTime = 0
-value = ifelse(statetype=A,50,0)
-ctrl = 1
-
-
-;---------------------------------------------------------------------------
-;Counter - Success
-[Statedef 1011]
-type    = U
-movetype= A
-physics = N
-juggle  = 4
-poweradd= 30
-ctrl = 0
-anim = 210
-sprpriority = 2
-
-[State 0, Mapset]
-type = MapSet
-trigger1 = movehit
-map = "wallbounceVelX"
-value = 4+(p2bodydist x/150)
-ignorehitpause = 1
-[State 0, Mapset]
-type = MapSet
-trigger1 = movehit
-map = "wallbounceVely"
-value = -5
-ignorehitpause = 1
-[State 610, 2]
+[State 600, 1]
 type = PlaySnd
-trigger1 = Time = 2
-value = 0, 1
-
-[State 610, 3]
+trigger1 = animelem=3
+value = s0, 2
+freqmul = 0.96+(random/7333.0)
+[State 600, 1]
+type = PlaySnd
+trigger1 = animelem=3
+value = s1010, 1
+freqmul = 0.96+(random/7333.0)
+volumescale=250
+[State 600, 2]
 type = HitDef
-trigger1 = Time = 0
+trigger1 = hitcount<3 &&(animelem=3||animelem =4||animelem =5)
 attr = A, NA
-damage = 100
+damage    = 15
 guardflag = HA
-priority = 4
-pausetime = 16,16
+priority = 3
+pausetime = 5,5
 sparkno = 1
 sparkxy = -10,-70
-hitsound   = 5,3
 guardsound = 6,0
-animtype = Med
+hitsound = 5,2
 ground.type = High
-ground.slidetime = 14
-ground.hittime  = 14
-ground.velocity = -30,-10
-id = 632
-air.velocity = -30,enemy,vel y
-envshake.time = 12
-envshake.freq = 90
-envshake.ampl = -6
-envshake.phase = 90
-fall.recover=0
-mindist = 80,-90
-maxdist = 80,90
-[State 0, TargetState]
-type = TargetState
-triggerall = numtarget(632)
-trigger1 =  MoveHit = 1
-value = 5800
-ID = 632
-persistent = 1
-[State 240, 4]
-type = ChangeState
-trigger1 = AnimTime = 0
-value = 0
-ctrl = 1
+ground.slidetime = 7
+ground.velocity = (vel x*-1)
+air.velocity = (vel x*-1),vel y-3
+ground.hittime  = 15
+air.hittime = 15                 ;Time before opponent regains control in air
+guard.hittime  = 10             ;Time opponent is in hit state
+airguard.hittime  = 10             ;Time opponent is in hit state
+envshake.time = 3
+envshake.freq =60
+envshake.ampl = -1
+envshake.phase =90
+yaccel = .7/fvar(20)
+fall=1
+[State 200, Velocity Dampen]
+type = varset
+trigger1 = movehit
+trigger1 = numtarget
+trigger1 = target, statetype = A
+fvar(20) = fvar(20)*.925
+ignorehitpause = 1
+persistent = 0
+
+
 
 ;---------------------------------------------------------------------------
 ;Dash Punch
@@ -2242,6 +2245,12 @@ ignorehitpause=1
 ;----------------------------------------------
 [Statedef -3]
 
+[State 0, Mapset]
+type = MapSet
+trigger1 = 1
+map = "floorbounceVelY"
+value = (-20+pos y/40)*fvar(20)
+ignorehitpause = 1
 [State 0, DisplayToClipboard]
 type = DisplayToClipboard
 trigger1 = 1
@@ -2279,13 +2288,18 @@ trigger1 = stateno !=650 && vel x > 0
 player = (vel x)*.3, ifelse(vel x<0,0,(vel x))
 ignorehitpause = 1
 
+[State 0, Jump After Smear]
+type = VelSet
+trigger1 = stateno = 45 && prevstateno = 1010 && numtarget 
+y = -15 
+redirectID = target,id
 [State 0, JumpOutofMovehit]
 type = ChangeState
 triggerall = !map(air_jump_used)
 triggerall = hitpausetime=0
 triggerall = command = "up"||command = "holdup"
 trigger1 = statetype = A && movetype = A && movehit
-trigger1 = stateno !=250
+trigger1 = stateno !=250 && stateno !=650
 value = 45
 [State 0, AirJumpReset]
 type = MapSet
