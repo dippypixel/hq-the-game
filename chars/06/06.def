@@ -46,6 +46,7 @@ ending.storyboard = ending.def
 
 
 [Map]
+cur_hue = 0
 wallbounceVelX = 1
 wallbounceVelY = 1
 floorbounceVelY = 1

@@ -23,6 +23,7 @@ guard.sparkno = 40
 KO.echo = 0
 ;Volume offset (negative for softer)
 volume = 0
+power = 3000
 ;Variables with this index and above will not have their values
 ;reset to 0 between rounds or matches. There are 60 int variables,
 ;indexed from 0 to 59, and 40 float variables, indexed from 0 to 39.
@@ -356,7 +357,7 @@ type = HitDef
 trigger1 = Time = 0
 attr = S, NA
 animtype  = Medium
-damage    = 50
+damage    = 50*fvar(20)
 guardflag = MA
 pausetime = 9,9
 sparkno = 1
@@ -513,7 +514,7 @@ type = HitDef
 trigger1 = AnimElem = 3
 attr = S, NA
 animtype  = Medium
-damage    = 50
+damage    = 50*fvar(20)
 guardflag = MA
 pausetime = 9,9
 sparkno = 1
@@ -751,7 +752,7 @@ freqmul = 0.96+(random/7333.0)
 type = HitDef
 trigger1 = Time = 0
 attr = A, NA
-damage = 40
+damage = 40*fvar(20)
 guardflag = HA
 priority = 4
 pausetime = 9,9
@@ -887,7 +888,7 @@ freqmul = 0.96+(random/7333.0)
 type = HitDef
 trigger1 = Time = 0
 attr = A, NA
-damage = 40
+damage = 40*fvar(20)
 guardflag = HA
 priority = 4
 pausetime = 9,9
@@ -1021,7 +1022,81 @@ under = 1
 ignorehitpause = 1
 persistent = 0
 ;---------------------------------------------------------------------------
-;ThrowProjectile
+;Jump Light Punch
+; CNS difficulty: easy
+[Statedef 660]
+type    = A
+movetype= A
+physics = A
+juggle  = 2
+poweradd = -250 
+ctrl = 0
+anim = 660
+sprpriority = 2
+
+
+[State 0, VelSet]
+type = VelSet
+trigger1 = animelem=3
+x = ifelse(((p2bodydist x + p2bodydist y)/50)>20,20,ifelse((p2bodydist x + p2bodydist y)/50<10,10,(p2bodydist x + p2bodydist y)/50))
+y = ifelse(((p2bodydist x + p2bodydist y)/50)>20,20,ifelse((p2bodydist x + p2bodydist y)/50<10,10,(p2bodydist x + p2bodydist y)/50))*.5
+;ignorehitpause = 
+;persistent = 
+
+[State 600, 1]
+type = PlaySnd
+trigger1 = Time = 1
+value = 0, 0
+freqmul = 0.96+(random/7333.0)
+[State 600, 1]
+type = PlaySnd
+trigger1 = animelem=3
+value = 0, 2
+freqmul = 0.96+(random/7333.0)
+[State 600, 2]
+type = HitDef
+trigger1 = hitcount<3 &&(animelem=3||animelem =4||animelem =5)
+attr = A, NA
+damage    = 15
+guardflag = HA
+priority = 3
+pausetime = 9,9
+sparkno = 1
+sparkxy = -10,-70
+hitsound = 5,2
+hitsound.freqmul = 0.96+(random/7333.0)
+guardsound = 6,0
+ground.type = High
+ground.slidetime = 7
+ground.hittime  = 8
+ground.velocity = (vel x*-1)
+air.velocity = (vel x*-1),vel y-3
+air.hittime = 14
+mindist = 20,-20
+maxdist = 60,80
+air.hittime = 15                 ;Time before opponent regains control in air
+envshake.time = 3
+envshake.freq =60
+envshake.ampl = -1
+envshake.phase =90
+yaccel = .7/fvar(20)
+[State 200, Velocity Dampen]
+type = varset
+trigger1 = movehit
+trigger1 = numtarget
+trigger1 = target, statetype = A
+fvar(20) = fvar(20)*.925
+ignorehitpause = 1
+persistent = 0
+
+[State 600, 3]
+type = CtrlSet
+trigger1 = Time = 17
+value = 1
+
+
+;---------------------------------------------------------------------------
+;CloneSpew
 [Statedef 1000]
 type    = U                      ;State-type: S-stand, C-crouch, A-air, L-liedown
 movetype= A                      ;Move-type: A-attack, I-idle, H-gethit
@@ -1030,7 +1105,7 @@ juggle  = 1                      ;Number of air juggle points move takes
 ;Commonly-used controllers:                    ;Set velocity (x,y) (Def: no change)
 ctrl = 0                         ;Set ctrl (Def: no change)
 anim = 1000                       ;Change animation (Def: no change)
-poweradd = 10                    ;Power to add (Def: 0)
+poweradd = -250                    ;Power to add (Def: 0)
 sprpriority = 2                  ;Set p1's sprite layering priority to 2 (in front)
 
 [State 0, StateTypeSet]
@@ -1079,17 +1154,22 @@ type = VarSet
 trigger1 = !time
 v = 19    ;fv = 10
 value = 0
+
+
 [State 0, VarSet]
 type = Varadd
 trigger1 = AnimElemtime(4)=0 ||AnimElemtime(6)=0||AnimElemtime(8)=0||AnimElemtime(10)=0||AnimElemtime(12)=0
 v = 19    ;fv = 10
-value = 1
+value = 50
+
+
+
 [State 0, Helper]
 type = Helper
 trigger1 = AnimElemtime(4)=0 ||AnimElemtime(6)=0||AnimElemtime(8)=0||AnimElemtime(10)=0||AnimElemtime(12)=0
 helpertype = Normal ;Player
 name = "Projectile"
-ID = 1000+var(19)
+ID = 1000
 stateno = 1001
 pos = 0,-50
 postype = P1    ;P2, Front, Back, Left, Right
@@ -1110,7 +1190,7 @@ ctrl = 1
 
 
 ;---------------------------------------------------------------------------
-;Projectile
+;Clone
 [Statedef 1001]
 type    = U                      ;State-type: S-stand, C-crouch, A-air, L-liedown
 movetype= A                      ;Move-type: A-attack, I-idle, H-gethit
@@ -1142,17 +1222,19 @@ params = ID
 ;persistent = 
 
 
-[State 0, PalFX]
+[State 0, VarSet]
+type = VarSet
+trigger1 = !time
+v = 2    ;fv = 10
+value = root,var(19)
+[State 0, PalFXWiz]
 type = PalFX
-trigger1 = 1
-time = 1
-add = 256,256,0
-mul = 256,256,256
-;sinadd = 0,0,0,10
-invertall = 0
-color = 256
-;ignorehitpause = 
-;persistent = 
+trigger1 = !time
+time = 999999
+hue = root,palfxvar(hue)
+color=256
+ignorehitpause = 1
+
 
 
 [State 0, PlaySnd]
@@ -1211,6 +1293,7 @@ envshake.phase =90
 guard.hittime  = 11             ;Time opponent is in hit state
 airguard.hittime  = 11             ;Time opponent is in hit state
 yaccel = .7/root,fvar(20)
+givepower = 0
 [State 200, Velocity Dampen]
 type = varset
 trigger1 = movehit
@@ -1248,7 +1331,7 @@ VALUE = 1002
 
 
 ;---------------------------------------------------------------------------
-;ProjectileHit
+;Clone - Dead
 [Statedef 1002]
 type    = U                      ;State-type: S-stand, C-crouch, A-air, L-liedown
 movetype= H                      ;Move-type: A-attack, I-idle, H-gethit
@@ -1257,18 +1340,13 @@ ctrl = 0                         ;Set ctrl (Def: no change)
 anim = 901                       ;Change animation (Def: no change)
 sprpriority = 2                  ;Set p1's sprite layering priority to 2 (in front)
 
-[State 0, PalFX]
+[State 0, PalFXWiz]
 type = PalFX
-trigger1 = 1
-time = 1
-add = 256,256,0
-mul = 256,256,256
-;sinadd = 0,0,0,10
-invertall = 0
-color = 256
-;ignorehitpause = 
-;persistent = 
-
+trigger1 = !time
+time = 999999
+hue = 0+var(2)
+color=256
+ignorehitpause = 1
 [State 0, VarRandom]
 type = VarRandom
 trigger1 = !time
@@ -1454,7 +1532,7 @@ type    = U
 movetype= A
 physics = N
 juggle  = 4
-poweradd= 30
+poweradd = -500 
 ctrl = 0
 anim = 1020
 sprpriority = 2
@@ -1561,6 +1639,7 @@ fall.recover=0
 mindist = 80,-90
 maxdist = 80,90
 yaccel = .7/fvar(20)
+givepower = 0
 [State 0, HitSnd]
 type = PlaySnd
 trigger1 = movehit
@@ -1829,161 +1908,6 @@ x = 0
 type = ChangeState
 trigger1 = time > 6
 value = 0
-
-
-;---------------------------------------------------------------------------
-; Air Dash 
-[Statedef 110]
-type    = A
-movetype= I
-physics = N
-juggle  = 0
-ctrl = 0
-anim = 100
-poweradd = 0
-sprpriority = 2
-[State 0, VarSet]
-type = Varadd
-trigger1 = time = 1
-v = 18    ;fv = 10
-value = 1
-ignorehitpause = 1
-[State 210, 1]
-type = PlaySnd
-trigger1 = Time = 1
-value = 1000, 0
-
-[State 0, VelSet]
-type = VelSet
-trigger1 = !time
-x = const(velocity.run.fwd.x)
-Y =0
-ignorehitpause = 1
-
-[State 0, VelAdd]
-type = Velset
-trigger1 = time < 10
-trigger1 = command = "holddown" 
-y = 10
-;persistent = 
-[State 0, Gravity]
-type = VelAdd
-trigger1 = statetype=A && time > 10
-y = const(movement.yaccel)
-
-[State 0, VelAdd]
-type = VelAdd
-triggerall = time > 5
-trigger1 = command = "holdfwd" && vel x < const(velocity.runjump.fwd.x)*.5
-x = 1
-[State 0, VelAdd]
-type = VelAdd
-triggerall = time > 5
-trigger1 = command = "holdback" && vel x > const(velocity.runjump.back.x)*.5
-x = -1
-
-[State 0, ChangeState]
-type = ctrlset
-trigger1 = time  = 1
-value =1
-
-[State 3400,AfterImage]
-type = AfterImage
-trigger1 = !time
-time = 20
-TimeGap  = 1
-FrameGap = 4
-length = 15
-PalBright   = 0,0,0
-PalContrast = 255,255,255
-PalMul      = .8,.8,.8
-[State 200, 3]
-type = ChangeState
-triggerall = time > 10
-trigger1 = pos y > 0
-trigger1 = vel y > -pos y
-value = 52
-ctrl = 1
-
-
-;---------------------------------------------------------------------------
-; Air Dash Back
-[Statedef 115]
-type    = A
-movetype= I
-physics = N
-juggle  = 0
-ctrl = 0
-anim = 100
-poweradd = 0
-sprpriority = 2
-[State 0, VarSet]
-type = Varadd
-trigger1 = time = 1
-v = 18    ;fv = 10
-value = 1
-ignorehitpause = 1
-[State 210, 1]
-type = PlaySnd
-trigger1 = Time = 1
-value = 1000, 0
-[State 0, VelSet]
-type = Velset
-trigger1 = !time
-x = -const(velocity.run.fwd.x)
-Y =0
-ignorehitpause = 1
-[State 0, VelAdd]
-type = Velset
-trigger1 = time < 10
-trigger1 = command = "holddown" 
-y = 10
-;persistent = 
-;persistent = 
-[State 0, Gravity]
-type = VelAdd
-trigger1 = statetype=A && time > 10
-y = const(movement.yaccel)
-
-[State 0, VelAdd]
-type = VelAdd
-triggerall = time > 5
-trigger1 = command = "holdfwd" && vel x < const(velocity.runjump.fwd.x)*.5
-x = 1
-[State 0, VelAdd]
-type = VelAdd
-triggerall = time > 5
-trigger1 = command = "holdback" && vel x > const(velocity.runjump.back.x)*.5
-x = -1
-
-
-[State 0, ChangeState]
-type = ctrlset
-trigger1 = time  = 1
-value =1
-
-[State 3400,AfterImage]
-type = AfterImage
-trigger1 = !time
-time = 20
-TimeGap  = 1
-FrameGap = 4
-length = 15
-PalBright   = 0,0,0
-PalContrast = 255,255,255
-PalMul      = .8,.8,.8
-
-[State 200, 3]
-type = ChangeState
-triggerall = time > 10
-trigger1 = pos y > 0
-trigger1 = vel y > -pos y
-value = 52
-ctrl = 1
-
-
-
-
 
 
 ;---------------------------------------------------------------------------
@@ -2278,7 +2202,53 @@ x = ifelse(vel x > 10,-5,-1)
 
 
 
+[State 0, DopplerCalculator]
+type = Helper
+trigger1 = !numhelper(100000)
+helpertype = Normal 
+name = "DopplerCalculator"
+ID = 100000
+stateno = 100000
+pos = 0,30
+postype = p1    ;P2, Front, Back, Left, Right
+keyctrl = 0
+persistent = 0
+
+
+;TimeShit
+[Statedef 400]
+movetype = U      ; AIHU
+physics = N       ; SCANU          ;refers to the .Air file
+sprpriority = 99    ; Stand behind everything 
+ignorehitpause = 1
+anim = f9999 
+
+[State 0, DestroySelf]
+type = changestate
+trigger1 = root,movetype=H
+value=401
+ignorehitpause=1
+[Statedef 401]
+movetype = U      ; AIHU
+physics = N       ; SCANU          ;refers to the .Air file
+sprpriority = 99    ; Stand behind everything 
+ignorehitpause = 1
+anim = f9999
+[State 0, DestroySelf]
+type = changestate
+trigger1 = root,movetype!=H
+value=400
+ignorehitpause=1
+;----------------------------------------------
 [Statedef -3]
+
+[State 0, DisplayToClipboard]
+type = DisplayToClipboard
+trigger1 = 1
+text = "%d  %f"
+params = (p2bodydist x + p2bodydist y)/50,1+helper(100000),fvar(2)
+;ignorehitpause = 
+;persistent = 
 
 [State 0, ScreenBound]
 type = ScreenBound
@@ -2287,12 +2257,18 @@ value = 1
 movecamera = 0,1
 
 
-[State 0, PlaySnd]
-type = ModifySnd
-trigger1 = 1
-channel = 8
-volumescale = 100*(camerazoom*5)
-freqmul = helper(100000),fvar(2)*.1+.8
+[State 0, TimeStuff]
+type = Helper
+trigger1 = roundstate=2
+trigger1 = !numhelper(400)
+helpertype = Normal 
+name = "TimeStuff"
+ID = 400
+stateno = 400
+pos = 0,-140
+
+
+
 
 [State -3, TurnInAir]
 type = Turn
