@@ -1,5 +1,5 @@
 {
-  "playtime": 3042.68,
+  "playtime": 3275.81,
   "modes": {
     "training": {
       "playtime": 0,
@@ -13,6 +13,10 @@
         "06": 1,
         "guymba": 1
       }
+    },
+    "versus": {
+      "playtime": 233.13,
+      "clear": 0
     }
   }
 }
