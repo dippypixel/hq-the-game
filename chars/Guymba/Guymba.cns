@@ -170,12 +170,16 @@ time = 1
 type = S
 ctrl = 1
 velset = 0,0
-anim=100
+anim=0
 [State 0, VarSet]
 type = VarSet
 trigger1 = !time
 v = 2    ;fv = 10
 value = 1
+[State 210, 1]
+type = ChangeAnim
+trigger1 = !time&&command= "holdfwd"
+value = 100
 [State 210, 1]
 type = PlaySnd
 trigger1 = !time&&command= "holdfwd"
