@@ -1999,13 +1999,6 @@ value = 5100 + (anim % 10)
 type = PosSet
 trigger1 = Time = 0
 y = 0
-
-[State 5100, 5]
-type = VelSet
-trigger1 = Time = 0
-y = 0
-
-
 [State 5100, 7]
 type = ChangeState
 trigger1 = Time = 0
@@ -2546,7 +2539,7 @@ elem = var(3)
 type = VarSet
 trigger1 = !time
 fv = 1    
-value = -10+(random/50.0)
+value = -10+(random/50.0)+ root,vel x
 [State 0, YSet]
 type = VarSet
 trigger1 = !time

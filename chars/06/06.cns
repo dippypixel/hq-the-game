@@ -653,6 +653,9 @@ envshake.phase = 90
 envshake.mul = 0.9
 dir = 0
 yaccel = .7/fvar(20)
+p2facing =11
+mindist = 20,-50
+maxdist = 60,30
 [State 0, HitSnd]
 type = PlaySnd
 trigger1 = MoveHitVar(Frame)
@@ -1546,10 +1549,8 @@ x = .5
 [State 0, VelSet]
 type = VelSet
 trigger1 = animelem=3
-x = 20*ifelse(command= "holdback",-1,1)
+x = ifelse(vel x > 20,vel x,20*ifelse(command= "holdback",-1,1))
 y = 15
-;ignorehitpause = 
-;persistent = 
 [State 0, FX]
 type = PalFX
 trigger1 = animelemtime(3)<=0
@@ -1591,13 +1592,19 @@ trans = Add ;None, Add1, Sub
 type = PlaySnd
 trigger1 =  !TIME
 value = s1020, 1
-volumescale = 100
+volumescale = 70
+[State 610, PunchSwing]
+type = PlaySnd
+trigger1 =  animelemtime(3)=-9
+value = 0,2
+freqmul = 0.95+(random/7333.0)
+volumescale = 50
 [State 600, SND]
 type = PlaySnd
 trigger1 = animelemtime(3)=-11
 value = s1010, 0
 freqmul = 0.96+(random/7333.0)
-volumescale = 300
+volumescale = 100
 [State 600, SND]
 type = PlaySnd
 trigger1 = animelem=3
@@ -1629,7 +1636,6 @@ envshake.ampl = -4
 envshake.phase = 90
 envshake.mul = 0.9
 yaccel = .7/fvar(20)
-fall=1
 [State 0, HitSnd]
 type = PlaySnd
 trigger1 = MoveHitVar(Frame)
@@ -1718,10 +1724,10 @@ value = s1020, 1
 volumescale = 75
 [State 610, PunchSwing]
 type = PlaySnd
-trigger1 =  animelemtime(3)=-18
-value = s0,2
-freqmul = 0.96+(random/7333.0)
-volumescale = 120
+trigger1 =  animelemtime(3)=0
+value = 0,1
+freqmul = 0.95+(random/7333.0)
+volumescale = 80
 [State 610, Launch]
 type = PlaySnd
 trigger1 =  animelemtime(4)=-10
@@ -1808,7 +1814,7 @@ ground.slidetime = 14
 ground.hittime  = 14
 ground.velocity = -30,-10
 id = 632
-air.velocity = -30,enemy,vel y*.5
+air.velocity = -30,ifelse(enemy,vel y*.5>0,-2,enemy,vel y*.5)
 envshake.time = 16
 envshake.freq = 120
 envshake.ampl = -20
@@ -1889,7 +1895,7 @@ trigger1 = !time && vel x < const(velocity.run.fwd.x)
 x = const(velocity.run.fwd.x)
 [State 100, 1]
 type = Veladd
-trigger1 = vel x <= 30 
+trigger1 = vel x <= ifelse(-enemynear,vel x>20,-enemynear,vel x,30)
 x = .2
 [State 0, VarSet]
 type = Varadd
@@ -2154,11 +2160,15 @@ sysvar(1) = 1
 type = VarSet
 trigger1 = command = "holdback"
 sysvar(1) = -1
-
 [State 40, 4]
 type = VelSet
-trigger1 = AnimTime = 0
-x = ifelse(sysvar(1) = 0, const(velocity.jump.neu.x), ifelse(sysvar(1) = 1, ifelse(prevstateno = 100, (vel x)*1.2, const(velocity.jump.fwd.x)),ifelse(prevstateno = [105,106], (vel x)*1.2, const(velocity.jump.back.x)))*ifelse(command="holdup", 1, 1.334))
+trigger1 = AnimTime = 0&& prevstateno != 100
+x = ifelse(sysvar(1) = 0, const(velocity.jump.neu.x), ifelse(sysvar(1) = 1, const(velocity.jump.fwd.x), const(velocity.jump.back.x)))*ifelse(command="holdup", 1, 1.334)
+y = ifelse(command!="holdup",const(velocity.jump.y)*0.667,const(velocity.jump.y))
+[State 40, 4]
+type = VelSet
+trigger1 = AnimTime = 0 && prevstateno = 100
+x = ifelse(sysvar(1) = 0, (vel x)*1.2, ifelse(sysvar(1) = 1, (vel x)*1.2, ifelse(p2dist x < -5,(vel x)*1.2,const(velocity.runjump.back.x))))
 y = ifelse(command!="holdup",const(velocity.jump.y)*0.667,const(velocity.jump.y))
 [State 40, 6]
 type = ChangeState
@@ -2308,12 +2318,30 @@ sysvar(1) = -1
 type = DisplayToClipboard
 trigger1 = 1
 text = "%f %f %f"
-params = fvar(20),-enemynear,vel y/20
-
+params = fvar(20),-enemynear,vel y/20,-enemynear,vel x
+[State 40, YVelset Min]
+type = VelSet
+trigger1 = prevstateno!=250
+triggerall = AnimTime = 0
+trigger1 = enemynear, statetype=A
+trigger1 = ((enemynear, pos y) / 20 + enemynear, vel y)>=-5
+y = -5
 [State 40, YVelset]
 type = VelSet
-trigger1 = AnimTime = 0
-y = ifelse(enemynear,vel y = 0,	-25,ifelse(enemynear,vel y < 0,	-25+enemynear,vel y/4,	 ifelse(-25+enemynear,vel y>-15,-15,-25+enemynear,vel y)))
+triggerall = AnimTime = 0
+trigger1 = prevstateno!=250
+trigger1 = enemynear, statetype=A
+trigger1 = ((enemynear, pos y) / 20 + enemynear, vel y)=[-25,-15]
+y = (enemynear, pos y) / 20 + enemynear, vel y
+[State 40, YVelset Max]
+type = VelSet
+triggerall = AnimTime = 0
+trigger1 = prevstateno!=250
+trigger1 = enemynear, statetype=A
+trigger1 = ((enemynear, pos y) / 10 + enemynear, vel y)<=-25
+trigger2 = enemynear, statetype!=A
+trigger3 = prevstateno=250
+y = -25
 
 
 
@@ -2328,14 +2356,30 @@ type = VelSet
 trigger1 = AnimTime = 0
 trigger1 = sysvar(1)=-1
 x = -15
-
-[State 40, Jump Forward]
+[State 40, Jump ForwardMax]
 type = VelSet
+trigger1 = prevstateno!=250
 trigger1 = AnimTime = 0
 trigger1 = sysvar(1)=1
-x = ifelse(	(p2bodydist x/200*10)>20,	20,	10*ifelse(p2bodydist x/200<1,1,p2bodydist x/200))
+trigger1 = ((p2bodydist x)/40 + -enemynear, vel x)>20
+x = 20
+[State 40, Jump Forward]
+type = VelSet
+trigger1 = prevstateno!=250
+trigger1 = AnimTime = 0
+trigger1 = sysvar(1)=1
+trigger1 = ((p2bodydist x)/40 + -enemynear, vel x) = [15,30]
+trigger2 = -enemynear, vel x>20
+x = ((p2bodydist x)/40 + -enemynear, vel x)
 
-
+[State 40, Jump ForwardMin]
+type = VelSet
+trigger1 = prevstateno!=250
+trigger1 = AnimTime = 0
+trigger1 = sysvar(1)=1
+trigger1 = ((p2bodydist x)/40 + -enemynear, vel x)<0
+trigger2 = prevstateno=250
+x = 0
 [State 40, 6]
 type = ChangeState
 trigger1 = AnimTime = 0
@@ -2385,16 +2429,31 @@ value = 0
 ;ignorehitpause = 
 ;persistent = 
 
-[State 0, VelAdd]
-type = Velset
-trigger1 = command = "holdfwd" && prevstateno=9000 && time < 5
-x = ifelse((p2bodydist x/220*10)>20,20,10*ifelse(p2bodydist x/220<1,1,p2bodydist x/220))
-[State 0, VelAdd]
+
+
+[State 0, SuperJump Back]
 type = Velset
 trigger1 = command = "holdback" && prevstateno=9000 && time < 5
 x = -10
 
 
+
+[State 40, SuperJump Forward Max]
+type = VelSet
+trigger1 = command = "holdfwd" && prevstateno=9000 && time < 5
+trigger1 = ((p2bodydist x)/40 + -enemynear, vel x)>20
+x = 20
+[State 40, SuperJump Forward]
+type = VelSet
+trigger1 = command = "holdfwd" && prevstateno=9000 && time < 5
+trigger1 = ((p2bodydist x)/40 + -enemynear, vel x) = [15,20]
+x = ((p2bodydist x)/40 + -enemynear, vel x)
+
+[State 40, SuperJump Forward Min]
+type = VelSet
+trigger1 = command = "holdfwd" && prevstateno=9000 && time < 5
+trigger1 = ((p2bodydist x)/40 + -enemynear, vel x)<15
+x = 15
 
 [State 0, VelAdd]
 type = Velset
@@ -2429,6 +2488,41 @@ pos = 0,30
 postype = p1    ;P2, Front, Back, Left, Right
 keyctrl = 0
 persistent = 0
+
+
+;---------------------------------------------------------------------------
+; Jump Land
+[Statedef 52]
+type    = S
+physics = S
+ctrl = 0
+anim = 47
+
+[State 52, 1]
+type = VelSet
+trigger1 = Time = 0
+y = 0
+
+[State 52, 2]
+type = PosSet
+trigger1 = Time = 0
+y = 0
+
+[State 52, 3]
+type = CtrlSet
+trigger1 = Time = 3
+value = 1
+
+[State 52, 5]
+type = ChangeState
+trigger1 = vel x > const(velocity.run.fwd.x)
+value = 100
+ctrl = 1
+[State 52, 5]
+type = ChangeState
+trigger1 = AnimTime = 0
+value = 0
+ctrl = 1
 
 
 ;TimeShit
@@ -2494,6 +2588,7 @@ pos = 0,-140
 
 [State -3, TurnInAir]
 type = Turn
+trigger1 = stateno =50 || movetype = A && movehit
 trigger1 = p2dist x < -5 && statetype = A && ctrl
 [State -3, High Speed Width]
 type = width
@@ -2504,7 +2599,9 @@ ignorehitpause = 1
 [State 0, Jump After Smear]
 type = VelSet
 trigger1 = stateno = 45 && prevstateno = 1010 && numtarget
-y = -15 
+trigger1 = target,statetype=A
+x = -vel x
+y = -15
 redirectID = target,id
 [State 0, JumpOutofMovehit]
 type = ChangeState
@@ -2546,16 +2643,16 @@ type = PlaySnd
 triggerall = Time = 1
 trigger1 = stateno = 52 ;Jump land
 trigger2 = stateno = 106 ;Run-back land
-value = 100, 0
+value = 100, 1
 volumescale = 75
 freqmul = 0.9+(random/10000.0)
 [State -3, Landing Sound]
 type = EnvShake
 triggerall = Time = 1
 trigger1 = stateno = 52 ;Jump land
-time = 10
+time = 5
 freq = 90
-ampl = -3*(camerazoom*2.2)
+ampl = -2.0*(camerazoom*2.2)
 phase = 90
 mul = .5
 ;Velocity Deterioration system (Edited from RicePigeon's Damage Proration system)

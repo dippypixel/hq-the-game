@@ -9,8 +9,8 @@ author = "VWTG"
 [Camera]
 startx = 0
 starty = -30
-boundleft = -700
-boundright = 700
+boundleft = -40000
+boundright = 40000
 boundhigh = -9999999999999999999999999
 boundlow = 70
 
@@ -43,8 +43,8 @@ p2starty = 0
 p2facing = -1
 
 ;--- Common ---
-leftbound  = -4000
-rightbound =  4000
+leftbound  = -40000
+rightbound =  40000
 
 ;--------------------------------------------------------
 [Bound]
