@@ -141,11 +141,6 @@ trigger1 = Time = 0
 y = 0
 [State 0, 4] ;Are you dead?
 type = ChangeState
-trigger1 = vel x >=const(velocity.run.fwd.x)*.8 && prevstateno!=1020
-value = 100
-ctrl = 1
-[State 0, 4] ;Are you dead?
-type = ChangeState
 trigger1 = !alive
 value = 5050
 ctrl = 0
@@ -158,11 +153,6 @@ type    = S
 physics = S
 sprpriority = 0
 
-[State 0, 4] ;Are you dead?
-type = ChangeState
-trigger1 = vel x >=const(velocity.run.fwd.x)*.8
-value = 100
-ctrl = 1
 
 [State 20, 1]
 type = VelSet
@@ -233,6 +223,68 @@ value = SCA
 time = 1
 
 ;---------------------------------------------------------------------------
+; GO
+[Statedef 192]
+type = S
+ctrl = 0
+velset = 0,0
+anim=0
+
+[State 3400,FX]
+type = AfterImage
+trigger1 = !time&&command= "holdfwd"
+time = 10
+TimeGap  = 3
+FrameGap = 1
+length = 5
+PalBright   = 0,0,0
+PalContrast = 255,255,255
+palmul = .65,.65,.65
+trans = Add ;None, Add1, Sub
+[State 1027, FX]
+type = Explod
+trigger1 = !time&&command= "holdfwd"
+anim = F61
+pos = 0, -20
+sprpriority = 10
+postype = p1 
+angle = -90
+persistent=0
+ignorehitpause = 1
+scale = 3,3
+[State 0, FX]
+type = EnvShake
+trigger1 = !time&&command= "holdfwd"
+time = 10
+freq = 60
+ampl = -3
+phase = 90
+mul = .5
+
+
+[State 0, RoundBoost Chance]
+type = VarSet
+trigger1 = !time
+v = 2    ;fv = 10
+value = 1
+[State 0, RoundBoost]
+type = VelSet
+trigger1 = !time&&command= "holdfwd"
+x = 30
+y = 0
+;ignorehitpause = 
+persistent = 0
+[State 195, 2]
+type = ChangeState
+trigger1 = Time = 1 && command= "holdfwd"
+value = 100
+ctrl=1
+[State 195, 2]
+type = ChangeState
+trigger1 = Time = 1 && command!= "holdfwd"
+value = 0
+ctrl=1
+;---------------------------------------------------------------------------
 ; Taunt
 ; CNS difficulty: easy
 [Statedef 195]
@@ -295,7 +347,7 @@ guardsound = 6, 0                ;Sound to play on guard
 ground.type = High               ;Type: High, Low, Trip (def: Normal)
 ground.slidetime = 5             ;Time that the opponent slides back
 ground.hittime  = 11             ;Time opponent is in hit state
-ground.velocity = (vel x*-1)-2             ;Velocity at which opponent is pushed
+ground.velocity = (vel x*-1)-1            ;Velocity at which opponent is pushed
 air.type = High                  ;Type: High, Low, Trip (def: same as ground.type)
 air.velocity = (vel x*-1)-1,0           ;X-velocity at which opponent is pushed,
 ;Y-velocity at which opponent is pushed
@@ -432,7 +484,7 @@ guardsound = 6, 0                ;Sound to play on guard
 ground.type = High               ;Type: High, Low, Trip (def: Normal)
 ground.slidetime = 5             ;Time that the opponent slides back
 ground.hittime  = 11             ;Time opponent is in hit state
-ground.velocity = (vel x*-1)-2             ;Velocity at which opponent is pushed
+ground.velocity = (vel x*-1)-1             ;Velocity at which opponent is pushed
 airguard.velocity = (vel x*-1)-1.9,-.8     ;Guard velocity in air (def: (air.xvel*1.5, air.yvel/2))
 air.type = High                  ;Type: High, Low, Trip (def: same as ground.type)
 air.velocity = (vel x*-1)-1,0          ;X-velocity at which opponent is pushed,
@@ -568,7 +620,7 @@ sprpriority = 2
 [State 0, VelMul]
 type = VelMul
 trigger1 = vel x >35 && movehit
-x = .7
+x = .9
 ignorehitpause=0
 [State 410, 1]
 type = PlaySnd
@@ -1077,7 +1129,7 @@ trigger1 = stateno=650 && movehit
 map = "spike_used"
 value = 1
 persistent=0
-[State 600, 1]
+[State 600, SND]
 type = PlaySnd
 trigger1 = animelemtime(3)=-8
 value = s650, 3
@@ -1114,7 +1166,7 @@ fall.recover=0
 mindist = -5,40
 maxdist = 80,40
 
-[State 1027, Spark]
+[State 1027, FX]
 type = Explod
 trigger1 = movehit
 anim = F61
@@ -1125,15 +1177,22 @@ angle = 0
 persistent=0
 ignorehitpause = 1
 scale = 5,5
-[State 0, HitSnd]
-type = PlaySnd
-trigger1 = MoveHitVar(Frame)
-value = s650,0
-volumescale = 100
-channel = -1
+[State 0, ImpactFrame]
+type = AllPalFX
+trigger1 = movehit
+time = 2
+mul = 0,0,0
+color = 256
 ignorehitpause = 1
-persistent=0
-freqmul = 0.96+(random/12500.0)
+persistent = 0
+[State 0, ImpactFrame]
+type = EnvColor
+trigger1 = movehit
+value = 255,0, 0
+time = 2
+under = 1
+ignorehitpause = 1
+persistent = 0
 [State 0, HitSnd]
 type = PlaySnd
 trigger1 = MoveHitVar(Frame)
@@ -1752,7 +1811,7 @@ id = 632
 air.velocity = -30,enemy,vel y*.5
 envshake.time = 16
 envshake.freq = 120
-envshake.ampl = -10
+envshake.ampl = -20
 envshake.phase = 90
 envshake.mul = 0.9
 envshake.dir = 90
@@ -1770,7 +1829,7 @@ channel = -1
 ignorehitpause = 1
 persistent=0
 freqmul = 0.96+(random/7333.0)
-[State 0, AllPalFX]
+[State 0, ImpactFrame]
 type = AllPalFX
 trigger1 = movehit
 time = 2
@@ -1778,8 +1837,7 @@ mul = 0,0,0
 color = 256
 ignorehitpause = 1
 persistent = 0
-
-[State 0, EnvColor]
+[State 0, ImpactFrame]
 type = EnvColor
 trigger1 = movehit
 value = 255,0, 0
@@ -1806,7 +1864,7 @@ persistent = 1
 [State 200, ctrlset after movehit]
 type = ctrlset
 trigger1 = movehit 
-trigger2 = time=20 &&!movehit
+trigger2 = time=20 &&!movehit&&statetype=A
 value = 1
 [State 200, End State]
 type = ChangeState
@@ -1827,8 +1885,8 @@ physics = N
 sprpriority = 1
 [State 100, 1]
 type = Velset
-trigger1 = !time && vel x < const(velocity.run.fwd.x)*.8
-x = const(velocity.run.fwd.x)*.8
+trigger1 = !time && vel x < const(velocity.run.fwd.x)
+x = const(velocity.run.fwd.x)
 [State 100, 1]
 type = Veladd
 trigger1 = vel x <= 30 
@@ -1864,19 +1922,36 @@ flag= NoBrake
 type = EnvShake
 trigger1 = animelemtime(1)=0 
 trigger2 = animelemtime(4)=0
-time = 5
-freq = 30
-ampl = -1.5*(camerazoom*2.2)
+time = 10
+freq = 90
+ampl = -3*(camerazoom*2.2)
 phase = 90
+mul = .5
 
-[State -3, Landing Sound]
+[State 0, Explod]
+type = Explod
+trigger1 = animelemtime(1)=0 
+trigger2 = animelemtime(4)=0
+anim = f61
+pos = 0,0
+postype = P1  ;P2, Front, Back, Left, Right
+facing = 1
+scale=.2+vel x*0.1,.2+vel x*0.1
+
+[State -3, StepSND]
 type = PlaySnd
 trigger1 = animelemtime(1)=0 
 trigger2 = animelemtime(4)=0
-value = 100, 0+random%4
-freqmul = 0.9+(random/5333.0)
-volumescale = 75
-
+value = 100, 0
+freqmul = 0.9+((random/10000.0)+abs(vel x)*0.0052)
+volumescale = 70*(camerazoom*2.2)
+[State -3, StepSND]
+type = PlaySnd
+trigger1 = animelemtime(1)=0 
+trigger2 = animelemtime(4)=0
+value = 100, 1
+freqmul = 0.84+((random/20000.0)+abs(vel x)*0.0052)
+volumescale = 50*(camerazoom*2.2)
 [State 100, 4]
 type = ChangeState
 trigger1 = command = "holdback2"
@@ -1936,20 +2011,12 @@ sprpriority = 1
 [State 100, 1]
 type = Velset
 trigger1 = !time
-trigger1 = !time && vel x > -const(velocity.run.fwd.x)*.8
-x = -const(velocity.run.fwd.x)*.8
+trigger1 = !time && vel x > -const(velocity.run.fwd.x)
+x = -const(velocity.run.fwd.x)
 [State 100, 1]
 type = Veladd
 trigger1 = vel x >= -30 
 x = -.2
-
-[State 106, EnvShake]
-type = EnvShake
-trigger1 = animelemtime(1)=0 
-trigger2 = animelemtime(4)=0
-time = 1
-freq = 60
-ampl = -4
 
 [State 0, VarSet]
 type = Varadd
@@ -1982,20 +2049,38 @@ flag= NoBrake
 
 [State 0, EnvShake]
 type = EnvShake
-trigger1 = animelemtime(1)=1
-trigger2 = animelemtime(4)=1
-time = 5
-freq = 60
-ampl = -1*(camerazoom*2.2)
+trigger1 = animelemtime(1)=0 
+trigger2 = animelemtime(4)=0
+time = 10
+freq = 90
+ampl = -3*(camerazoom*2.2)
 phase = 90
+mul = .5
 
-[State -3, Landing Sound]
+[State 0, Explod]
+type = Explod
+trigger1 = animelemtime(1)=0 
+trigger2 = animelemtime(4)=0
+anim = f61
+pos = 0,0
+postype = P1  ;P2, Front, Back, Left, Right
+facing = 1
+scale=.2+abs(vel x)*0.1,.2+abs(vel x)*0.1
+
+[State -3, StepSND]
 type = PlaySnd
 trigger1 = animelemtime(1)=0 
 trigger2 = animelemtime(4)=0
-value = 100, 0+random%4
-freqmul = 0.9+(random/5333.0)
-volumescale = 75
+value = 100, 0
+freqmul = 0.9+((random/10000.0)+abs(vel x)*0.0052)
+volumescale = 70*(camerazoom*2.2)
+[State -3, StepSND]
+type = PlaySnd
+trigger1 = animelemtime(1)=0 
+trigger2 = animelemtime(4)=0
+value = 100, 1
+freqmul = 0.84+((random/20000.0)+abs(vel x)*0.0052)
+volumescale = 50*(camerazoom*2.2)
 [State 100, 4]
 type = ChangeState
 trigger1 = command != "holdback" 
@@ -2389,17 +2474,10 @@ ignorehitpause = 1
 [State 0, DisplayToClipboard]
 type = DisplayToClipboard
 trigger1 = 1
-text = "%d  %d"
-params = (p2bodydist x + p2bodydist y)/50,map(spike_used)
+text = "%f  %d"
+params = 1,map(spike_used)
 ;ignorehitpause = 
 ;persistent = 
-
-[State 0, ScreenBound]
-type = ScreenBound
-trigger1 = enemynear,stateno = [5800,5820]
-value = 1
-movecamera = 0,1
-
 
 [State 0, TimeStuff]
 type = Helper
@@ -2455,14 +2533,31 @@ type = VelAdd
 trigger1 = statetype = A && movetype = A && movehit
 trigger1 = command = "holdback" && vel x > const(velocity.runjump.back.x)*.5
 x = -2
-
+[State -3, Jump Sound]
+type = PlaySnd
+triggerall = Time = 1
+trigger1 = stateno = 50 
+trigger1=prevstateno!=45&&prevstateno!=9000
+value = 40, 0
+volumescale = 100
+freqmul = 0.9+(random/10000.0)+(abs(vel x)+abs(vel y))*.003
 [State -3, Landing Sound]
 type = PlaySnd
 triggerall = Time = 1
 trigger1 = stateno = 52 ;Jump land
 trigger2 = stateno = 106 ;Run-back land
-value = 42, 0
+value = 100, 0
 volumescale = 75
+freqmul = 0.9+(random/10000.0)
+[State -3, Landing Sound]
+type = EnvShake
+triggerall = Time = 1
+trigger1 = stateno = 52 ;Jump land
+time = 10
+freq = 90
+ampl = -3*(camerazoom*2.2)
+phase = 90
+mul = .5
 ;Velocity Deterioration system (Edited from RicePigeon's Damage Proration system)
 [State -2, Reset velocity dampener]
 type = Varset

@@ -199,7 +199,10 @@ time = 5
 name = "AirDashB"
 command = z + /$B
 time = 5
-
+[Command]
+name = "AirDashB"
+command = /$z + /$B
+time = 5
 [Command]
 name = "AirDashD"
 command = z + /$D

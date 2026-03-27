@@ -699,53 +699,6 @@ trigger1 = Time = 0
 value = 0
 
 ;---------------------------------------------------------------------------
-; GO
-[Statedef 192]
-type = S
-ctrl = 1
-velset = 0,0
-anim=0
-
-[State 210, 1]
-type = PlaySnd
-trigger1 = !time&&command= "holdfwd"
-value = f400, 0
-[State 0, EnvColor]
-type = EnvColor
-trigger1 = !time&&command= "holdfwd"
-value = 255,255,255
-time = 1
-under = 0
-;ignorehitpause = 
-;persistent = 
-[State 0, VarSet]
-type = VarSet
-trigger1 = !time
-v = 2    ;fv = 10
-value = 1
-[State 0, VelSet]
-type = VelSet
-trigger1 = !time&&command= "holdfwd"
-x = 40
-y = 0
-;ignorehitpause = 
-persistent = 0
-
-[State 0, EnvShake]
-type = EnvShake
-trigger1 = !time&&command= "holdfwd"
-time = 10
-freq = 60
-ampl = -3
-phase = 90
-
-[State 195, 2]
-type = ChangeState
-trigger1 = Time = 1
-value = 0
-ctrl = 1
-
-;---------------------------------------------------------------------------
 ; Stand get-hit (shaking)
 [Statedef 5000]
 type    = S
@@ -2220,14 +2173,6 @@ type = posset
 trigger1 = pos y >= 0
 y = 0
 
-
-
-[State 1026, No scroll]
-type = ScreenBound
-trigger1 = 1
-value = 1
-movecamera = 0,1
-
 [State 1026, Hit wall]
 type = ChangeState
 trigger1 = BackEdgeBodyDist <= 20
@@ -2735,7 +2680,7 @@ phase = 90
 ;ignorehitpause = 
 ;persistent = 
 
-;Camera Velocity
+;CamSpeedCalculator
 [Statedef 100001]
 movetype = U      ; AIHU
 physics = N       ; SCANU          ;refers to the .Air file
@@ -2746,33 +2691,33 @@ anim = f9999
 [State 0, Camera VelocityX]
 type = VarSet
 trigger1 = HitPauseTime=0&&enemy,HitPauseTime=0
-v = 0          ; store velocity in var(0)
-value = (camerapos x - var(1)) * 0.3 + var(0) * 0.7  ; X velocity
+fv = 0          ; store velocity in var(0)
+value = (camerapos x - fvar(1)) * 0.3 + fvar(0) * 0.7  ; X velocity
 
 [State 0, Update CamPos]
 type = VarSet
 trigger1 = HitPauseTime=0&&enemy,HitPauseTime=0
-v = 1
+fv = 1
 value = camerapos x
 
 
 [State 0, Camera VelocityY]
 type = VarSet
 trigger1 = HitPauseTime=0&&enemy,HitPauseTime=0
-v = 2          ; store velocity in var(0)
-value = (camerapos y - var(3)) * 0.3 + var(2) * 0.7  ; Y velocity
+fv = 2          ; store velocity in var(0)
+value = (camerapos y - fvar(3)) * 0.3 + fvar(2) * 0.7  ; Y velocity
 
 [State 0, Update CamPos]
 type = VarSet
 trigger1 = HitPauseTime=0&&enemy,HitPauseTime=0
-v = 3
+fv = 3
 value = camerapos y
 
 [State 0, Update CamPos]
 type = VarSet
 trigger1 = 1
-v = 4
-value = abs(var(0))+abs(var(2))
+fv = 4
+value = abs(var(0))+abs(fvar(2))
 
 
 ;DopplerWind
@@ -2839,6 +2784,12 @@ redirectID = root, id
 [Statedef -2]
 ignorehitpause = 1
 
+
+[State 1026, Wallbounce Screenbound]
+type = ScreenBound
+trigger1 = stateno=[5800,5820]
+value = 1
+movecamera = 0,1
 [State 0, PlayIfAir]
 type = PlaySnd
 trigger1 = name = "Guymba"
