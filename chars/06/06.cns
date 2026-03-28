@@ -732,13 +732,8 @@ ignorehitpause = 1
 persistent = 0
 [State 410, 4]
 type = ChangeState
-trigger1 = movehit && command = "chargeup"
-value = 9000
-ctrl = 1
-[State 410, 4]
-type = ChangeState
 trigger1 = movehit && command = "holdup"
-value = 40
+value = 9000
 ctrl = 1
 [State 410, 4]
 type = ctrlset
