@@ -510,7 +510,7 @@ guardflag = MA
 pausetime = 12,12
 sparkno = 1
 sparkxy = -10,-70
-hitsound   = S8000, 3
+hitsound   = S8000, 6
 guardsound = 6,0
 ground.type = High
 ground.slidetime = 14
@@ -704,7 +704,7 @@ priority = 4
 pausetime = 9,9
 sparkno = 1
 sparkxy = -10,-70
-hitsound   = S8000, 3
+hitsound   = S8000, 6
 guardsound = 6,0
 animtype = Med
 ground.type = High
@@ -897,6 +897,7 @@ y = 0
 type = VelSet
 trigger1= vel y > 0
 trigger1= pos y > -vel y
+x = 0
 y = 0
 
 [State 0, Gravity]
@@ -904,7 +905,14 @@ type = Veladd
 trigger1 = statetype = A 
 y = const(movement.yaccel)
 
-
+[State 200, 2]
+type = PlaySnd
+trigger1 = AnimElem = 4
+value = s900,0
+[State 200, 2]
+type = PlaySnd
+trigger1 = AnimElem = 4
+value = s900,1
 [State 0, Helper]
 type = Helper
 triggerall = numhelper(901) <= 2
@@ -942,6 +950,12 @@ juggle  = 1                      ;Number of air juggle points move takes
 ctrl = 0                         ;Set ctrl (Def: no change)
 anim = 901                       ;Change animation (Def: no change)
 sprpriority = 2                  ;Set p1's sprite layering priority to 2 (in front)
+[State 0, HitBy]
+type = HitBy
+trigger1 = 1
+value = 
+time = -1
+ignorehitpause = 1
 [State 0, VelSet]
 type = VelSet
 trigger1 = time = 1
@@ -979,9 +993,9 @@ type = DestroySelf
 trigger1 = time > 240
 [State 0, DestroySelf]
 type = CHANGESTATE 
-trigger1 = movehit
+trigger1 = movecontact
 VALUE = 905
-;ignorehitpause = 
+ignorehitpause = 1
 ;persistent = 
 
 
@@ -992,29 +1006,13 @@ type    = U                      ;State-type: S-stand, C-crouch, A-air, L-liedow
 movetype= H                      ;Move-type: A-attack, I-idle, H-gethit
 physics = N                      ;Physics: S-stand, C-crouch, A-air
 ctrl = 0                         ;Set ctrl (Def: no change)
-anim = 901                       ;Change animation (Def: no change)
+anim = 902                       ;Change animation (Def: no change)
 sprpriority = 2                  ;Set p1's sprite layering priority to 2 (in front)
-velset = -9,-9
-
-[State 5050, 3] ;Gravity
-type = VelAdd
-trigger1 = 1
-y = const(movement.yaccel)
-;ignorehitpause = 
-;persistent =
-
-
-[State 0, AngleDraw]
-type = AngleDraw
-trigger1 =1
-value = 1
-scale = 1+(time/20),1+(time/20)
-;ignorehitpause = 
-;persistent = 
+velset = 0,0
 
 [State 0, DestroySelf]
 type = DestroySelf
-trigger1 = pos y > 200
+trigger1 = animtime = 0
 
 ;---------------------------------------------------------------------------
 ; Run forward
@@ -1469,7 +1467,11 @@ value = f41,0
 freqmul = 1
 volumescale = 200
 freqmul = 0.9+(random/5333.3)
-
+[State 0, PlaySnd]
+type = PlaySnd
+trigger1 = !time
+value = s3,2
+freqmul = 0.9+(random/5333.3)
 
 [State 40, 1]
 type = VarSet
@@ -1556,4 +1558,10 @@ type = PlaySnd
 triggerall = Time = 1
 trigger1 = stateno = 52 ;Jump land
 trigger2 = stateno = 106 ;Run-back land
-value = 40, 0
+value = s4,0
+
+[State 0, PlaySnd]
+type = PlaySnd
+triggerall = Time = 1
+trigger1 = stateno = 40 ;Jump
+value = S3,0
