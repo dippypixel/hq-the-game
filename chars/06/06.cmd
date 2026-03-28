@@ -306,7 +306,10 @@ time = 5
 name = "chargeback";Required (do not remove)
 command = /10$B
 time = 5
-
+[Command]
+name = "chargefwd";Required (do not remove)
+command = /10$B
+time = 5
 [Command]
 name = "chargeup";Required (do not remove)
 command = /10$U

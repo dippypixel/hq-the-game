@@ -2067,7 +2067,9 @@ time = 20
 type    = A
 movetype= H
 physics = N
-velset = vel x,enemy,map(floorbounceVely)
+velset = ifelse(enemy, vel x>20,-enemynear,vel x-1,vel x),enemy,map(floorbounceVely)
+
+
 
 [State -3, High Speed Width]
 type = width
@@ -2967,12 +2969,6 @@ pos = 0,-60
 postype = p1    ;P2, Front, Back, Left, Right
 keyctrl = 0
 persistent = 0
-
-[State 0, ROUND BOOST]
-type = ChangeState
-trigger1 = roundstate=2 && stateno!=192 && !var(2)
-VALUE=192
-persistent=0
 [State -3, Air Height]
 type = Height
 trigger1 = statetype = A
