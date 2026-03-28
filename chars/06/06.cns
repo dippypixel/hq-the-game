@@ -683,8 +683,8 @@ guardsound = 6,0
 ground.type = High
 ground.slidetime = 14
 ground.hittime  = 17
-ground.velocity = ifelse(-vel x*.3>-8,-8,-vel x*.3),-25
-air.velocity = ifelse(-vel x*.3>-8,-8,-vel x*.3),-25*fvar(20)
+ground.velocity = ifelse(-vel x*.3>-9,-9,-vel x*.3),-25
+air.velocity = ifelse(-vel x*.3>-9,-9,-vel x*.3),-25*fvar(20)
 fall = 1
 envshake.time = 16
 envshake.freq = 140
@@ -732,7 +732,17 @@ ignorehitpause = 1
 persistent = 0
 [State 410, 4]
 type = ChangeState
+trigger1 = movehit && command = "chargeup"
+value = 9000
+ctrl = 1
+[State 410, 4]
+type = ChangeState
 trigger1 = movehit && command = "holdup"
+value = 40
+ctrl = 1
+[State 410, 4]
+type = ctrlset
+trigger1 = movehit && time>30
 value = 9000
 ctrl = 1
 [State 0, ChangeState]
@@ -1479,13 +1489,7 @@ player = 0,40
 value = 0,40
 ignorehitpause = 1
 ;persistent = 
-[State 0, DisplayToClipboard]
-type = DisplayToClipboard
-trigger1 = 1
-text = "var(10) = %d"
-params = ID
-;ignorehitpause = 
-;persistent = 
+
 [State 0, PlayerPush]
 type = PlayerPush
 trigger1 = 1
@@ -1707,7 +1711,7 @@ sprpriority = 2
 [State 0, VelX Mul]
 type = Velmul
 trigger1 = !time
-x = .5
+x = ifelse(vel x > 20,.7,.5)
 
 [State 0, Sparkno]
 type = MapSet
@@ -1801,6 +1805,8 @@ ground.hittime  = 15
 air.hittime = 15                 ;Time before opponent regains control in air
 guard.hittime  = 10             ;Time opponent is in hit state
 airguard.hittime  = 10             ;Time opponent is in hit state
+mindist = 0, 0
+maxdist = 70, 120
 envshake.time = 9
 envshake.freq = 140
 envshake.ampl = -4
@@ -1837,6 +1843,14 @@ poweradd = -500
 ctrl = 0
 anim = 1020
 sprpriority = 2
+
+
+[State 0, VelX Mul]
+type = Velmul
+trigger1 = !time
+x = ifelse(vel x > 15,1,.5)
+
+
 [State 0, Sparkno]
 type = MapSet
 trigger1 = MoveHitVar(Frame)
@@ -1990,7 +2004,6 @@ ground.type = High
 ground.slidetime = 14
 ground.hittime  = 14
 ground.velocity = -30,-10
-id = 632
 air.velocity = -30,ifelse(enemy,vel y*.5>0,-2,enemy,vel y*.5)
 envshake.time = 16
 envshake.freq = 120
@@ -2003,6 +2016,7 @@ mindist = 80,-30
 maxdist = 80,30
 yaccel = .7/fvar(20)
 givepower = 0
+p2stateno=5800
 [State 0, HitSnd]
 type = PlaySnd
 trigger1 = movehit
@@ -2034,16 +2048,7 @@ triggerall = statetype=a
 trigger1 = movehit && enemy,BackEdgeBodyDist < 20 && p2bodydist x < 30
 x = -15
 ignorehitpause = 1
-;persistent = 
 
-
-[State 0, TargetState]
-type = TargetState
-triggerall = numtarget(632)
-trigger1 =  MoveHit = 1
-value = 5800
-ID = 632
-persistent = 1
 [State 200, ctrlset after movehit]
 type = ctrlset
 trigger1 = movehit 
@@ -2137,11 +2142,11 @@ freqmul = 0.84+((random/20000.0)+abs(vel x)*0.0052)
 volumescale = 50*(camerazoom*2.2)
 [State 100, 4]
 type = ChangeState
-trigger1 = command = "holdback2"
+trigger1 = command = "chargeback"
 value = 105
 [State 100, 4]
 type = ChangeState
-trigger1 = command != "holdfwd" && command != "holdback2"
+trigger1 = command != "holdfwd" && command != "holdback"&& command != "chargeback"
 value = 101
 
 ;---------------------------------------------------------------------------
@@ -2153,7 +2158,7 @@ anim = 105
 sprpriority = 1
 [State 0, PlaySnd]
 type = PlaySnd
-trigger1 = !TIME
+trigger1 = animelemtime(2)=0
 value = f41,0
 freqmul = 1
 volumescale = 200
@@ -2161,7 +2166,7 @@ freqmul = 0.9+(random/5333.3)
 
 [State 100, 1]
 type = Velset
-trigger1 =!time
+trigger1 =animelemtime(2)=0
 x = -20
 
 [State 100, 2] ;Prevent run from canceling into walk
@@ -2177,7 +2182,7 @@ flag2= NoBrake
 
 [State 100, 4]
 type = ChangeState
-trigger1 = command = "holdback" && time > 10
+trigger1 = command = "chargeback" && time > 10
 value = 106
 
 [State 100, 4]
@@ -2345,7 +2350,7 @@ y = ifelse(command!="holdup",const(velocity.jump.y)*0.667,const(velocity.jump.y)
 [State 40, 4]
 type = VelSet
 trigger1 = AnimTime = 0 && prevstateno = 100
-x = ifelse(sysvar(1) = 0, (vel x)*1.2, ifelse(sysvar(1) = 1, (vel x)*1.2, ifelse(p2dist x < -5,(vel x)*1.2,const(velocity.runjump.back.x))))
+x = ifelse(sysvar(1) != -1, (vel x)*1.2, ifelse(p2dist x < -20,(vel x)*1.2,const(velocity.runjump.back.x)))
 y = ifelse(command!="holdup",const(velocity.jump.y)*0.667,const(velocity.jump.y))
 [State 40, 6]
 type = ChangeState
@@ -2434,17 +2439,19 @@ ctrl = 0
 sprpriority = 1
 facep2 = 1
 
+
+[State 0, PosSet]
+type = PosSet
+trigger1 = pos y !=0
+y = 0
+;ignorehitpause = 
+;persistent = 
+
+
 [State 0, VelSet]
 type = Velmul
 trigger1 = prevstateno=410
 x =.5
-
-[State 0, PlayerPush]
-type = PlayerPush
-trigger1 = 1
-value = 0
-;ignorehitpause = 
-;persistent = 
 
 [State 3400,AfterImage]
 type = AfterImage
@@ -2490,37 +2497,54 @@ sysvar(1) = 1
 type = VarSet
 trigger1 = command = "holdback"
 sysvar(1) = -1
+[State 0, XCalc]
+type = VarSet
+trigger1 = AnimTime = 0
+fv = 9    ;fv = 10
+value = ((p2bodydist x)/35 + -enemynear, vel x)
+[State 0, YCalc]
+type = VarSet
+trigger1 = AnimTime = 0
+fv = 10    ;fv = 10
 
-[State 0, DisplayToClipboard]
-type = DisplayToClipboard
-trigger1 = 1
-text = "%f %f %f"
-params = fvar(20),-enemynear,vel y/20,-enemynear,vel x
-[State 40, YVelset Min]
-type = VelSet
-trigger1 = prevstateno!=250
-triggerall = AnimTime = 0
-trigger1 = enemynear, statetype=A
-trigger1 = ((enemynear, pos y) / 20 + enemynear, vel y)>=-5
-y = -5
-[State 40, YVelset]
+value = ((enemynear, pos y) / 15 + enemynear, vel y)
+
+
+
+[State 40, Max Y Vel]
 type = VelSet
 triggerall = AnimTime = 0
-trigger1 = prevstateno!=250
-trigger1 = enemynear, statetype=A
-trigger1 = ((enemynear, pos y) / 20 + enemynear, vel y)=[-25,-15]
-y = (enemynear, pos y) / 20 + enemynear, vel y
-[State 40, YVelset Max]
-type = VelSet
-triggerall = AnimTime = 0
-trigger1 = prevstateno!=250
-trigger1 = enemynear, statetype=A
-trigger1 = ((enemynear, pos y) / 10 + enemynear, vel y)<=-25
-trigger2 = enemynear, statetype!=A
-trigger3 = prevstateno=250
+triggerall = !map(superjump_velocitycap)
+trigger1 = enemy, statetype!=A
+trigger2 = prevstateno=250
+x = 10
 y = -25
+[State 40, uncapped Y Vel Prediction]
+type = VelSet
+triggerall = AnimTime = 0
+trigger1 = map(superjump_velocitycap)
+y = ifelse(fvar(10)*fvar(20)>-15,-15,fvar(10)*fvar(20))
+[State 40, Capped Y Vel Prediction]
+type = VelSet
+triggerall = AnimTime = 0
+trigger1 = !map(superjump_velocitycap)
+trigger1 = enemy, statetype=A
+trigger1 = prevstateno!=250
+y = ifelse(fvar(10)<-25,-25,ifelse(fvar(10)>-15,-15,fvar(10)))
 
-
+[State 40, UnCapped Forward Velocity]
+type = VelSet
+triggerall = AnimTime = 0
+triggerall = sysvar(1)=1
+trigger1 = map(superjump_velocitycap)
+x = ifelse(fvar(9)/fvar(20)<10,10,fvar(9)/fvar(20))
+[State 40, Capped Forward Velocity]
+type = VelSet
+triggerall = AnimTime = 0
+triggerall = sysvar(1)=1
+trigger1 = !map(superjump_velocitycap)
+trigger1 = prevstateno!=250
+x = ifelse(fvar(9)>20,20,ifelse(fvar(9)<8,8,fvar(9)))
 
 [State 40, Jump Nowhere]
 type = VelSet
@@ -2533,30 +2557,6 @@ type = VelSet
 trigger1 = AnimTime = 0
 trigger1 = sysvar(1)=-1
 x = -15
-[State 40, Jump ForwardMax]
-type = VelSet
-trigger1 = prevstateno!=250
-trigger1 = AnimTime = 0
-trigger1 = sysvar(1)=1
-trigger1 = ((p2bodydist x)/40 + -enemynear, vel x)>20
-x = 20
-[State 40, Jump Forward]
-type = VelSet
-trigger1 = prevstateno!=250
-trigger1 = AnimTime = 0
-trigger1 = sysvar(1)=1
-trigger1 = ((p2bodydist x)/40 + -enemynear, vel x) = [15,30]
-trigger2 = -enemynear, vel x>20
-x = ((p2bodydist x)/40 + -enemynear, vel x)
-
-[State 40, Jump ForwardMin]
-type = VelSet
-trigger1 = prevstateno!=250
-trigger1 = AnimTime = 0
-trigger1 = sysvar(1)=1
-trigger1 = ((p2bodydist x)/40 + -enemynear, vel x)<0
-trigger2 = prevstateno=250
-x = 0
 [State 40, 6]
 type = ChangeState
 trigger1 = AnimTime = 0
@@ -2608,29 +2608,7 @@ value = 0
 
 
 
-[State 0, SuperJump Back]
-type = Velset
-trigger1 = command = "holdback" && prevstateno=9000 && time < 5
-x = -10
 
-
-
-[State 40, SuperJump Forward Max]
-type = VelSet
-trigger1 = command = "holdfwd" && prevstateno=9000 && time < 5
-trigger1 = ((p2bodydist x)/40 + -enemynear, vel x)>20
-x = 20
-[State 40, SuperJump Forward]
-type = VelSet
-trigger1 = command = "holdfwd" && prevstateno=9000 && time < 5
-trigger1 = ((p2bodydist x)/40 + -enemynear, vel x) = [15,20]
-x = ((p2bodydist x)/40 + -enemynear, vel x)
-
-[State 40, SuperJump Forward Min]
-type = VelSet
-trigger1 = command = "holdfwd" && prevstateno=9000 && time < 5
-trigger1 = ((p2bodydist x)/40 + -enemynear, vel x)<15
-x = 15
 
 [State 0, VelAdd]
 type = Velset
@@ -2649,8 +2627,9 @@ trigger1 = command = "holdfwd" && vel x < const(velocity.runjump.fwd.x)*ifelse(p
 x = ifelse(vel x < -10,5,1)
 [State 0, VelAdd]
 type = VelAdd
+trigger1 = command != "down" &&command != "holddown"&&command != "back"
 trigger1 = command = "holdback" && vel x > const(velocity.runjump.back.x)*ifelse(prevstateno=9000,1,.5)
-x = ifelse(vel x > 10,-5,-1)
+x = ifelse(vel x > 10&&command = "chargeback",-5,-1)
 
 
 
@@ -2768,36 +2747,11 @@ trigger1 = animtime=0
 ;----------------------------------------------
 [Statedef -3]
 
-
 [State 0, Mapset]
 type = MapSet
 trigger1 = 1
 map = "floorbounceVelY"
 value = ifelse(map(spike_used)>2,-5,(-20+pos y/40)*fvar(20))
-[State 0, HitSparkInit]
-type = Helper
-trigger1 = MoveHitVar(Frame)
-trigger1 = enemy,stateno!=301
-helpertype = Normal 
-name = "Hitspark"
-ID = 100002
-stateno = 100002
-pos = MoveHitVar(sparkx),MoveHitVar(sparky)
-postype = p1    ;P2, Front, Back, Left, Right
-keyctrl = 0
-persistent = 0
-ignorehitpause=1
-ownpal=1
-supermovetime = 9999999999999
-pausemovetime = 9999999999999
-
-[State 0, DisplayToClipboard]
-type = DisplayToClipboard
-trigger1 = 1
-text = "%ds  %d"
-params = MoveHitVar(Frame),(enemynear, pos x - pos x) 
-ignorehitpause = 1
-;persistent = 
 
 [State 0, TimeStuff]
 type = Helper
@@ -2895,3 +2849,41 @@ trigger1 = fvar(20) < 0.25
 fv = 20 
 value = 0.25
 ignorehitpause = 1
+[Statedef +1]
+
+[State 0, DisplayToClipboard]
+type = DisplayToClipboard
+trigger1 = !hitpausetime
+text = "%d  %d"
+params = sysvar(1)
+ignorehitpause = 1
+;persistent = 
+
+[State 40, UncapSJ]
+type = MapSet
+trigger1 = -enemynear, vel x>20 && vel x>15
+trigger2 = prevstateno = 250 && -enemynear, vel x>15
+map = "superjump_velocitycap"
+value = 1
+[State 40, CapSJ]
+type = MapSet
+trigger1 = -enemynear, vel x<20 && vel x<15
+trigger1 = !numtarget
+map = "superjump_velocitycap"
+value = 0
+[State 0, HitSparkInit]
+type = Helper
+trigger1 = MoveHitVar(Frame)
+trigger1 = enemy,stateno!=301
+helpertype = Normal 
+name = "Hitspark"
+ID = 100002
+stateno = 100002
+pos = MoveHitVar(sparkx),MoveHitVar(sparky)
+postype = p1    ;P2, Front, Back, Left, Right
+keyctrl = 0
+persistent = 0
+ignorehitpause=1
+ownpal=1
+supermovetime = 9999999999999
+pausemovetime = 9999999999999

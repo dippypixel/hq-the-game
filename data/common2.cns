@@ -2835,18 +2835,15 @@ value = var(19) *.95
 redirectID = root, id
 
 
-;ignorehitpause = 
-;persistent = 
+
 ;-------------------------------------------------------------------------------------------------------
 [Statedef -2]
 ignorehitpause = 1
 
-
-[State 1026, Wallbounce Screenbound]
-type = ScreenBound
-trigger1 = stateno=[5800,5820]
-value = 1
-movecamera = 0,1
+[State 0, AssertSpecial]
+type = AssertSpecial
+trigger1 = stateno=5801
+flag = CameraFreeze 
 [State 0, PlayIfAir]
 type = PlaySnd
 trigger1 = name = "Guymba"
@@ -2867,7 +2864,7 @@ ignorehitpause=1
 [State 0, SilenceIfGrounded]
 type = ModifySnd
 trigger1 = statetype!=A 
-trigger2 = hitpausetime
+;trigger2 = hitpausetime
 channel = 9
 volumescale = 0
 freqmul = 0

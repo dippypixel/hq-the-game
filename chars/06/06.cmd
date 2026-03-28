@@ -303,11 +303,14 @@ command = /$B
 time = 5
 
 [Command]
-name = "holdback2";Required (do not remove)
-command = /$B
+name = "chargeback";Required (do not remove)
+command = /10$B
 time = 5
 
-
+[Command]
+name = "chargeup";Required (do not remove)
+command = /10$U
+time = 5
 [Command]
 name = "holdup" ;Required (do not remove)
 command = /$U
@@ -393,7 +396,7 @@ triggerall = command = "SuperJump"||command = "SuperJump2"
 trigger1 = ctrl && stateno != 9000
 trigger1 = statetype  != A
 trigger2 = stateno = 900 && AnimElemTime(12)>=1
-
+trigger3 = stateno = 250 && movehit
 ;===========================================================================
 ;---------------------------------------------------------------------------
 [State -1, Counter]
@@ -419,7 +422,7 @@ value = 100
 trigger1 = command = "AirDashF" || command = "FF"
 trigger1 = statetype != A
 trigger1 = ctrl
-
+Y
 ;---------------------------------------------------------------------------
 ;Run Back
 [State -1, Run Back]
