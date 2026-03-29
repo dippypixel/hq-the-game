@@ -1,5 +1,5 @@
 {
-  "playtime": 3366.93,
+  "playtime": 3493.25,
   "modes": {
     "training": {
       "playtime": 0,
@@ -23,8 +23,11 @@
       "clear": 0
     },
     "freebattle": {
-      "playtime": 43.25,
-      "clear": 0
+      "playtime": 169.57,
+      "clear": 1,
+      "clearcount": {
+        "guymba": 1
+      }
     }
   }
 }
